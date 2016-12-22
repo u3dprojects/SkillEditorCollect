@@ -11,6 +11,8 @@
 *.unityproj
 *.DS_Store
 
+[Pp]rojectSettings/
+
 /Assets/StreamingAssets/
 /Assets/StreamingAssets*
 /Assets/StreamingAssets.meta
