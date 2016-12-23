@@ -146,14 +146,14 @@ public class ED_Skill05_Inspector : Editor
             return;
         }
 
-        draw_gui.DrawRefreshAnimator();
+        draw_gui.DrawRefreshAnimator(DoReInit);
 
         draw_gui.DrawAniListIndex();
 
         draw_gui.DrawAniInfo();
 
         draw_gui.DrawSpeed();
-
+        
         EditorGUILayout.BeginHorizontal();
         {
             if (GUILayout.Button("Play"))

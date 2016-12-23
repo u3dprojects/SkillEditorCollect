@@ -24,8 +24,12 @@ public class DBOpt_GUI : System.Object{
     // 速度控制
     float cur_speed = 1.0f;
 
+    bool isCanSetMinMaxSpeed = false;
+
     float min_speed = 0.0f;
     float max_speed = 3.0f;
+
+    // 动画播放进度
 
     public void DoClear()
     {
@@ -80,11 +84,14 @@ public class DBOpt_GUI : System.Object{
         return true;
     }
 
-    public void DrawRefreshAnimator()
+    public void DrawRefreshAnimator(System.Action OnClickRefresh)
     {
         if (GUILayout.Button("刷新Animator动画列表"))
         {
-            DoInit(this.db_opt_ani);
+            if (OnClickRefresh != null)
+            {
+                OnClickRefresh();
+            }
         }
         GUILayout.Space(space_row_interval);
     }
@@ -119,14 +126,34 @@ public class DBOpt_GUI : System.Object{
 
     public void DrawSpeed()
     {
+        isCanSetMinMaxSpeed = EditorGUILayout.Toggle("速度的限制控制??", isCanSetMinMaxSpeed);
+
+        GUILayout.Space(space_row_interval);
+
+        if (isCanSetMinMaxSpeed)
+        {
+            EditorGUILayout.BeginHorizontal();
+            {
+                min_speed = EditorGUILayout.FloatField("最小速度:", min_speed);
+                max_speed = EditorGUILayout.FloatField("最大速度:", max_speed);
+            }
+            EditorGUILayout.EndHorizontal();
+
+            GUILayout.Space(space_row_interval);
+        }
+        
         EditorGUILayout.BeginHorizontal();
         {
-            GUILayout.Label("速度:");
             // cur_speed = GUILayout.HorizontalSlider(cur_speed,min_speed, max_speed);
-            cur_speed = EditorGUILayout.Slider(cur_speed, min_speed, max_speed);
+            cur_speed = EditorGUILayout.Slider("当前速度:", cur_speed, min_speed, max_speed);
         }
         EditorGUILayout.EndHorizontal();
 
         GUILayout.Space(space_row_interval);
+    }
+
+    public void DrawAniProgress()
+    {
+
     }
 }
