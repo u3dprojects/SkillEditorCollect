@@ -127,6 +127,14 @@ public class ED_Skill05_Inspector : Editor
                 }
             }
         );
+
+        this.Repaint();
+    }
+
+    void OnReady()
+    {
+        OnResetMember();
+        OnInitM_Ani();
     }
 
     void OnInitM_Ani()
@@ -153,13 +161,25 @@ public class ED_Skill05_Inspector : Editor
         draw_gui.DrawAniInfo();
 
         draw_gui.DrawSpeed();
-        
+
+        draw_gui.DrawCtrlAniProgress(isPauseing,delegate(bool bl)
+        {
+           isPauseing = bl;
+            if (!bl)
+            {
+                DoResume();
+            }
+        });
+
+        draw_gui.DrawAniProgress(isPauseing);
+
+
         EditorGUILayout.BeginHorizontal();
         {
             if (GUILayout.Button("Play"))
             {
-                OnResetMember();
-                OnInitM_Ani();
+                OnReady();
+
                 isPlaying = true;
 
                 db_opt_ani.SetCurCondition();
@@ -176,8 +196,7 @@ public class ED_Skill05_Inspector : Editor
 
             if (GUILayout.Button("Stop"))
             {
-                OnInitM_Ani();
-                OnResetMember();
+                OnReady();
             }
         }
         EditorGUILayout.EndHorizontal();

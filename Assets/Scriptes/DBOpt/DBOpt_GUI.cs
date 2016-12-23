@@ -30,6 +30,14 @@ public class DBOpt_GUI : System.Object{
     float max_speed = 3.0f;
 
     // 动画播放进度
+    bool isPreCtrlProgress = false;
+    bool isCtrlProgress = false;
+    float reckon_progress = 0.0f;
+    float cur_progress = 0.0f;
+    float pre_progress = 0.0f;
+
+    float min_progress = 0.0f;
+    float max_progress = 1.0f;
 
     public void DoClear()
     {
@@ -42,6 +50,15 @@ public class DBOpt_GUI : System.Object{
         ind_popup = 0;
 
         cur_speed = 1.0f;
+        isCanSetMinMaxSpeed = false;
+        min_speed = 0.0f;
+        max_speed = 3.0f;
+
+        reckon_progress = 0.0f;
+        cur_progress = 0.0f;
+        pre_progress = 0.0f;
+        isPreCtrlProgress = false;
+        isCtrlProgress = false;
     }
 
     public void DoInit(DBOpt_Ani db_ani)
@@ -54,6 +71,13 @@ public class DBOpt_GUI : System.Object{
     public float CurSpeed
     {
         get { return cur_speed; }
+    }
+
+    float Round(float org,int acc)
+    {
+        float pow = Mathf.Pow(10, acc);
+        float temp = org * pow;
+        return Mathf.RoundToInt(temp) / pow;
     }
     
     public void DrawRowLine()
@@ -152,8 +176,57 @@ public class DBOpt_GUI : System.Object{
         GUILayout.Space(space_row_interval);
     }
 
-    public void DrawAniProgress()
+    void ReckonProgress(float normalizedTime)
     {
+        reckon_progress = (normalizedTime % 1);
+        reckon_progress = Round(reckon_progress, 2);
 
+        cur_progress = reckon_progress * db_opt_ani.CurLens;
+        cur_progress = Round(cur_progress, 2);
+
+        pre_progress = cur_progress;
+    }
+
+    public void DrawCtrlAniProgress(bool isPause,System.Action<bool> callFunc)
+    {
+        
+        isCtrlProgress = EditorGUILayout.Toggle("拖动进度控制？？", isCtrlProgress,GUILayout.Height(20));
+
+        GUILayout.Space(space_row_interval);
+
+        if(isPreCtrlProgress != isCtrlProgress) {
+            isPreCtrlProgress = isCtrlProgress;
+
+            if (callFunc != null)
+            {
+                callFunc(isCtrlProgress);
+            }
+        }
+        else
+        {
+            isCtrlProgress = isPause;
+            isPreCtrlProgress = isCtrlProgress;
+        }
+    }
+
+    public void DrawAniProgress(bool isPause)
+    {
+        EditorGUILayout.BeginHorizontal();
+        {
+            if (!isPause)
+            {
+                ReckonProgress(db_opt_ani.normalizedTime);
+            } else if (isPause && pre_progress != cur_progress) {
+                ReckonProgress(cur_progress / db_opt_ani.CurLens);
+                db_opt_ani.PlayCurr(reckon_progress);
+            }
+
+            // EditorGUILayout.LabelField("当前进度:" + reckon_progress);
+            GUILayout.Label("当前进度:  " + reckon_progress);
+            cur_progress = EditorGUILayout.Slider(cur_progress, min_progress, max_progress * db_opt_ani.CurLens);
+        }
+        EditorGUILayout.EndHorizontal();
+
+        GUILayout.Space(space_row_interval);
     }
 }
