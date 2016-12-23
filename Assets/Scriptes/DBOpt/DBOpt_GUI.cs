@@ -141,7 +141,9 @@ public class DBOpt_GUI : System.Object{
         {
             GUILayout.Label("总帧数: " + db_opt_ani.CurFrameCount);
 
-            EditorGUILayout.LabelField("总时长: " + db_opt_ani.CurLens + " s");
+            GUILayout.Label("总时长: " + db_opt_ani.CurLens + " s");
+
+            EditorGUILayout.LabelField("动画帧率: " + db_opt_ani.CurFrameRate +" 帧/s");
         }
         EditorGUILayout.EndHorizontal();
 
