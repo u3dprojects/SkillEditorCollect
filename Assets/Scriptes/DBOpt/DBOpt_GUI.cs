@@ -39,6 +39,12 @@ public class DBOpt_GUI : System.Object{
     float min_progress = 0.0f;
     float max_progress = 1.0f;
 
+    // 播放次数控制
+    bool isRound = false;
+    int round_times = -1;
+    public int cur_round_times{get;set;}
+    public bool isLastRoundComplete { get; set; }
+
     public void DoClear()
     {
         db_opt_ani = null;
@@ -59,6 +65,11 @@ public class DBOpt_GUI : System.Object{
         pre_progress = 0.0f;
         isPreCtrlProgress = false;
         isCtrlProgress = false;
+
+        isRound = false;
+        round_times = -1;
+        cur_round_times = 0;
+        isLastRoundComplete = false;
     }
 
     public void DoInit(DBOpt_Ani db_ani)
@@ -191,8 +202,17 @@ public class DBOpt_GUI : System.Object{
 
     public void DrawCtrlAniProgress(bool isPause,System.Action<bool> callFunc)
     {
-        
-        isCtrlProgress = EditorGUILayout.Toggle("拖动进度控制？？", isCtrlProgress,GUILayout.Height(20));
+
+        EditorGUILayout.BeginHorizontal();
+        {
+            isCtrlProgress = EditorGUILayout.Toggle("拖动进度控制？？", isCtrlProgress,GUILayout.Height(20));
+
+            GUIStyle style = new GUIStyle();
+            style.normal.textColor = Color.yellow;
+
+            EditorGUILayout.LabelField("(勾选时，才可控制 [当前进度]！！！)",style);
+        }
+        EditorGUILayout.EndHorizontal();
 
         GUILayout.Space(space_row_interval);
 
@@ -230,5 +250,33 @@ public class DBOpt_GUI : System.Object{
         EditorGUILayout.EndHorizontal();
 
         GUILayout.Space(space_row_interval);
+    }
+
+    public void DrawRoundTimes()
+    {
+        EditorGUILayout.BeginHorizontal();
+        {
+            isRound = EditorGUILayout.Toggle("是否控制循环次数？？", isRound);
+
+            GUIStyle style = new GUIStyle();
+            style.alignment = TextAnchor.MiddleCenter;
+            style.normal.textColor = Color.cyan;
+
+            EditorGUILayout.LabelField(string.Format("已播放了{0:D2}次，第{1:D2}次播放", cur_round_times,(cur_round_times + 1)), style, GUILayout.Height(20));
+        }
+        EditorGUILayout.EndHorizontal();
+
+        GUILayout.Space(space_row_interval);
+        
+        if (isRound)
+        {
+            EditorGUILayout.BeginHorizontal();
+            {
+                round_times = EditorGUILayout.IntField("循环次数:", round_times);
+            }
+            EditorGUILayout.EndHorizontal();
+
+            GUILayout.Space(space_row_interval);
+        }
     }
 }

@@ -120,6 +120,8 @@ public class ED_Skill05_Inspector : Editor
             delegate () { OnResetMemberReckon(); },
             delegate (bool isloop)
             {
+                draw_gui.cur_round_times++;
+
                 OnResetMemberReckon();
                 if (!isloop)
                 {
@@ -141,6 +143,17 @@ public class ED_Skill05_Inspector : Editor
     {
         db_opt_ani.DoResetAniCtrl();
         db_opt_ani.OnResetMemberReckon();
+    }
+
+    void DoPlay()
+    {
+        draw_gui.cur_round_times = 0;
+
+        OnReady();
+
+        isPlaying = true;
+
+        db_opt_ani.SetCurCondition();
     }
 
     public override void OnInspectorGUI()
@@ -173,16 +186,13 @@ public class ED_Skill05_Inspector : Editor
 
         draw_gui.DrawAniProgress(isPauseing);
 
+        draw_gui.DrawRoundTimes();
 
         EditorGUILayout.BeginHorizontal();
         {
             if (GUILayout.Button("Play"))
             {
-                OnReady();
-
-                isPlaying = true;
-
-                db_opt_ani.SetCurCondition();
+                DoPlay();
             }
 
             if (GUILayout.Button(isPauseing ? "ReGo" : "Pause"))
