@@ -201,10 +201,10 @@ public class DBOpt_GUI : System.Object{
     void ReckonProgress(float normalizedTime)
     {
         reckon_progress = (normalizedTime % 1);
-        reckon_progress = Round(reckon_progress, 2);
+        reckon_progress = Round(reckon_progress, 3);
 
         cur_progress = reckon_progress * db_opt_ani.CurLens;
-        cur_progress = Round(cur_progress, 2);
+        cur_progress = Round(cur_progress, 3);
 
         pre_progress = cur_progress;
     }
@@ -253,7 +253,7 @@ public class DBOpt_GUI : System.Object{
             }
 
             // EditorGUILayout.LabelField("当前进度:" + reckon_progress);
-            GUILayout.Label("当前进度:  " + reckon_progress);
+            GUILayout.Label("当前进度:" + reckon_progress,GUILayout.Width(110));
             cur_progress = EditorGUILayout.Slider(cur_progress, min_progress, max_progress * db_opt_ani.CurLens);
         }
         EditorGUILayout.EndHorizontal();
