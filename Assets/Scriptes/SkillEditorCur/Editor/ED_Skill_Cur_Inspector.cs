@@ -203,7 +203,7 @@ public class ED_Skill_Cur_Inspector : Editor
 
         draw_gui.DrawAniProgress(isPauseing);
 
-        // draw_gui.DrawRoundTimes();
+        draw_gui.DrawRoundTimes();
 
         EditorGUILayout.BeginHorizontal();
         {
