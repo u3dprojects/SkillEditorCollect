@@ -12,9 +12,9 @@ using UnityEditor;
 [CustomEditor(typeof(ED_Skill_Cur), true)]
 public class ED_Skill_Cur_Inspector : Editor
 {
-
     DBOpt_Ani db_opt_ani = new DBOpt_Ani();
     DBOpt_Time db_opt_time = new DBOpt_Time();
+    DBOpt_GUI draw_gui = new DBOpt_GUI();
 
     ED_Skill_Cur m_entity;
     Animator m_ani;
@@ -22,24 +22,12 @@ public class ED_Skill_Cur_Inspector : Editor
     // 更新是否是通过EditorApplication的时间
     bool isUpAniByEdTime = false;
 
-    // 控制行间 - 间隔距离
-    float space_row_interval = 10.0f;
-
     // 暂停按钮控制
     bool isPauseing = false;
 
     // 播放按钮的控制值
     bool isPlaying = false;
 
-    // popup 列表选择值
-    int ind_popup = 0;
-    int pre_ind_popup = -1;
-
-    // 速度控制
-    float cur_speed = 1.0f;
-
-    float min_speed = 0.0f;
-    float max_speed = 3.0f;
 
     void OnEnable()
     {
@@ -50,7 +38,10 @@ public class ED_Skill_Cur_Inspector : Editor
     void OnDisable()
     {
         EditorApplication.update -= OnUpdate;
+
         DoClear();
+
+        draw_gui.DoClear();
     }
 
     void DoClear()
@@ -59,10 +50,7 @@ public class ED_Skill_Cur_Inspector : Editor
         m_entity = null;
         m_ani = null;
 
-        pre_ind_popup = -1;
-        ind_popup = 0;
-
-        cur_speed = 1.0f;
+        draw_gui.Reset();
 
         OnResetMember();
     }
@@ -70,7 +58,6 @@ public class ED_Skill_Cur_Inspector : Editor
     void DoReInit()
     {
         DoClear();
-        db_opt_ani.DoClear();
 
         DoInit();
     }
@@ -89,7 +76,10 @@ public class ED_Skill_Cur_Inspector : Editor
             m_ani = m_entity.GetComponent<Animator>();
 
         if (m_ani)
+        {
             db_opt_ani.DoReInit(m_ani);
+            draw_gui.DoInit(db_opt_ani);
+        }
     }
 
     void OnResetMember()
@@ -97,7 +87,7 @@ public class ED_Skill_Cur_Inspector : Editor
         isPauseing = false;
         isPlaying = false;
         isUpAniByEdTime = false;
-        
+
         OnResetMemberReckon();
     }
 
@@ -127,17 +117,42 @@ public class ED_Skill_Cur_Inspector : Editor
 
         // db_opt_ani.DoUpdateAnimator(db_opt_time.DeltaTime, cur_speed);
 
-        db_opt_ani.DoUpdateAnimator(db_opt_time.DeltaTime, cur_speed,
+        db_opt_ani.DoUpdateAnimator(db_opt_time.DeltaTime, draw_gui.CurSpeed,
             delegate () { OnResetMemberReckon(); },
             delegate (bool isloop)
             {
-                OnResetMemberReckon();
-                if (!isloop)
+                draw_gui.cur_round_times++;
+                if (draw_gui.isRound)
                 {
-                    isPlaying = false;
+                    if (draw_gui.isCompleteRound)
+                    {
+                        isPlaying = false;
+                    }
+                }
+                else
+                {
+                    if (!isloop)
+                    {
+                        isPlaying = false;
+                    }
+                }
+
+                OnResetMemberReckon();
+
+                if (isPlaying && !isloop)
+                {
+                    DoPlay(false);
                 }
             }
         );
+
+        this.Repaint();
+    }
+
+    void OnReady()
+    {
+        OnResetMember();
+        OnInitM_Ani();
     }
 
     void OnInitM_Ani()
@@ -146,79 +161,55 @@ public class ED_Skill_Cur_Inspector : Editor
         db_opt_ani.OnResetMemberReckon();
     }
 
+    void DoPlay(bool isFirst = true)
+    {
+        if (isFirst)
+            draw_gui.cur_round_times = 0;
+
+        OnReady();
+
+        isPlaying = true;
+
+        db_opt_ani.SetCurCondition();
+    }
+
     public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
 
-        EditorGUILayout.BeginHorizontal();
-        {
-            GUILayout.Label("行间间距:");
-            space_row_interval = EditorGUILayout.Slider(space_row_interval, 0, 100);
-        }
-        EditorGUILayout.EndHorizontal();
+        draw_gui.DrawRowLine();
 
-        GUILayout.Space(space_row_interval);
-
-        if (m_ani == null)
+        if (!draw_gui.DrawJudged())
         {
-            EditorGUILayout.HelpBox("请将脚本绑定到一个带Animator的物体！", MessageType.Error);
             return;
         }
 
-        if (GUILayout.Button("刷新Animator动画列表"))
+        draw_gui.DrawRefreshAnimator(DoReInit);
+
+        draw_gui.DrawAniListIndex();
+
+        draw_gui.DrawAniInfo();
+
+        draw_gui.DrawSpeed();
+
+        draw_gui.DrawCtrlAniProgress(isPauseing, delegate (bool bl)
         {
-            DoReInit();
-        }
+            isPauseing = bl;
+            if (!bl)
+            {
+                DoResume();
+            }
+        });
 
-        if (db_opt_ani.Keys.Count <= 0)
-        {
-            EditorGUILayout.HelpBox("该AnimatorController里面没有任何动画，请添加动画！", MessageType.Error);
-            return;
-        }
+        draw_gui.DrawAniProgress(isPauseing);
 
-        GUILayout.Space(space_row_interval);
-
-        ind_popup = EditorGUILayout.Popup("动画列表", ind_popup, db_opt_ani.Keys.ToArray());
-        if (pre_ind_popup != ind_popup)
-        {
-            pre_ind_popup = ind_popup;
-            db_opt_ani.ResetAniState(ind_popup);
-            db_opt_ani.SetSpeed(1.0f);
-
-            cur_speed = 1.0f;
-        }
-
-        GUILayout.Space(space_row_interval);
-
-        EditorGUILayout.BeginHorizontal();
-        {
-            GUILayout.Label("总帧数: " + db_opt_ani.CurFrameCount);
-
-            EditorGUILayout.LabelField("总时长: " + db_opt_ani.CurLens + " s");
-        }
-        EditorGUILayout.EndHorizontal();
-
-        GUILayout.Space(space_row_interval);
-
-        EditorGUILayout.BeginHorizontal();
-        {
-            GUILayout.Label("速度:");
-            // cur_speed = GUILayout.HorizontalSlider(cur_speed,min_speed, max_speed);
-            cur_speed = EditorGUILayout.Slider(cur_speed, min_speed, max_speed);
-        }
-        EditorGUILayout.EndHorizontal();
-
-        GUILayout.Space(space_row_interval);
+        // draw_gui.DrawRoundTimes();
 
         EditorGUILayout.BeginHorizontal();
         {
             if (GUILayout.Button("Play"))
             {
-                OnResetMember();
-                OnInitM_Ani();
-                isPlaying = true;
-                
-                db_opt_ani.SetCurCondition();
+                DoPlay();
             }
 
             if (GUILayout.Button(isPauseing ? "ReGo" : "Pause"))
@@ -232,8 +223,7 @@ public class ED_Skill_Cur_Inspector : Editor
 
             if (GUILayout.Button("Stop"))
             {
-                OnInitM_Ani();
-                OnResetMember();
+                OnReady();
             }
         }
         EditorGUILayout.EndHorizontal();
