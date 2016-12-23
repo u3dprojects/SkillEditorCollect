@@ -40,11 +40,21 @@ public class DBOpt_GUI : System.Object{
     float max_progress = 1.0f;
 
     // 播放次数控制
-    bool isRound = false;
-    int round_times = -1;
+    public bool isRound { get; set; }
+    int round_times = 1;
     public int cur_round_times{get;set;}
-    public bool isLastRoundComplete { get; set; }
-
+    public bool isCompleteRound
+    {
+        get
+        {
+            if (isRound)
+            {
+                return round_times <= cur_round_times;
+            }
+            return true;
+        }
+    }
+    
     public void DoClear()
     {
         db_opt_ani = null;
@@ -67,9 +77,8 @@ public class DBOpt_GUI : System.Object{
         isCtrlProgress = false;
 
         isRound = false;
-        round_times = -1;
+        round_times = 1;
         cur_round_times = 0;
-        isLastRoundComplete = false;
     }
 
     public void DoInit(DBOpt_Ani db_ani)
@@ -262,7 +271,10 @@ public class DBOpt_GUI : System.Object{
             style.alignment = TextAnchor.MiddleCenter;
             style.normal.textColor = Color.cyan;
 
-            EditorGUILayout.LabelField(string.Format("已播放了{0:D2}次，第{1:D2}次播放", cur_round_times,(cur_round_times + 1)), style, GUILayout.Height(20));
+            string desc = "";
+            // desc = string.Format("已播放了{0:D2}次，第{1:D2}次播放", cur_round_times, (cur_round_times + 1));
+            desc = string.Format("已播放了{0:D2}次!", cur_round_times);
+            EditorGUILayout.LabelField(desc, style, GUILayout.Height(20));
         }
         EditorGUILayout.EndHorizontal();
 
@@ -272,7 +284,7 @@ public class DBOpt_GUI : System.Object{
         {
             EditorGUILayout.BeginHorizontal();
             {
-                round_times = EditorGUILayout.IntField("循环次数:", round_times);
+                round_times = EditorGUILayout.IntField("循环播放次数:", round_times);
             }
             EditorGUILayout.EndHorizontal();
 

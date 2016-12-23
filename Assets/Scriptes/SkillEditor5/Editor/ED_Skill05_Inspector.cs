@@ -121,11 +121,24 @@ public class ED_Skill05_Inspector : Editor
             delegate (bool isloop)
             {
                 draw_gui.cur_round_times++;
-
-                OnResetMemberReckon();
-                if (!isloop)
+                if (draw_gui.isRound)
                 {
-                    isPlaying = false;
+                    if (draw_gui.isCompleteRound)
+                    {
+                        isPlaying = false;
+                    }
+                } else {
+                    if (!isloop)
+                    {
+                        isPlaying = false;
+                    }
+                }
+                
+                OnResetMemberReckon();
+
+                if (isPlaying && !isloop)
+                {
+                    DoPlay(false);
                 }
             }
         );
@@ -145,9 +158,10 @@ public class ED_Skill05_Inspector : Editor
         db_opt_ani.OnResetMemberReckon();
     }
 
-    void DoPlay()
+    void DoPlay(bool isFirst = true)
     {
-        draw_gui.cur_round_times = 0;
+        if(isFirst)
+            draw_gui.cur_round_times = 0;
 
         OnReady();
 
