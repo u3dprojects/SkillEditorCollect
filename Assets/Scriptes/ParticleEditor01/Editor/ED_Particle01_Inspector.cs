@@ -63,6 +63,8 @@ public class ED_Particle01_Inspector : Editor
             return;
         }
         m_db_particle.SetScale(cur_scale);
+
+        m_db_particle.SetSpeed(cur_speed);
     }
 
     void DoPlay(bool isFirst = true)
@@ -86,6 +88,8 @@ public class ED_Particle01_Inspector : Editor
         base.OnInspectorGUI();
 
         DrawScale();
+
+        DrawSpeed();
 
         EditorGUILayout.BeginHorizontal();
         {
@@ -122,26 +126,24 @@ public class ED_Particle01_Inspector : Editor
 
     public void DrawScale()
     {
-        //isCanSetMinMaxSpeed = EditorGUILayout.Toggle("速度的限制控制??", isCanSetMinMaxSpeed);
-
-        //GUILayout.Space(space_row_interval);
-
-        //if (isCanSetMinMaxSpeed)
-        //{
-        //    EditorGUILayout.BeginHorizontal();
-        //    {
-        //        min_speed = EditorGUILayout.FloatField("最小速度:", min_speed);
-        //        max_speed = EditorGUILayout.FloatField("最大速度:", max_speed);
-        //    }
-        //    EditorGUILayout.EndHorizontal();
-
-        //    GUILayout.Space(space_row_interval);
-        //}
-
         EditorGUILayout.BeginHorizontal();
         {
             // cur_speed = GUILayout.HorizontalSlider(cur_speed,min_speed, max_speed);
             cur_scale = EditorGUILayout.Slider("当前缩放:", cur_scale, min_scale, max_scale);
+        }
+        EditorGUILayout.EndHorizontal();
+
+        GUILayout.Space(space_row_interval);
+    }
+
+    float min_speed = 0.0f;
+    float max_speed = 3.0f;
+    float cur_speed = 1.0f;
+    public void DrawSpeed()
+    {
+        EditorGUILayout.BeginHorizontal();
+        {
+            cur_speed = EditorGUILayout.Slider("当前速度:", cur_speed, min_speed, max_speed);
         }
         EditorGUILayout.EndHorizontal();
 

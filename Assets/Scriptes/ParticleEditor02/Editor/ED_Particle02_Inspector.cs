@@ -76,8 +76,11 @@ public class ED_Particle02_Inspector : Editor
 
         m_db_particle.SetScale(cur_scale);
 
+        m_db_particle.SetSpeedRate(cur_speed);
+
         // 用delta time 播放 无效
         m_db_particle.Simulate(m_db_time.ProgressTime);
+        
     }
 
     void DoPlay(bool isFirst = true)
@@ -101,6 +104,8 @@ public class ED_Particle02_Inspector : Editor
         base.OnInspectorGUI();
 
         DrawScale();
+
+        DrawSpeed();
 
         EditorGUILayout.BeginHorizontal();
         {
@@ -141,6 +146,21 @@ public class ED_Particle02_Inspector : Editor
         EditorGUILayout.BeginHorizontal();
         {
             cur_scale = EditorGUILayout.Slider("当前缩放:", cur_scale, min_scale, max_scale);
+        }
+        EditorGUILayout.EndHorizontal();
+
+        GUILayout.Space(space_row_interval);
+    }
+
+
+    float min_speed = 0.0f;
+    float max_speed = 3.0f;
+    float cur_speed = 1.0f;
+    public void DrawSpeed()
+    {
+        EditorGUILayout.BeginHorizontal();
+        {
+            cur_speed = EditorGUILayout.Slider("当前速度:", cur_speed, min_speed, max_speed);
         }
         EditorGUILayout.EndHorizontal();
 
