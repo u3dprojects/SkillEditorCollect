@@ -122,6 +122,14 @@ public class DBOpt_Time : System.Object {
             + ",@ real_pro = " + ProgressTime + ",@ real_delta = " + DeltaTime);
     }
 
+    public void DoUpdateTime(bool isDebug)
+    {
+        bool isPreDeBug = this.isDebug;
+        this.isDebug = isDebug;
+        DoUpdateTime();
+        this.isDebug = isPreDeBug;
+    }
+
     public void DoUpdateTime()
     {
         OnUpEDTime();
