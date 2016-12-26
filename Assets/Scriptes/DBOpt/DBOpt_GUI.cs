@@ -54,7 +54,20 @@ public class DBOpt_GUI : System.Object{
             return true;
         }
     }
-    
+
+    // 控制位移
+    bool is_open_pos = false;
+
+    float x_pos = 0.0f;
+    AnimationCurve x_curve = new AnimationCurve(new Keyframe(0,0,0,0),new Keyframe(1,1,0,0));
+
+    float y_pos = 0.0f;
+    AnimationCurve y_curve = new AnimationCurve(new Keyframe(0, 0, 0, 0), new Keyframe(1, 1, 0, 0));
+
+    float z_pos = 0.0f;
+    AnimationCurve z_curve = new AnimationCurve(new Keyframe(0, 0, 0, 0), new Keyframe(1, 1, 0, 0));
+
+
     public void DoClear()
     {
         db_opt_ani = null;
@@ -285,6 +298,47 @@ public class DBOpt_GUI : System.Object{
             EditorGUILayout.BeginHorizontal();
             {
                 round_times = EditorGUILayout.IntField("循环播放次数:", round_times);
+            }
+            EditorGUILayout.EndHorizontal();
+
+            GUILayout.Space(space_row_interval);
+        }
+    }
+
+    public void DrawMovePos()
+    {
+        EditorGUILayout.BeginHorizontal();
+        {
+            is_open_pos = EditorGUILayout.Toggle("是否开启移动", is_open_pos);
+        }
+        EditorGUILayout.EndHorizontal();
+
+        GUILayout.Space(space_row_interval);
+
+        if (is_open_pos)
+        {
+            EditorGUILayout.BeginHorizontal();
+            {
+                x_pos = EditorGUILayout.FloatField("value:", x_pos);
+                x_curve = EditorGUILayout.CurveField("x", x_curve);
+            }
+            EditorGUILayout.EndHorizontal();
+
+            GUILayout.Space(space_row_interval);
+
+            EditorGUILayout.BeginHorizontal();
+            {
+                y_pos = EditorGUILayout.FloatField("value:", x_pos);
+                x_curve = EditorGUILayout.CurveField("y", x_curve);
+            }
+            EditorGUILayout.EndHorizontal();
+
+            GUILayout.Space(space_row_interval);
+
+            EditorGUILayout.BeginHorizontal();
+            {
+                x_pos = EditorGUILayout.FloatField("value:", x_pos);
+                x_curve = EditorGUILayout.CurveField("z", x_curve);
             }
             EditorGUILayout.EndHorizontal();
 

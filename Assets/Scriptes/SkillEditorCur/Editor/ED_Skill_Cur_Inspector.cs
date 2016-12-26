@@ -205,6 +205,8 @@ public class ED_Skill_Cur_Inspector : Editor
 
         draw_gui.DrawRoundTimes();
 
+        draw_gui.DrawMovePos();
+
         EditorGUILayout.BeginHorizontal();
         {
             if (GUILayout.Button("Play"))
