@@ -329,8 +329,8 @@ public class DBU3D_GUI : System.Object{
 
             EditorGUILayout.BeginHorizontal();
             {
-                y_pos = EditorGUILayout.FloatField("value:", x_pos);
-                x_curve = EditorGUILayout.CurveField("y", x_curve);
+                y_pos = EditorGUILayout.FloatField("value:", y_pos);
+                y_curve = EditorGUILayout.CurveField("y", y_curve);
             }
             EditorGUILayout.EndHorizontal();
 
@@ -338,8 +338,8 @@ public class DBU3D_GUI : System.Object{
 
             EditorGUILayout.BeginHorizontal();
             {
-                x_pos = EditorGUILayout.FloatField("value:", x_pos);
-                x_curve = EditorGUILayout.CurveField("z", x_curve);
+                z_pos = EditorGUILayout.FloatField("value:", z_pos);
+                z_curve = EditorGUILayout.CurveField("z", z_curve);
             }
             EditorGUILayout.EndHorizontal();
 
