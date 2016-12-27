@@ -13,7 +13,7 @@ using UnityEditor;
 public class ED_Skill03_Inspector : Editor
 {
 
-    DBOpt_Ani db_opt_ani = new DBOpt_Ani();
+    DBU3D_Ani db_opt_ani = new DBU3D_Ani();
     DBOpt_Time db_opt_time = new DBOpt_Time();
 
     ED_Skill03 m_entity;

@@ -9,9 +9,9 @@ using UnityEditor;
 /// 功能 : 
 /// </summary>
 [System.Serializable]
-public class DBOpt_GUI : System.Object{
+public class DBU3D_GUI : System.Object{
 
-    DBOpt_Ani db_opt_ani;
+    DBU3D_Ani db_opt_ani;
     // DBOpt_Time db_opt_time = new DBOpt_Time();
     
     // 控制行间 - 间隔距离
@@ -94,7 +94,7 @@ public class DBOpt_GUI : System.Object{
         cur_round_times = 0;
     }
 
-    public void DoInit(DBOpt_Ani db_ani)
+    public void DoInit(DBU3D_Ani db_ani)
     {
         Reset();
         
@@ -305,6 +305,7 @@ public class DBOpt_GUI : System.Object{
         }
     }
 
+    // 动作位移
     public void DrawMovePos()
     {
         EditorGUILayout.BeginHorizontal();
@@ -345,4 +346,5 @@ public class DBOpt_GUI : System.Object{
             GUILayout.Space(space_row_interval);
         }
     }
+
 }

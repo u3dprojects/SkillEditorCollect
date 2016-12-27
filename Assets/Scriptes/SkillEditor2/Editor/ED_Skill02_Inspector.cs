@@ -13,7 +13,7 @@ using System.Collections.Generic;
 [CanEditMultipleObjects]
 [CustomEditor(typeof(ED_Skill02),true)]
 public class ED_Skill02_Inspector : Editor {
-    DBOpt_Ani db_opt_ani = new DBOpt_Ani();
+    DBU3D_Ani db_opt_ani = new DBU3D_Ani();
     DBOpt_Time db_opt_time = new DBOpt_Time();
 
     ED_Skill02 m_entity;

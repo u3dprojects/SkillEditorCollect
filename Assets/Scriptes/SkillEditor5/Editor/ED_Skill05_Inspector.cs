@@ -12,9 +12,9 @@ using UnityEditor;
 [CustomEditor(typeof(ED_Skill05), true)]
 public class ED_Skill05_Inspector : Editor
 {
-    DBOpt_Ani db_opt_ani = new DBOpt_Ani();
+    DBU3D_Ani db_opt_ani = new DBU3D_Ani();
     DBOpt_Time db_opt_time = new DBOpt_Time();
-    DBOpt_GUI draw_gui = new DBOpt_GUI();
+    DBU3D_GUI draw_gui = new DBU3D_GUI();
     
     ED_Skill05 m_entity;
     Animator m_ani;

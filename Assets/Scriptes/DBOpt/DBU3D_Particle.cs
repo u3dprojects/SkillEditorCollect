@@ -100,6 +100,10 @@ public class DBU3D_Particle : System.Object {
 
     void DoClearParticle()
     {
+        if (lens <= 0)
+        {
+            return;
+        }
         ParticleSystem ps;
         for (int i = 0; i < lens; i++)
         {

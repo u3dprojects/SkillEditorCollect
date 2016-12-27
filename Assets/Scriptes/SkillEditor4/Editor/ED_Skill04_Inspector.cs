@@ -6,14 +6,14 @@ using UnityEditor;
 /// 类名 : Demo04-进度
 /// 作者 : Canyon
 /// 日期 : 2016-12-22 17:20:00
-/// 功能 : 目前所有的Ani操作都放到了DBOpt_Ani对象里面
+/// 功能 : 目前所有的Ani操作都放到了DBU3D_Ani对象里面
 /// </summary>
 [CanEditMultipleObjects]
 [CustomEditor(typeof(ED_Skill04), true)]
 public class ED_Skill04_Inspector : Editor
 {
 
-    DBOpt_Ani db_opt_ani = new DBOpt_Ani();
+    DBU3D_Ani db_opt_ani = new DBU3D_Ani();
     DBOpt_Time db_opt_time = new DBOpt_Time();
 
     ED_Skill04 m_entity;

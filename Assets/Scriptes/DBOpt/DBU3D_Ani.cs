@@ -16,7 +16,7 @@ public enum AniRunStatus
 /// 功能 : 
 /// </summary>
 [System.Serializable]
-public class DBOpt_Ani : System.Object {
+public class DBU3D_Ani : System.Object {
 
     Animator m_ani;
     AnimatorController m_ani_ctrl;
@@ -47,9 +47,12 @@ public class DBOpt_Ani : System.Object {
     int cur_loop_times = 0;
     bool isFinished_OneWheel = false;
 
-    public DBOpt_Ani() { }
+    // 动作时间轴时间
+    // List<DBU3D_AniTimeEvent> lstEvents = new List<DBU3D_AniTimeEvent>();
 
-    public DBOpt_Ani(Animator ani)
+    public DBU3D_Ani() { }
+
+    public DBU3D_Ani(Animator ani)
     {
         DoInit(ani);
     }
@@ -347,6 +350,8 @@ public class DBOpt_Ani : System.Object {
         lst_keys.Clear();
         
         OnResetMember();
+
+        // lstEvents.Clear();
     }
 
     void OnResetMember()
