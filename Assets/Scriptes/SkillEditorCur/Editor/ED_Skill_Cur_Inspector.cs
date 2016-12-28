@@ -113,7 +113,10 @@ public class ED_Skill_Cur_Inspector : Editor
             return;
         }
 
+
         db_opt_time.DoUpdateTime();
+
+        ED_Particle_Manager.instance.OnUpdate(db_opt_time.DeltaTime);
 
         // db_opt_ani.DoUpdateAnimator(db_opt_time.DeltaTime, cur_speed);
 
@@ -153,12 +156,15 @@ public class ED_Skill_Cur_Inspector : Editor
     {
         OnResetMember();
         OnInitM_Ani();
+
+        ED_Particle_Manager.instance.DoInit();
     }
 
     void OnInitM_Ani()
     {
         db_opt_ani.DoResetAniCtrl();
         db_opt_ani.OnResetMemberReckon();
+        db_opt_ani.ResetCurEvents();
     }
 
     void DoPlay(bool isFirst = true)
@@ -206,6 +212,8 @@ public class ED_Skill_Cur_Inspector : Editor
         draw_gui.DrawRoundTimes();
 
         draw_gui.DrawMovePos();
+
+        draw_gui.DrawEffect();
 
         EditorGUILayout.BeginHorizontal();
         {

@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 using UnityEditor;
 
 /// <summary>
@@ -67,10 +67,20 @@ public class DBU3D_GUI : System.Object{
     float z_pos = 0.0f;
     AnimationCurve z_curve = new AnimationCurve(new Keyframe(0, 0, 0, 0), new Keyframe(1, 1, 0, 0));
 
+    // 
+    List<bool> m_evnt_fodeOut = new List<bool>();
+    int nextIndFodeOut
+    {
+        get {
+            return m_evnt_fodeOut.Count;
+        }
+    }
 
     public void DoClear()
     {
         db_opt_ani = null;
+
+        Reset();
     }
 
     public void Reset()
@@ -92,6 +102,8 @@ public class DBU3D_GUI : System.Object{
         isRound = false;
         round_times = 1;
         cur_round_times = 0;
+
+        m_evnt_fodeOut.Clear();
     }
 
     public void DoInit(DBU3D_Ani db_ani)
@@ -345,6 +357,91 @@ public class DBU3D_GUI : System.Object{
 
             GUILayout.Space(space_row_interval);
         }
+    }
+
+    // 添加特效
+    public void DrawEffect()
+    {
+        EditorGUILayout.BeginHorizontal();
+        {
+            if (GUILayout.Button("添加动作特效"))
+            {
+                db_opt_ani.AddAniEffect();
+            }
+        }
+        EditorGUILayout.EndHorizontal();
+
+        GUILayout.Space(space_row_interval);
+
+        int lens = db_opt_ani.cur_lstEffects.Count;
+        
+        if (lens > 0) {
+            DBU3D_AniEffect one;
+            for (int i = 0; i < lens; i++)
+            {
+                one = db_opt_ani.cur_lstEffects[i];
+
+                m_evnt_fodeOut.Add(false);
+
+                EditorGUILayout.BeginVertical();
+                {
+                    EditorGUILayout.BeginHorizontal();
+                    {
+                        if (string.IsNullOrEmpty(one.name))
+                        {
+                            m_evnt_fodeOut[i] = EditorGUILayout.Foldout(m_evnt_fodeOut[i], "特效 - 未指定");
+                        }
+                        else
+                        {
+                            m_evnt_fodeOut[i] = EditorGUILayout.Foldout(m_evnt_fodeOut[i], "特效 - " + one.name);
+                        }
+
+                        GUI.color = Color.red;
+                        if (GUILayout.Button("X", EditorStyles.miniButton, GUILayout.Width(50)))
+                        {
+                            db_opt_ani.RemoveAniEffect(one);
+                        }
+                        GUI.color = Color.white;
+                    }
+                    EditorGUILayout.EndHorizontal();
+                    GUILayout.Space(space_row_interval);
+
+                    if (m_evnt_fodeOut[i])
+                    {
+                        DrawOneEffect(one);
+                    }
+                }
+                EditorGUILayout.EndVertical();
+                GUILayout.Space(space_row_interval);
+            }
+        }
+    }
+
+    void DrawOneEffect(DBU3D_AniEffect one)
+    {
+        GUILayout.BeginHorizontal();
+        {
+            GUILayout.Label("特效文件:", GUILayout.Width(80));
+            one.gobj = EditorGUILayout.ObjectField(one.gobj, typeof(GameObject), false) as GameObject;
+            one.Reset(one.gobj);
+        }
+        GUILayout.EndHorizontal();
+
+        GUILayout.Space(space_row_interval);
+
+        GUILayout.BeginHorizontal();
+        {
+            GUILayout.Label("触发时间:", GUILayout.Width(80));
+            one.time = EditorGUILayout.Slider(one.time, 0, 1);
+        }
+        GUILayout.EndHorizontal();
+
+        if (one.isChanged)
+        {
+            db_opt_ani.ResetAniEffect(one);
+        }
+
+        GUILayout.Space(space_row_interval);
     }
 
 }

@@ -25,7 +25,10 @@ public class DBU3D_Particle : System.Object {
     int _curState = 0;
 
     // 该粒子的最长时间
-    float _maxTime = 1f;
+    float _maxTime = 0.0f;
+
+    // 当前操作对象
+    GameObject gobj;
 
     public DBU3D_Particle() { }
 
@@ -46,6 +49,7 @@ public class DBU3D_Particle : System.Object {
 
     void DoInit(GameObject gobj)
     {
+        this.gobj = gobj;
         ParticleSystem[] arr = gobj.GetComponentsInChildren<ParticleSystem>(true);
         Renderer[] arrRenders = gobj.GetComponentsInChildren<Renderer>(true);
         if (arrRenders != null && arrRenders.Length > 0)
@@ -87,11 +91,29 @@ public class DBU3D_Particle : System.Object {
         }
     }
 
+    public void DoDestory()
+    {
+        GameObject gobj = this.gobj;
+
+        DoClear();
+
+        if (gobj)
+        {
+#if UNITY_EDITOR
+            GameObject.DestroyImmediate(gobj);
+#else
+            GameObject.Destroy(gobj);
+#endif
+        }
+    }
+
     public void DoClear() {
         DoClearParticle();
 
+        this.gobj = null;
         lens = 0;
         _cur_speed_rate = 1;
+        _maxTime = 0.0f;
 
         listAll.Clear();
         listAllRenders.Clear();
@@ -189,6 +211,14 @@ public class DBU3D_Particle : System.Object {
         }
     }
 
+    public float lifeTime
+    {
+        get
+        {
+            return _maxTime - 0.01f;
+        }
+    }
+
     public float maxTime
     {
         get
@@ -246,7 +276,7 @@ public class DBU3D_Particle : System.Object {
     }
 
     // 模拟快进 -在给定一段时间内通过模拟粒子快进粒子系统，然后暂停它
-    public void Simulate(float timeProgress)
+    public void Simulate(float timeProgress,bool withChildren = false,bool resStart = false)
     {
         if (lens <= 0)
         {
@@ -256,7 +286,50 @@ public class DBU3D_Particle : System.Object {
         for (int i = 0; i < lens; i++)
         {
             ps = listAll[i];
-            ps.Simulate(timeProgress);
+            ps.Simulate(timeProgress, withChildren, resStart);
+        }
+    }
+
+    public bool isEndMax
+    {
+        get
+        {
+            if (lens <= 0)
+            {
+                return true;
+            }
+            ParticleSystem ps;
+            for (int i = 0; i < lens; i++)
+            {
+                ps = listAll[i];
+                if (ps.time > maxTime)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+
+    public bool isEndLife
+    {
+        get
+        {
+            if (lens <= 0)
+            {
+                return true;
+            }
+            ParticleSystem ps;
+            for (int i = 0; i < lens; i++)
+            {
+                ps = listAll[i];
+                Debug.Log(ps.time + ",life = " + lifeTime);
+                if(ps.time > lifeTime)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 
@@ -295,5 +368,25 @@ public class DBU3D_Particle : System.Object {
             ps.startSpeed = speedRate * (vList[2]);
             ps.playbackSpeed = speedRate * (vList[3]);
         }
+    }
+
+    public void Play()
+    {
+        if (Application.isPlaying) {
+            ChangeState(1);
+        }else
+        {
+            Simulate(0);
+        }
+    }
+
+    public void Pause()
+    {
+        ChangeState(2);
+    }
+
+    public void Stop()
+    {
+        ChangeState(0);
     }
 }

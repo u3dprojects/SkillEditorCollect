@@ -48,7 +48,12 @@ public class DBU3D_Ani : System.Object {
     bool isFinished_OneWheel = false;
 
     // 动作时间轴时间
-    // List<DBU3D_AniTimeEvent> lstEvents = new List<DBU3D_AniTimeEvent>();
+    public List<DBU3D_AniTimeEvent> cur_lstEvents = new List<DBU3D_AniTimeEvent>();
+    // 排序对象
+    SortAniTimeEvent _sort_event = new SortAniTimeEvent();
+
+    // 当前动作的特效事件
+    public List<DBU3D_AniEffect> cur_lstEffects = new List<DBU3D_AniEffect>();
 
     public DBU3D_Ani() { }
 
@@ -190,7 +195,7 @@ public class DBU3D_Ani : System.Object {
 
     void OnResetLayers()
     {
-        if (m_ani)
+        if (m_ani != null && m_ani_ctrl != null)
         {
             AnimatorControllerLayer layer;
             for (int index = 0; index < m_ani.layerCount; index++)
@@ -255,6 +260,12 @@ public class DBU3D_Ani : System.Object {
         cur_state_frame_count = 0;
         cur_state_length = 0.0f;
         cur_is_HasCondition = false;
+
+        // 动作时间事件
+        cur_lstEvents.Clear();
+
+        // 动作特效
+        cur_lstEffects.Clear();
 
         if (state.motion)
         {
@@ -351,7 +362,8 @@ public class DBU3D_Ani : System.Object {
         
         OnResetMember();
 
-        // lstEvents.Clear();
+        cur_lstEffects.Clear();
+        cur_lstEvents.Clear();
     }
 
     void OnResetMember()
@@ -557,6 +569,117 @@ public class DBU3D_Ani : System.Object {
                     callFinished(isLoop);
                 }
             }
+
+            // 执行事件
+            DoTimeEvent(normalizedTime - runed_loop_times);
         }
     }
+
+    #region ==== 动作时间轴 ==== 
+    public void AddAniEffect()
+    {
+        DBU3D_AniEffect one_effect = new DBU3D_AniEffect();
+        cur_lstEffects.Add(one_effect);
+    }
+
+    public void ResetCurEvents()
+    {
+        int lens = cur_lstEffects.Count;
+        DBU3D_AniEffect one_effect;
+        for (int i = 0; i < lens; i++)
+        {
+            one_effect = cur_lstEffects[i];
+            ResetAniEffect(one_effect);
+        }
+    }
+    
+    public void ResetAniEffect(DBU3D_AniEffect one_effect)
+    {
+        one_effect.isChanged = false;
+
+        DBU3D_AniEvent<string> m_event = RemoveAniTimeEvent(one_effect);
+        if (m_event == null) {
+            m_event = new DBU3D_AniEvent<string>(one_effect.unq_id, delegate (string id)
+            {
+                one_effect.Play();
+            });
+        }
+        AddTimeEvent(one_effect.time, m_event);
+    }
+
+    void AddTimeEvent(float time, DBU3D_AniEvent<string> m_event)
+    {
+        DBU3D_AniTimeEvent time_event = new DBU3D_AniTimeEvent(time, m_event);
+        cur_lstEvents.Add(time_event);
+    }
+
+    public void RemoveAniEffect(DBU3D_AniEffect one)
+    {
+        cur_lstEffects.Remove(one);
+        RemoveAniTimeEvent(one);
+    }
+
+    void DoClearEmptyEvnet()
+    {
+        int lens = cur_lstEvents.Count;
+        DBU3D_AniTimeEvent one_time_event;
+        List<DBU3D_AniTimeEvent> empty = new List<DBU3D_AniTimeEvent>();
+        for (int i = 0; i < lens; i++)
+        {
+            one_time_event = cur_lstEvents[i];
+            if (one_time_event.isEmpty)
+            {
+                empty.Add(one_time_event);
+            }
+        }
+
+        lens = empty.Count;
+        for (int i = 0; i < lens; i++)
+        {
+            one_time_event = empty[i];
+            cur_lstEvents.Remove(one_time_event);
+        }
+    }
+
+    DBU3D_AniEvent<string> RemoveAniTimeEvent(string oneid)
+    {
+        if (string.IsNullOrEmpty(oneid))
+            return null;
+
+        DBU3D_AniEvent<string> ret = null;
+        DBU3D_AniEvent<string> tmp = null;
+        int lens = cur_lstEvents.Count;
+        for (int i = 0; i < lens; i++)
+        {
+            tmp = (cur_lstEvents[i]).Remove(oneid);
+            if (ret == null)
+            {
+                ret = tmp;
+            }
+        }
+        DoClearEmptyEvnet();
+        return tmp;
+    }
+
+    DBU3D_AniEvent<string> RemoveAniTimeEvent(DBU3D_AniEffect one)
+    {
+        if(one != null)
+            return RemoveAniTimeEvent(one.unq_id);
+
+        return null;
+    }
+
+    void DoTimeEvent(float nomal)
+    {
+        int lens = cur_lstEvents.Count;
+        if (lens <= 0)
+            return;
+        cur_lstEvents.Sort(_sort_event);
+
+        for (int i = 0; i < lens; i++)
+        {
+            (cur_lstEvents[i]).DoEvent(nomal);
+        }
+    }
+    #endregion
 }
