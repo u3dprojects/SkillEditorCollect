@@ -29,7 +29,7 @@ public class ED_Skill06_Inspector : Editor
     {
         EditorApplication.update += OnUpdate;
 
-        ED_Time_Manager.m_instance.DoInit();
+        EDM_Timer.m_instance.DoInit();
 
         DoInit();
     }
@@ -85,26 +85,26 @@ public class ED_Skill06_Inspector : Editor
         isPauseing = false;
         isPlaying = false;
 
-        ED_Particle_Manager.m_instance.DoInit();
+        EDM_Particle.m_instance.DoInit();
 
         OnResetMemberReckon();
     }
 
     void OnResetMemberReckon()
     {
-        ED_Time_Manager.m_instance.DoReset();
+        EDM_Timer.m_instance.DoReset();
     }
 
     void DoPause()
     {
-        ED_Time_Manager.m_instance.DoPause();
-        ED_Particle_Manager.m_instance.DoPause();
+        EDM_Timer.m_instance.DoPause();
+        EDM_Particle.m_instance.DoPause();
     }
 
     void DoResume()
     {
-        ED_Time_Manager.m_instance.DoResume();
-        ED_Particle_Manager.m_instance.DoResume();
+        EDM_Timer.m_instance.DoResume();
+        EDM_Particle.m_instance.DoResume();
     }
 
     void OnUpdate()
@@ -114,7 +114,7 @@ public class ED_Skill06_Inspector : Editor
             return;
         }
 
-        float delta_time = ED_Time_Manager.m_instance.DeltaTime;
+        float delta_time = EDM_Timer.m_instance.DeltaTime;
         // db_opt_ani.DoUpdateAnimator(db_opt_time.DeltaTime, cur_speed);
 
         db_opt_ani.DoUpdateAnimator(delta_time, draw_gui.CurSpeed,

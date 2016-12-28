@@ -12,26 +12,26 @@ using UnityEditor;
 /// 功能 : 
 /// </summary>
 [ExecuteInEditMode]
-public class ED_Time_Manager : MonoBehaviour {
+public class EDM_Timer : MonoBehaviour {
 
-    private static ED_Time_Manager _m_instance;
+    private static EDM_Timer _m_instance;
 
-    static public ED_Time_Manager m_instance
+    static public EDM_Timer m_instance
     {
         get
         {
             if (_m_instance == null)
             {
-                GameObject gobj = GameObject.Find("EDTimeManager");
+                GameObject gobj = GameObject.Find("EDM_Timer");
                 if (gobj == null)
                 {
-                    gobj = new GameObject("EDTimeManager");
+                    gobj = new GameObject("EDM_Timer");
                 }
 
-                _m_instance = gobj.GetComponent<ED_Time_Manager>();
+                _m_instance = gobj.GetComponent<EDM_Timer>();
                 if (_m_instance == null)
                 {
-                    _m_instance = gobj.AddComponent<ED_Time_Manager>();
+                    _m_instance = gobj.AddComponent<EDM_Timer>();
                 }
             }
             return _m_instance;

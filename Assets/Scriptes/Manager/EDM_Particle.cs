@@ -12,26 +12,26 @@ using UnityEditor;
 /// 功能 : 
 /// </summary>
 [ExecuteInEditMode]
-public class ED_Particle_Manager : MonoBehaviour {
+public class EDM_Particle : MonoBehaviour {
 
-    private static ED_Particle_Manager _m_instance;
+    private static EDM_Particle _m_instance;
 
-    static public ED_Particle_Manager m_instance
+    static public EDM_Particle m_instance
     {
         get
         {
             if (_m_instance == null)
             {
-                GameObject gobj = GameObject.Find("EDParticleManager");
+                GameObject gobj = GameObject.Find("EDM_Particle");
                 if (gobj == null)
                 {
-                    gobj = new GameObject("EDParticleManager");
+                    gobj = new GameObject("EDM_Particle");
                 }
 
-                _m_instance = gobj.GetComponent<ED_Particle_Manager>();
+                _m_instance = gobj.GetComponent<EDM_Particle>();
                 if (_m_instance == null)
                 {
-                    _m_instance = gobj.AddComponent<ED_Particle_Manager>();
+                    _m_instance = gobj.AddComponent<EDM_Particle>();
                 }
             }
             return _m_instance;
@@ -58,7 +58,7 @@ public class ED_Particle_Manager : MonoBehaviour {
 
     public void OnUpdate()
     {
-        OnUpdate(ED_Time_Manager.m_instance.DeltaTime);
+        OnUpdate(EDM_Timer.m_instance.DeltaTime);
     }
 
     public void OnUpdate(float deltatime)

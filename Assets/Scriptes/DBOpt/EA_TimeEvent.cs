@@ -9,7 +9,7 @@ using System;
 /// 功能 : 
 /// </summary>
 [System.Serializable]
-public class DBU3D_AniTimeEvent : System.Object{
+public class EA_TimeEvent : System.Object{
     float _progress = 0.0f;
     public float progress
     {
@@ -26,16 +26,16 @@ public class DBU3D_AniTimeEvent : System.Object{
         }
     }
 
-    List<DBU3D_AniEvent<string>> lstCalls = new List<DBU3D_AniEvent<string>>();
+    List<EA_Event<string>> lstCalls = new List<EA_Event<string>>();
     
-    public DBU3D_AniTimeEvent(float pro, DBU3D_AniEvent<string> m_event)
+    public EA_TimeEvent(float pro, EA_Event<string> m_event)
     {
         this._progress = pro;
         this.is_doed = false;
         Add(m_event);
     }
 
-    public void Add(DBU3D_AniEvent<string> m_event)
+    public void Add(EA_Event<string> m_event)
     {
         if (m_event != null)
         {
@@ -43,10 +43,10 @@ public class DBU3D_AniTimeEvent : System.Object{
         }
     }
 
-    public DBU3D_AniEvent<string> GetEvent(string unqid)
+    public EA_Event<string> GetEvent(string unqid)
     {
-        DBU3D_AniEvent<string> retOne = null;
-        DBU3D_AniEvent<string> tmp = null;
+        EA_Event<string> retOne = null;
+        EA_Event<string> tmp = null;
         int lens = this.lstCalls.Count;
         for (int i = 0; i < lens; i++)
         {
@@ -60,9 +60,9 @@ public class DBU3D_AniTimeEvent : System.Object{
         return retOne;
     }
 
-    public DBU3D_AniEvent<string> Remove(string unqid)
+    public EA_Event<string> Remove(string unqid)
     {
-        DBU3D_AniEvent<string> rmOne = GetEvent(unqid);
+        EA_Event<string> rmOne = GetEvent(unqid);
         if (rmOne != null)
         {
             Remove(rmOne);
@@ -70,7 +70,7 @@ public class DBU3D_AniTimeEvent : System.Object{
         return rmOne;
     }
 
-    public DBU3D_AniEvent<string> Remove(DBU3D_AniEvent<string> m_event)
+    public EA_Event<string> Remove(EA_Event<string> m_event)
     {
         if (m_event != null && this.lstCalls.Contains(m_event))
         {
@@ -88,7 +88,7 @@ public class DBU3D_AniTimeEvent : System.Object{
 
     public  void DoClearEvent()
     {
-        foreach (DBU3D_AniEvent<string> item in lstCalls)
+        foreach (EA_Event<string> item in lstCalls)
         {
             item.DoClear();
         }
@@ -112,7 +112,7 @@ public class DBU3D_AniTimeEvent : System.Object{
 
     void DoEvent()
     {
-        foreach (DBU3D_AniEvent<string> item in lstCalls)
+        foreach (EA_Event<string> item in lstCalls)
         {
             item.DoDelegate();
         }
@@ -128,9 +128,9 @@ public class DBU3D_AniTimeEvent : System.Object{
 }
 
 // 按照时间进度排序
-public class SortAniTimeEvent : IComparer<DBU3D_AniTimeEvent>
+public class EA_Sort_TimeEvent : IComparer<EA_TimeEvent>
 {
-    public int Compare(DBU3D_AniTimeEvent x, DBU3D_AniTimeEvent y)
+    public int Compare(EA_TimeEvent x, EA_TimeEvent y)
     {
         return x.progress < y.progress ? -1 : 1;
     }

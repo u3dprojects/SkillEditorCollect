@@ -9,7 +9,7 @@ using System.Collections;
 /// 功能 :  
 /// </summary>
 [System.Serializable]
-public class DBU3D_AniEffect : System.Object
+public class EA_Effect : System.Object
 {
     static public int INDEX_ID_ANIEFFECT = 0;
 
@@ -56,7 +56,7 @@ public class DBU3D_AniEffect : System.Object
     // 是否有改变
     public bool isChanged { get; set; }
     
-    public DBU3D_AniEffect(){
+    public EA_Effect(){
         DoClear();
         this.unq_id = string.Format("Atc_Effect_{0:d}", (INDEX_ID_ANIEFFECT++));
     }
@@ -151,6 +151,6 @@ public class DBU3D_AniEffect : System.Object
     public void Play()
     {
         UnityEngine.GameObject gobjFab = GameObject.Instantiate(this.gobj,Vector3.zero,Quaternion.identity) as GameObject;
-        ED_Particle_Manager.m_instance.DoActive(gobjFab);
+        EDM_Particle.m_instance.DoActive(gobjFab);
     }
 }

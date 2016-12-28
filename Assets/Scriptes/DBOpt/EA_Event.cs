@@ -8,7 +8,7 @@ using System.Collections.Generic;
 /// 功能 : 
 /// </summary>
 [System.Serializable]
-public class DBU3D_AniEvent<T> : System.Object
+public class EA_Event<T> : System.Object
 {
     // 数据表中的标识
     
@@ -19,7 +19,7 @@ public class DBU3D_AniEvent<T> : System.Object
 
     System.Action<T> callFunc;
 
-    public DBU3D_AniEvent(T id, System.Action<T> call)
+    public EA_Event(T id, System.Action<T> call)
     {
         this.id = id;
         if (call != null)

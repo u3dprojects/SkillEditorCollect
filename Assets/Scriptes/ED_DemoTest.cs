@@ -4,7 +4,7 @@ using System.Collections;
 [ExecuteInEditMode]
 public class ED_DemoTest : MonoBehaviour {
 
-    DBU3D_AniEffect effect = new DBU3D_AniEffect();
+    EA_Effect effect = new EA_Effect();
 
 	// Use this for initialization
 	void Start () {

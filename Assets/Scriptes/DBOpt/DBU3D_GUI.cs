@@ -58,13 +58,10 @@ public class DBU3D_GUI : System.Object{
     // 控制位移
     bool is_open_pos = false;
 
-    float x_pos = 0.0f;
     AnimationCurve x_curve = new AnimationCurve(new Keyframe(0,0,0,0),new Keyframe(1,1,0,0));
 
-    float y_pos = 0.0f;
     AnimationCurve y_curve = new AnimationCurve(new Keyframe(0, 0, 0, 0), new Keyframe(1, 1, 0, 0));
 
-    float z_pos = 0.0f;
     AnimationCurve z_curve = new AnimationCurve(new Keyframe(0, 0, 0, 0), new Keyframe(1, 1, 0, 0));
 
     // 
@@ -332,7 +329,6 @@ public class DBU3D_GUI : System.Object{
         {
             EditorGUILayout.BeginHorizontal();
             {
-                x_pos = EditorGUILayout.FloatField("value:", x_pos);
                 x_curve = EditorGUILayout.CurveField("x", x_curve);
             }
             EditorGUILayout.EndHorizontal();
@@ -341,7 +337,6 @@ public class DBU3D_GUI : System.Object{
 
             EditorGUILayout.BeginHorizontal();
             {
-                y_pos = EditorGUILayout.FloatField("value:", y_pos);
                 y_curve = EditorGUILayout.CurveField("y", y_curve);
             }
             EditorGUILayout.EndHorizontal();
@@ -350,7 +345,6 @@ public class DBU3D_GUI : System.Object{
 
             EditorGUILayout.BeginHorizontal();
             {
-                z_pos = EditorGUILayout.FloatField("value:", z_pos);
                 z_curve = EditorGUILayout.CurveField("z", z_curve);
             }
             EditorGUILayout.EndHorizontal();
@@ -366,26 +360,26 @@ public class DBU3D_GUI : System.Object{
         {
             if (GUILayout.Button("添加动作特效"))
             {
-                db_opt_ani.AddAniEffect();
+                db_opt_ani.AddCurEffect();
             }
         }
         EditorGUILayout.EndHorizontal();
 
         GUILayout.Space(space_row_interval);
 
-        int lens = db_opt_ani.cur_lstEffects.Count;
+        int lens = db_opt_ani.curEffects.Count;
         
         if (lens > 0) {
-            DBU3D_AniEffect one;
+            EA_Effect one;
             for (int i = 0; i < lens; i++)
             {
-                lens = db_opt_ani.cur_lstEffects.Count;
+                lens = db_opt_ani.curEffects.Count;
                 if(i > lens - 1)
                 {
                     i = lens - 1;
                 }
 
-                one = db_opt_ani.cur_lstEffects[i];
+                one = db_opt_ani.curEffects[i];
 
                 m_evnt_fodeOut.Add(false);
 
@@ -405,7 +399,7 @@ public class DBU3D_GUI : System.Object{
                         GUI.color = Color.red;
                         if (GUILayout.Button("X", EditorStyles.miniButton, GUILayout.Width(50)))
                         {
-                            db_opt_ani.RemoveAniEffect(one);
+                            db_opt_ani.RemoveEffect(one);
                             m_evnt_fodeOut.RemoveAt(i);
                         }
                         GUI.color = Color.white;
@@ -427,7 +421,7 @@ public class DBU3D_GUI : System.Object{
         }
     }
 
-    void DrawOneEffect(DBU3D_AniEffect one)
+    void DrawOneEffect(EA_Effect one)
     {
         GUILayout.BeginHorizontal();
         {
@@ -448,7 +442,7 @@ public class DBU3D_GUI : System.Object{
 
         if (one.isChanged)
         {
-            db_opt_ani.ResetAniEffect(one);
+            db_opt_ani.ResetEvent(one);
         }
 
         GUILayout.Space(space_row_interval);
