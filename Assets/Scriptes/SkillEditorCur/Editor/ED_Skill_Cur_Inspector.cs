@@ -12,15 +12,12 @@ using UnityEditor;
 [CustomEditor(typeof(ED_Skill_Cur), true)]
 public class ED_Skill_Cur_Inspector : Editor
 {
+    ED_Skill_Cur m_entity;
+
     DBU3D_Ani db_opt_ani = new DBU3D_Ani();
-    DBOpt_Time db_opt_time = new DBOpt_Time();
     DBU3D_GUI draw_gui = new DBU3D_GUI();
 
-    ED_Skill_Cur m_entity;
     Animator m_ani;
-
-    // 更新是否是通过EditorApplication的时间
-    bool isUpAniByEdTime = false;
 
     // 暂停按钮控制
     bool isPauseing = false;
@@ -28,11 +25,13 @@ public class ED_Skill_Cur_Inspector : Editor
     // 播放按钮的控制值
     bool isPlaying = false;
 
-
     void OnEnable()
     {
-        DoInit();
         EditorApplication.update += OnUpdate;
+
+        ED_Time_Manager.m_instance.DoInit();
+
+        DoInit();
     }
 
     void OnDisable()
@@ -64,7 +63,6 @@ public class ED_Skill_Cur_Inspector : Editor
 
     void DoInit()
     {
-        db_opt_time.DoReInit(isUpAniByEdTime);
         OnInitAni();
         OnResetMember();
     }
@@ -86,24 +84,27 @@ public class ED_Skill_Cur_Inspector : Editor
     {
         isPauseing = false;
         isPlaying = false;
-        isUpAniByEdTime = false;
+
+        ED_Particle_Manager.m_instance.DoInit();
 
         OnResetMemberReckon();
     }
 
     void OnResetMemberReckon()
     {
-        db_opt_time.OnResetMemberReckon();
+        ED_Time_Manager.m_instance.DoReset();
     }
 
     void DoPause()
     {
-
+        ED_Time_Manager.m_instance.DoPause();
+        ED_Particle_Manager.m_instance.DoPause();
     }
 
     void DoResume()
     {
-        db_opt_time.DoResume();
+        ED_Time_Manager.m_instance.DoResume();
+        ED_Particle_Manager.m_instance.DoResume();
     }
 
     void OnUpdate()
@@ -113,14 +114,10 @@ public class ED_Skill_Cur_Inspector : Editor
             return;
         }
 
-
-        db_opt_time.DoUpdateTime();
-
-        ED_Particle_Manager.m_instance.OnUpdate(db_opt_time.DeltaTime);
-
+        float delta_time = ED_Time_Manager.m_instance.DeltaTime;
         // db_opt_ani.DoUpdateAnimator(db_opt_time.DeltaTime, cur_speed);
 
-        db_opt_ani.DoUpdateAnimator(db_opt_time.DeltaTime, draw_gui.CurSpeed,
+        db_opt_ani.DoUpdateAnimator(delta_time, draw_gui.CurSpeed,
             delegate () { OnResetMemberReckon(); },
             delegate (bool isloop)
             {
@@ -134,7 +131,11 @@ public class ED_Skill_Cur_Inspector : Editor
                 }
                 else
                 {
-                    if (!isloop)
+                    if (isloop)
+                    {
+                        db_opt_ani.ResetCurEvents();
+                    }
+                    else
                     {
                         isPlaying = false;
                     }
@@ -156,8 +157,6 @@ public class ED_Skill_Cur_Inspector : Editor
     {
         OnResetMember();
         OnInitM_Ani();
-
-        ED_Particle_Manager.m_instance.DoInit();
     }
 
     void OnInitM_Ani()
@@ -201,7 +200,11 @@ public class ED_Skill_Cur_Inspector : Editor
         draw_gui.DrawCtrlAniProgress(isPauseing, delegate (bool bl)
         {
             isPauseing = bl;
-            if (!bl)
+            if (isPauseing)
+            {
+                DoPause();
+            }
+            else
             {
                 DoResume();
             }
@@ -225,7 +228,11 @@ public class ED_Skill_Cur_Inspector : Editor
             if (GUILayout.Button(isPauseing ? "ReGo" : "Pause"))
             {
                 isPauseing = !isPauseing;
-                if (!isPauseing)
+                if (isPauseing)
+                {
+                    DoPause();
+                }
+                else
                 {
                     DoResume();
                 }

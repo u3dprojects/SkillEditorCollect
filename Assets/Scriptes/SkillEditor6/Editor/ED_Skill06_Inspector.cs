@@ -12,10 +12,11 @@ using UnityEditor;
 [CustomEditor(typeof(ED_Skill06), true)]
 public class ED_Skill06_Inspector : Editor
 {
+    ED_Skill06 m_entity;
+
     DBU3D_Ani db_opt_ani = new DBU3D_Ani();
     DBU3D_GUI draw_gui = new DBU3D_GUI();
 
-    ED_Skill06 m_entity;
     Animator m_ani;
 
     // 暂停按钮控制
