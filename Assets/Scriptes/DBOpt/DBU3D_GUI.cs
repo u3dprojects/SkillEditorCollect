@@ -379,6 +379,12 @@ public class DBU3D_GUI : System.Object{
             DBU3D_AniEffect one;
             for (int i = 0; i < lens; i++)
             {
+                lens = db_opt_ani.cur_lstEffects.Count;
+                if(i > lens - 1)
+                {
+                    i = lens - 1;
+                }
+
                 one = db_opt_ani.cur_lstEffects[i];
 
                 m_evnt_fodeOut.Add(false);
@@ -400,6 +406,7 @@ public class DBU3D_GUI : System.Object{
                         if (GUILayout.Button("X", EditorStyles.miniButton, GUILayout.Width(50)))
                         {
                             db_opt_ani.RemoveAniEffect(one);
+                            m_evnt_fodeOut.RemoveAt(i);
                         }
                         GUI.color = Color.white;
                     }
@@ -414,6 +421,9 @@ public class DBU3D_GUI : System.Object{
                 EditorGUILayout.EndVertical();
                 GUILayout.Space(space_row_interval);
             }
+        }else
+        {
+            m_evnt_fodeOut.Clear();
         }
     }
 
