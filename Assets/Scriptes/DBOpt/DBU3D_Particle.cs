@@ -323,7 +323,6 @@ public class DBU3D_Particle : System.Object {
             for (int i = 0; i < lens; i++)
             {
                 ps = listAll[i];
-                Debug.Log(ps.time + ",life = " + lifeTime);
                 if(ps.time > lifeTime)
                 {
                     return true;
