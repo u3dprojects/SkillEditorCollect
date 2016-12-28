@@ -57,12 +57,9 @@ public class DBU3D_GUI : System.Object{
 
     // 控制位移
     bool is_open_pos = false;
-
-    AnimationCurve x_curve = new AnimationCurve(new Keyframe(0,0,0,0),new Keyframe(1,1,0,0));
-
-    AnimationCurve y_curve = new AnimationCurve(new Keyframe(0, 0, 0, 0), new Keyframe(1, 1, 0, 0));
-
-    AnimationCurve z_curve = new AnimationCurve(new Keyframe(0, 0, 0, 0), new Keyframe(1, 1, 0, 0));
+    AnimationCurve x_curve;
+    AnimationCurve y_curve;
+    AnimationCurve z_curve;
 
     // 
     List<bool> m_evnt_fodeOut = new List<bool>();
@@ -172,6 +169,10 @@ public class DBU3D_GUI : System.Object{
             db_opt_ani.SetSpeed(1.0f);
 
             cur_speed = 1.0f;
+
+            // 获取StateMache
+            is_open_pos = false;
+            InitMache();
         }
 
         GUILayout.Space(space_row_interval);
@@ -314,12 +315,87 @@ public class DBU3D_GUI : System.Object{
         }
     }
 
+    void DefCurve()
+    {
+        x_curve = new AnimationCurve(new Keyframe(0, 0, 0, 0), new Keyframe(1, 1, 0, 0));
+        y_curve = new AnimationCurve(new Keyframe(0, 0, 0, 0), new Keyframe(1, 1, 0, 0));
+        z_curve = new AnimationCurve(new Keyframe(0, 0, 0, 0), new Keyframe(1, 1, 0, 0));
+    }
+
+    void InitMache()
+    {
+        // 获取StateMache
+        db_opt_ani.cur_state_mache = db_opt_ani.GetStateMache<SpriteAniCurve>();
+        bool isNotNull = db_opt_ani.cur_state_mache != null;
+        is_open_pos = isNotNull;
+        syncMache(true);
+        if (!isNotNull)
+        {
+            DefCurve();
+        }
+    }
+
+    void SaveMache()
+    {
+        if(db_opt_ani.cur_state_mache == null)
+        {
+            db_opt_ani.cur_state_mache = db_opt_ani.AddStateMache<SpriteAniCurve>();
+        }
+        syncMache();
+    }
+
+    void syncMache(bool isReverse = false)
+    {
+        if (db_opt_ani.cur_state_mache == null)
+        {
+            return;
+        }
+
+        SpriteAniCurve temp = db_opt_ani.cur_state_mache as SpriteAniCurve;
+        if (isReverse)
+        {
+            x_curve = temp.x;
+            y_curve = temp.y;
+            z_curve = temp.z;
+        }
+        else
+        {
+            temp.x = x_curve;
+            temp.y = y_curve;
+            temp.z = z_curve;
+        }
+    }
+
+    void RemoveMache()
+    {
+        db_opt_ani.RemoveStateMache<SpriteAniCurve>();
+        db_opt_ani.cur_state_mache = null;
+        DefCurve();
+    }
+
     // 动作位移
     public void DrawMovePos()
     {
         EditorGUILayout.BeginHorizontal();
         {
             is_open_pos = EditorGUILayout.Toggle("是否开启移动", is_open_pos);
+
+            // 添加一个按钮
+            if (is_open_pos)
+            {
+                GUI.color = Color.cyan;
+                if (GUILayout.Button("SaveCurveMache", EditorStyles.miniButton, GUILayout.Width(120),GUILayout.Height(30)))
+                {
+                    SaveMache();
+                }
+
+                GUI.color = Color.red;
+                if (GUILayout.Button("RemoveCurveMache", EditorStyles.miniButton, GUILayout.Width(120),GUILayout.Height(30)))
+                {
+                    RemoveMache();
+                }
+                GUI.color = Color.white;
+            }
         }
         EditorGUILayout.EndHorizontal();
 
@@ -350,6 +426,29 @@ public class DBU3D_GUI : System.Object{
             EditorGUILayout.EndHorizontal();
 
             GUILayout.Space(space_row_interval);
+
+            syncMache();
+        }
+    }
+
+    public SpriteAniCurve curCurve
+    {
+        get
+        {
+            if (is_open_pos)
+            {
+                if (db_opt_ani.cur_state_mache)
+                {
+                    return db_opt_ani.cur_state_mache as SpriteAniCurve;
+                }
+
+                SpriteAniCurve m_Curve = new SpriteAniCurve();
+                m_Curve.x = x_curve;
+                m_Curve.y = y_curve;
+                m_Curve.z = z_curve;
+                return m_Curve;
+            }
+            return null;
         }
     }
 

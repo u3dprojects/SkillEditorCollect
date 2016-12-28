@@ -14,6 +14,10 @@ public class ED_Skill_Cur_Inspector : Editor
 {
     ED_Skill_Cur m_entity;
 
+    Transform trsf_entity;
+    CharacterController myCtrl;
+    Vector3 def_pos = Vector3.zero;
+
     DBU3D_Ani db_opt_ani = new DBU3D_Ani();
     DBU3D_GUI draw_gui = new DBU3D_GUI();
 
@@ -24,6 +28,13 @@ public class ED_Skill_Cur_Inspector : Editor
 
     // 播放按钮的控制值
     bool isPlaying = false;
+
+    // 位移曲线动画
+    SpriteAniCurve movCurve = null;
+    Vector3 movPos = Vector3.zero;
+    bool isCanSpeed = false;
+    float movSpeed = 1f;
+    float curSpeed = 0.0f;
 
     void OnEnable()
     {
@@ -48,10 +59,14 @@ public class ED_Skill_Cur_Inspector : Editor
         db_opt_ani.DoClear();
         m_entity = null;
         m_ani = null;
+        trsf_entity = null;
+        myCtrl = null;
 
         draw_gui.Reset();
 
         OnResetMember();
+
+        movCurve = null;
     }
 
     void DoReInit()
@@ -70,8 +85,13 @@ public class ED_Skill_Cur_Inspector : Editor
     void OnInitAni()
     {
         m_entity = target as ED_Skill_Cur;
-        if (m_entity)
-            m_ani = m_entity.GetComponent<Animator>();
+        trsf_entity = m_entity.transform;
+
+        if (trsf_entity) { 
+            m_ani = trsf_entity.GetComponent<Animator>();
+            myCtrl = trsf_entity.GetComponent<CharacterController>();
+            def_pos = trsf_entity.transform.position;
+        }
 
         if (m_ani)
         {
@@ -93,6 +113,8 @@ public class ED_Skill_Cur_Inspector : Editor
     void OnResetMemberReckon()
     {
         EDM_Timer.m_instance.DoReset();
+        if (trsf_entity)
+            trsf_entity.position = def_pos;
     }
 
     void DoPause()
@@ -114,10 +136,10 @@ public class ED_Skill_Cur_Inspector : Editor
             return;
         }
 
-        float delta_time = EDM_Timer.m_instance.DeltaTime;
+        float temp = EDM_Timer.m_instance.DeltaTime;
         // db_opt_ani.DoUpdateAnimator(db_opt_time.DeltaTime, cur_speed);
 
-        db_opt_ani.DoUpdateAnimator(delta_time, draw_gui.CurSpeed,
+        db_opt_ani.DoUpdateAnimator(temp, draw_gui.CurSpeed,
             delegate () { OnResetMemberReckon(); },
             delegate (bool isloop)
             {
@@ -151,6 +173,34 @@ public class ED_Skill_Cur_Inspector : Editor
         );
 
         this.Repaint();
+
+        // 执行位移
+        movCurve = draw_gui.curCurve;
+        if (movCurve)
+        {
+            movPos = Vector3.zero;
+            if (isCanSpeed) {
+                curSpeed = movSpeed * temp;
+            }else
+            {
+                curSpeed = movSpeed;
+            }
+
+            float nt01 = db_opt_ani.nt01;
+            movPos.x = movCurve.x.Evaluate(nt01) * curSpeed;
+            movPos.y = movCurve.y.Evaluate(nt01) * curSpeed;
+            movPos.z = movCurve.z.Evaluate(nt01) * curSpeed;
+
+
+            if (myCtrl)
+            {
+                Debug.Log(movSpeed + "=,=" + temp + "=,=" + curSpeed + "=,=" + nt01 + ","   + movCurve.x.Evaluate(nt01) + "," + movPos);
+                myCtrl.Move(movPos);
+            }else
+            {
+                m_entity.transform.position += movPos;
+            }
+        }
     }
 
     void OnReady()

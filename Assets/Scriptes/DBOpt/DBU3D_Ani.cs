@@ -31,7 +31,7 @@ public class DBU3D_Ani : System.Object {
 
     string cur_state_key = "";
     int cur_layer_index = 0;
-    AnimatorState cur_ani_state;
+    AnimatorState cur_state;
     
     int cur_state_frame_count = 0;
     float cur_state_length = 0f;
@@ -49,6 +49,9 @@ public class DBU3D_Ani : System.Object {
 
     // 动作时间轴时间
     DBU3D_AniState_TimeEvent stateEvent = new DBU3D_AniState_TimeEvent();
+
+    // 当前StateMatch
+    public StateMachineBehaviour cur_state_mache { get; set; }
 
     public DBU3D_Ani() { }
 
@@ -238,9 +241,9 @@ public class DBU3D_Ani : System.Object {
         if (dic_name_state.ContainsKey(key))
         {
             cur_state_key = key;
-            cur_ani_state = dic_name_state[key];
+            cur_state = dic_name_state[key];
             cur_layer_index = dic_state_layer[key];
-            ResetAniState(cur_ani_state);
+            ResetAniState(cur_state);
         }
         else
         {
@@ -250,8 +253,8 @@ public class DBU3D_Ani : System.Object {
 
     void ResetAniState(AnimatorState state)
     {
-        cur_ani_state = state;
-
+        cur_state = state;
+        cur_state_mache = null;
         cur_state_frame_count = 0;
         cur_state_length = 0.0f;
         cur_is_HasCondition = false;
@@ -274,9 +277,9 @@ public class DBU3D_Ani : System.Object {
 
     bool ReCurIsHasCondition()
     {
-        if (cur_ani_state)
+        if (cur_state)
         {
-            foreach (AnimatorStateTransition stateTran in cur_ani_state.transitions)
+            foreach (AnimatorStateTransition stateTran in cur_state.transitions)
             {
                 if(stateTran.conditions.Length > 0)
                 {
@@ -297,16 +300,16 @@ public class DBU3D_Ani : System.Object {
 
     public AnimationClip CurClip()
     {
-        if (cur_ani_state && cur_ani_state.motion)
+        if (cur_state && cur_state.motion)
         {
-            return cur_ani_state.motion as AnimationClip;
+            return cur_state.motion as AnimationClip;
         }
         return null;
     }
 
     public AnimatorState CurState
     {
-        get { return cur_ani_state;}
+        get { return cur_state;}
     }
 
     public float CurLens
@@ -344,7 +347,8 @@ public class DBU3D_Ani : System.Object {
 
         m_ani = null;
         m_ani_ctrl = null;
-        cur_ani_state = null;
+        cur_state = null;
+        cur_state_mache = null;
         cur_state_key = "";
         cur_layer_index = 0;
 
@@ -377,9 +381,9 @@ public class DBU3D_Ani : System.Object {
 
     public void PlayCurr(float begNormallizedTime, float delta_time = 0)
     {
-        if (cur_ani_state)
+        if (cur_state)
         {
-            Play(cur_ani_state.name, cur_layer_index, begNormallizedTime,delta_time);
+            Play(cur_state.name, cur_layer_index, begNormallizedTime,delta_time);
         }
     }
 
@@ -393,7 +397,7 @@ public class DBU3D_Ani : System.Object {
 
     public bool IsChanged4CheckCurStateInfo()
     {
-        if (cur_ani_state)
+        if (cur_state)
         {
             cur_stateInfo = m_ani.GetCurrentAnimatorStateInfo(cur_layer_index);
             if (cur_state_shortNameHash != cur_stateInfo.shortNameHash)
@@ -413,6 +417,14 @@ public class DBU3D_Ani : System.Object {
         }
     }
 
+    public float nt01
+    {
+        get
+        {
+            return Mathf.Repeat(normalizedTime, 1);
+        }
+    }
+
     public bool isLoop
     {
         get { return cur_stateInfo.loop; }
@@ -420,11 +432,11 @@ public class DBU3D_Ani : System.Object {
 
     public void SetCurCondition()
     {
-        if (cur_ani_state)
+        if (cur_state)
         {
             AnimatorControllerParameterType pars_type = AnimatorControllerParameterType.Bool;
 
-            foreach (AnimatorStateTransition stateTran in cur_ani_state.transitions)
+            foreach (AnimatorStateTransition stateTran in cur_state.transitions)
             {
                 foreach(AnimatorCondition con in stateTran.conditions)
                 {
@@ -512,59 +524,113 @@ public class DBU3D_Ani : System.Object {
 
     public void DoUpdateAnimator(float deltatime,float speed,System.Action callBackChange,System.Action<bool> callFinished)
     {
-        if (m_ani)
+        if (m_ani == null)
+            return;
+
+        bool isChanged = IsChanged4CheckCurStateInfo();
+        if (isChanged)
         {
-            bool isChanged = IsChanged4CheckCurStateInfo();
-            if (isChanged)
+            if (callBackChange != null)
             {
-                if (callBackChange != null)
+                callBackChange();
+            }
+        }
+
+        if (cur_is_HasCondition)
+        {
+            SetSpeed(speed);
+            OnAniUpdate(deltatime);
+        }
+        else
+        {
+            float progress = 0.0f;
+            if (!isChanged)
+            {
+                progress = normalizedTime + deltatime * speed / CurLens;
+            }
+            PlayCurr(progress, deltatime);
+        }
+
+        if (CurIsInTransition)
+        {
+            return;
+        }
+
+        cur_loop_times = Mathf.FloorToInt(normalizedTime);
+        if (cur_loop_times > runed_loop_times)
+        {
+            isFinished_OneWheel = true;
+            runed_loop_times = cur_loop_times;
+        }
+        else
+        {
+            isFinished_OneWheel = false;
+        }
+
+        if (isFinished_OneWheel)
+        {
+            if (callFinished != null)
+            {
+                callFinished(isLoop);
+            }
+        }
+
+        // 执行事件
+        stateEvent.OnUpdate(nt01);
+    }
+
+    #region === state mache behaviour ==
+
+    public T AddStateMache<T>() where T : StateMachineBehaviour
+    {
+        if (cur_state)
+        {
+            return cur_state.AddStateMachineBehaviour<T>();
+        }
+        return null;
+    }
+
+    public T GetStateMache<T>() where T : StateMachineBehaviour
+    {
+        if (cur_state != null && cur_state.behaviours != null)
+        {
+            int lens = cur_state.behaviours.Length;
+            StateMachineBehaviour temp = null;
+            for (int i = 0; i < lens; i++)
+            {
+                temp = cur_state.behaviours[i];
+                if (temp is T)
                 {
-                    callBackChange();
+                    return temp as T;
                 }
             }
+        }
+        return default(T);
+    }
 
-            if (cur_is_HasCondition)
+    public void RemoveStateMache<T>() where T : StateMachineBehaviour
+    {
+        if (cur_state != null && cur_state.behaviours != null)
+        {
+            int lens = cur_state.behaviours.Length;
+            List<StateMachineBehaviour> lstMaches = new List<StateMachineBehaviour>();
+            StateMachineBehaviour temp = null;
+            for (int i = 0; i < lens; i++)
             {
-                SetSpeed(speed);
-                OnAniUpdate(deltatime);
-            }
-            else
-            {
-                float progress = 0.0f;
-                if (!isChanged)
+                temp = cur_state.behaviours[i];
+                if(temp is T)
                 {
-                    progress = normalizedTime + deltatime * speed / CurLens;
+                    continue;
                 }
-                PlayCurr(progress, deltatime);
-            }
-            
-            if (CurIsInTransition)
-            {
-                return;
+
+                lstMaches.Add(temp);
             }
 
-            cur_loop_times = Mathf.FloorToInt(normalizedTime);
-            if (cur_loop_times > runed_loop_times)
-            {
-                isFinished_OneWheel = true;
-                runed_loop_times = cur_loop_times;
-            }
-            else
-            {
-                isFinished_OneWheel = false;
-            }
-
-            if (isFinished_OneWheel)
-            {
-                if (callFinished != null) {
-                    callFinished(isLoop);
-                }
-            }
-
-            // 执行事件
-            stateEvent.OnUpdate(normalizedTime - runed_loop_times);
+            cur_state.behaviours = lstMaches.ToArray();
         }
     }
+
+    #endregion
 
     #region ==== 动作时间轴 ==== 
     public void AddCurEffect()
