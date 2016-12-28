@@ -42,6 +42,9 @@ public class DBOpt_Time : System.Object {
 
     // 是否打印
     bool isDebug = false;
+
+    // 是否暂停了
+    bool isPause = false;
     
     public DBOpt_Time() {}
 
@@ -67,7 +70,7 @@ public class DBOpt_Time : System.Object {
         DoInit(isEdTime, isDebug);
     }
 
-    public void DoInit(bool isEdTime,bool isDebug)
+    void DoInit(bool isEdTime,bool isDebug)
     {
         this.isUpAniByEdTime = isEdTime;
         this.isDebug = isDebug;
@@ -81,6 +84,11 @@ public class DBOpt_Time : System.Object {
     public void SetIsDeBug(bool isDebug)
     {
         this.isDebug = isDebug;
+    }
+
+    public void SetIsPause(bool isPause)
+    {
+        this.isPause = isPause;
     }
 
     public void OnResetMemberReckon()
@@ -145,14 +153,25 @@ public class DBOpt_Time : System.Object {
 
     public void DoUpdateTime()
     {
+        if (this.isPause)
+            return;
+
         OnUpEDTime();
         OnUpRealTime();
 
         OnDebugLogTime();
     }
 
+    // 暂停
+    public void DoPause()
+    {
+        this.isPause = true;
+    }
+
+    // 恢复
     public void DoResume()
     {
+        this.isPause = false;
 #if UNITY_EDITOR
         last_ed_time_startup = EditorApplication.timeSinceStartup;
 #endif
