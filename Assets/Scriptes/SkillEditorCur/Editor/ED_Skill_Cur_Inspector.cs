@@ -116,7 +116,7 @@ public class ED_Skill_Cur_Inspector : Editor
 
         db_opt_time.DoUpdateTime();
 
-        ED_Particle_Manager.instance.OnUpdate(db_opt_time.DeltaTime);
+        ED_Particle_Manager.m_instance.OnUpdate(db_opt_time.DeltaTime);
 
         // db_opt_ani.DoUpdateAnimator(db_opt_time.DeltaTime, cur_speed);
 
@@ -157,7 +157,7 @@ public class ED_Skill_Cur_Inspector : Editor
         OnResetMember();
         OnInitM_Ani();
 
-        ED_Particle_Manager.instance.DoInit();
+        ED_Particle_Manager.m_instance.DoInit();
     }
 
     void OnInitM_Ani()

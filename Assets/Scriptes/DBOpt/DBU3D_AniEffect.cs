@@ -151,6 +151,6 @@ public class DBU3D_AniEffect : System.Object
     public void Play()
     {
         UnityEngine.GameObject gobjFab = GameObject.Instantiate(this.gobj,Vector3.zero,Quaternion.identity) as GameObject;
-        ED_Particle_Manager.instance.DoActive(gobjFab);
+        ED_Particle_Manager.m_instance.DoActive(gobjFab);
     }
 }

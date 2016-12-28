@@ -1,15 +1,21 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
+/// <summary>
+/// 类名 : 粒子特效管理
+/// 作者 : Canyon
+/// 日期 : 2016-12-27 10:10
+/// 功能 : 
+/// </summary>
 public class ED_Particle_Manager : MonoBehaviour {
 
-    private static ED_Particle_Manager _instance;
+    private static ED_Particle_Manager _m_instance;
 
-    static public ED_Particle_Manager instance
+    static public ED_Particle_Manager m_instance
     {
         get
         {
-            if (_instance == null)
+            if (_m_instance == null)
             {
                 GameObject gobj = GameObject.Find("ParticleManager");
                 if (gobj == null)
@@ -17,13 +23,13 @@ public class ED_Particle_Manager : MonoBehaviour {
                     gobj = new GameObject("ParticleManager");
                 }
 
-                _instance = gobj.GetComponent<ED_Particle_Manager>();
-                if (_instance == null)
+                _m_instance = gobj.GetComponent<ED_Particle_Manager>();
+                if (_m_instance == null)
                 {
-                    _instance = gobj.AddComponent<ED_Particle_Manager>();
+                    _m_instance = gobj.AddComponent<ED_Particle_Manager>();
                 }
             }
-            return _instance;
+            return _m_instance;
         }
     }
 
