@@ -25,7 +25,20 @@ public class DBOpt_Time : System.Object {
     float progress_realtime_since_startup = 0.0f;
 
     // 更新是否是通过EditorApplication的时间
-    bool isUpAniByEdTime = false;
+    bool _isUpAniByEdTime = false;
+    bool isUpAniByEdTime {
+        get
+        {
+#if !UNITY_EDITOR
+            _isUpAniByEdTime = false;
+#endif
+            return _isUpAniByEdTime;
+        }
+        set
+        {
+            _isUpAniByEdTime = value;
+        }
+    }
 
     // 是否打印
     bool isDebug = false;
