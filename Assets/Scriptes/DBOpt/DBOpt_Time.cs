@@ -102,6 +102,8 @@ public class DBOpt_Time : System.Object {
         last_realtime_since_startup = 0.0f;
         delta_realtime_since_startup = 0.0f;
         progress_realtime_since_startup = 0.0f;
+
+        isPause = false;
     }
 
     void OnUpEDTime()
