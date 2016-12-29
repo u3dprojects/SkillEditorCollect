@@ -6,7 +6,7 @@ using UnityEditor;
 /// 类名 : Demo_06
 /// 作者 : Canyon
 /// 日期 : 2016-12-28 09:40
-/// 功能 : 抽出时间管理
+/// 功能 : 抽出时间管理,添加了粒子系统
 /// </summary>
 [CanEditMultipleObjects]
 [CustomEditor(typeof(ED_Skill06), true)]

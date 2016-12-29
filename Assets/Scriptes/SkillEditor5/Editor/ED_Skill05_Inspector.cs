@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEditor;
 
 /// <summary>
-/// 类名 : Demo04-进度
+/// 类名 : Demo05-进度
 /// 作者 : Canyon
 /// 日期 : 2016-12-22 17:20:00
 /// 功能 : 抽出绘制区域

@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEditor;
 
 /// <summary>
-/// 类名 : 当前技能控制模式
+/// 类名 : 初步分离Ani,Time
 /// 作者 : Canyon
 /// 日期 : 2016-12-22 09:30:00
 /// 功能 : 
