@@ -62,7 +62,8 @@ public class SpriteAniCurve : StateMachineBehaviour
     public override void OnStateMove(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         m_liveTime += Time.deltaTime;
-        Debug.Log("== OnStateMove == animator.name = " + animator.name + ",layerIndex = " + layerIndex + ",normalizedTime = " + stateInfo.normalizedTime + ",length = " + stateInfo.length + "," + m_liveTime);
+        Debug.Log(Time.deltaTime + "== OnStateMove == animator.name = " + animator.name + ",layerIndex = " + layerIndex + ",normalizedTime = " + stateInfo.normalizedTime + ",length = " + stateInfo.length + "," + m_liveTime);
+
         if (this.charController != null)
         {
             Vector3 move = Vector3.zero;
