@@ -651,9 +651,9 @@ public class ED_Ani : System.Object {
         stateEvent.RemoveEffect(effect);
     }
 
-    public void ResetEvent(EA_Effect effect)
+    public void ResetEvent(EA_Effect effect, Transform trsfParent)
     {
-        stateEvent.ResetOneEvent(effect);
+        stateEvent.ResetOneEvent(effect, trsfParent);
     }
 
     public void ResetCurEvents()

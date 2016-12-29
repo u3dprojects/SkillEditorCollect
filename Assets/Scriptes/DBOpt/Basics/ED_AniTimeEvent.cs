@@ -67,24 +67,33 @@ public class ED_AniTimeEvent : System.Object {
     {
         int lens = lst_effects.Count;
         EA_Effect one_effect;
+        Transform trsfTemp;
         for (int i = 0; i < lens; i++)
         {
             one_effect = lst_effects[i];
-            ResetOneEvent(one_effect);
+            trsfTemp = null;
+            if(one_effect != null)
+            {
+                trsfTemp = one_effect.trsfParent;
+            }
+            ResetOneEvent(one_effect, trsfTemp);
         }
     }
     
-    public void ResetOneEvent(EA_Effect one_effect)
+    public void ResetOneEvent(EA_Effect one_effect,Transform trsfParent)
     {
         one_effect.isChanged = false;
+        one_effect.trsfParent = trsfParent;
 
         EA_Event<string> m_event = RemoveEvent(one_effect);
         if (m_event == null) {
             m_event = new EA_Event<string>(one_effect.unq_id, delegate (string id)
             {
-                EDM_Particle.m_instance.DoReady(one_effect.gobjFab);
+                EDM_Particle.m_instance.DoReady(one_effect.gobjFab,one_effect.trsfParent);
             });
         }
+
+        
         AddEvent(one_effect.time, m_event);
     }
 

@@ -410,12 +410,13 @@ public class EDD_GUI : System.Object{
         }
         GUILayout.EndHorizontal();
 
+        GUILayout.Space(space_row_interval);
+
         if (effect.isChanged)
         {
-            db_opt_ani.ResetEvent(effect);
+            db_opt_ani.ResetEvent(effect,effect.trsfParent);
         }
 
-        GUILayout.Space(space_row_interval);
     }
 
 }

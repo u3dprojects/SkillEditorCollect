@@ -18,7 +18,7 @@ public class ED_Skill_Cur_Inspector : Editor
     CharacterController myCtrl;
     Vector3 def_pos = Vector3.zero;
 
-    ED_Ani db_opt_ani = new ED_Ani();
+    ED_Ani_YGame m_ed_ani = new ED_Ani_YGame();
     EDD_GUI_YGame draw_gui = new EDD_GUI_YGame();
 
     Animator m_ani;
@@ -68,7 +68,7 @@ public class ED_Skill_Cur_Inspector : Editor
     {
         EDM_Particle.m_instance.DoClear();
 
-        db_opt_ani.DoClear();
+        m_ed_ani.DoClear();
 
         m_entity = null;
         m_ani = null;
@@ -108,8 +108,8 @@ public class ED_Skill_Cur_Inspector : Editor
 
         if (m_ani)
         {
-            db_opt_ani.DoReInit(m_ani);
-            draw_gui.DoInit(db_opt_ani);
+            m_ed_ani.DoReInit(m_ani);
+            draw_gui.DoInit(m_ed_ani);
         }
     }
 
@@ -168,7 +168,7 @@ public class ED_Skill_Cur_Inspector : Editor
 
         // db_opt_ani.DoUpdateAnimator(db_opt_time.DeltaTime, cur_speed);
 
-        db_opt_ani.DoUpdateAnimator(temp, draw_gui.CurSpeed,
+        m_ed_ani.DoUpdateAnimator(temp, draw_gui.CurSpeed,
             delegate () { OnResetMemberReckon(); },
             delegate (bool isloop)
             {
@@ -184,7 +184,7 @@ public class ED_Skill_Cur_Inspector : Editor
                 {
                     if (isloop)
                     {
-                        db_opt_ani.ResetCurEvents();
+                        m_ed_ani.ResetCurEvents();
                     }
                     else
                     {
@@ -215,7 +215,7 @@ public class ED_Skill_Cur_Inspector : Editor
                 curSpeed = movSpeed;
             }
 
-            float nt01 = db_opt_ani.nt01;
+            float nt01 = m_ed_ani.nt01;
             movPos.x = movCurve[0].Evaluate(nt01) * curSpeed;
             movPos.y = movCurve[1].Evaluate(nt01) * curSpeed;
             movPos.z = movCurve[2].Evaluate(nt01) * curSpeed;
@@ -242,9 +242,9 @@ public class ED_Skill_Cur_Inspector : Editor
 
     void OnInitM_Ani()
     {
-        db_opt_ani.DoResetAniCtrl();
-        db_opt_ani.OnResetMemberReckon();
-        db_opt_ani.ResetCurEvents();
+        m_ed_ani.DoResetAniCtrl();
+        m_ed_ani.OnResetMemberReckon();
+        m_ed_ani.ResetCurEvents();
     }
 
     void DoPlay(bool isFirst = true)
@@ -256,7 +256,7 @@ public class ED_Skill_Cur_Inspector : Editor
 
         isPlaying = true;
 
-        db_opt_ani.SetCurCondition();
+        m_ed_ani.SetCurCondition();
     }
 
     void DoStop()
