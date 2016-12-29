@@ -10,15 +10,15 @@ public enum AniRunStatus
 }
 
 /// <summary>
-/// 类名 : animator数据管理
+/// 类名 : E-Editor,D-Data,Ani-Animator
 /// 作者 : Canyon
 /// 日期 : 2016-12-21 10:10:00
 /// 功能 : 
 /// </summary>
 [System.Serializable]
-public class DBU3D_Ani : System.Object {
+public class ED_Ani : System.Object {
 
-    Animator m_ani;
+    public Animator m_ani { get; set; }
     AnimatorController m_ani_ctrl;
 
     // animator 中key - 对应 - State动画(key = layer_sub_state.name or layer_state.name)
@@ -53,9 +53,9 @@ public class DBU3D_Ani : System.Object {
     // 当前StateMatch
     public StateMachineBehaviour cur_state_mache { get; set; }
 
-    public DBU3D_Ani() { }
+    public ED_Ani() { }
 
-    public DBU3D_Ani(Animator ani)
+    public ED_Ani(Animator ani)
     {
         DoInit(ani);
     }

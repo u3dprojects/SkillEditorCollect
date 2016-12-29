@@ -11,7 +11,7 @@ using UnityEditor;
 [System.Serializable]
 public class EDD_GUI : System.Object{
 
-    protected DBU3D_Ani db_opt_ani;
+    protected ED_Ani db_opt_ani;
     // DBOpt_Time db_opt_time = new DBOpt_Time();
 
     // 控制行间 - 间隔距离
@@ -94,7 +94,7 @@ public class EDD_GUI : System.Object{
         m_evnt_fodeOut.Clear();
     }
 
-    public virtual void DoInit(DBU3D_Ani db_ani)
+    public virtual void DoInit(ED_Ani db_ani)
     {
         Reset();
         

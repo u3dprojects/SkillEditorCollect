@@ -23,7 +23,7 @@ public class EDD_GUI_YGame : EDD_GUI{
     SpriteJoint.JointType m_pre_join = SpriteJoint.JointType.Default;
 
 
-    public override void DoInit(DBU3D_Ani db_ani)
+    public override void DoInit(ED_Ani db_ani)
     {
         base.DoInit(db_ani);
 

@@ -18,7 +18,7 @@ public class ED_Skill_Cur_Inspector : Editor
     CharacterController myCtrl;
     Vector3 def_pos = Vector3.zero;
 
-    DBU3D_Ani db_opt_ani = new DBU3D_Ani();
+    ED_Ani db_opt_ani = new ED_Ani();
     EDD_GUI_YGame draw_gui = new EDD_GUI_YGame();
 
     Animator m_ani;
