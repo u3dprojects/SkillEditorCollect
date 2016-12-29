@@ -30,7 +30,7 @@ public class ED_Skill06_Inspector : Editor
     bool isPlaying = false;
 
     // 位移曲线动画
-    SpriteAniCurve movCurve = null;
+    AnimationCurve[] movCurve = null;
     Vector3 movPos = Vector3.zero;
     bool isCanSpeed = false;
     float movSpeed = 1f;
@@ -177,7 +177,7 @@ public class ED_Skill06_Inspector : Editor
 
         // 执行位移
         movCurve = draw_gui.curCurve;
-        if (movCurve)
+        if (movCurve != null)
         {
             movPos = Vector3.zero;
             if (isCanSpeed)
@@ -190,14 +190,14 @@ public class ED_Skill06_Inspector : Editor
             }
 
             float nt01 = db_opt_ani.nt01;
-            movPos.x = movCurve.x.Evaluate(nt01) * curSpeed;
-            movPos.y = movCurve.y.Evaluate(nt01) * curSpeed;
-            movPos.z = movCurve.z.Evaluate(nt01) * curSpeed;
+            movPos.x = movCurve[0].Evaluate(nt01) * curSpeed;
+            movPos.y = movCurve[1].Evaluate(nt01) * curSpeed;
+            movPos.z = movCurve[2].Evaluate(nt01) * curSpeed;
 
 
             if (myCtrl)
             {
-                Debug.Log(movSpeed + "=,=" + temp + "=,=" + curSpeed + "=,=" + nt01 + "," + movCurve.x.Evaluate(nt01) + "," + movPos);
+                Debug.Log(movSpeed + "=,=" + temp + "=,=" + curSpeed + "=,=" + nt01 + "," + movCurve[0].Evaluate(nt01) + "," + movPos);
                 myCtrl.Move(movPos);
             }
             else

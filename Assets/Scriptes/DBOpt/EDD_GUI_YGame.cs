@@ -16,6 +16,8 @@ public class EDD_GUI_YGame : EDD_GUI{
     AnimationCurve x_curve;
     AnimationCurve y_curve;
     AnimationCurve z_curve;
+    AnimationCurve[] curMvPocCurve = new AnimationCurve[3];
+
 
     public override void DrawAniListIndex(System.Action callFunc = null)
     {
@@ -147,7 +149,7 @@ public class EDD_GUI_YGame : EDD_GUI{
         }
     }
 
-    public SpriteAniCurve curCurve
+    public AnimationCurve[] curCurve
     {
         get
         {
@@ -155,14 +157,17 @@ public class EDD_GUI_YGame : EDD_GUI{
             {
                 if (db_opt_ani.cur_state_mache)
                 {
-                    return db_opt_ani.cur_state_mache as SpriteAniCurve;
+                    SpriteAniCurve m_Curve = db_opt_ani.cur_state_mache as SpriteAniCurve;
+                    curMvPocCurve[0] = m_Curve.x;
+                    curMvPocCurve[1] = m_Curve.y;
+                    curMvPocCurve[2] = m_Curve.z;
+                }else
+                {
+                    curMvPocCurve[0] = x_curve;
+                    curMvPocCurve[1] = y_curve;
+                    curMvPocCurve[2] = z_curve;
                 }
-
-                SpriteAniCurve m_Curve = new SpriteAniCurve();
-                m_Curve.x = x_curve;
-                m_Curve.y = y_curve;
-                m_Curve.z = z_curve;
-                return m_Curve;
+                return curMvPocCurve;
             }
             return null;
         }
