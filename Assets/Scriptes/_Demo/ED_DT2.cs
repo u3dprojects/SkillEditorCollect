@@ -28,6 +28,7 @@ public class ED_DT2 : MonoBehaviour {
     {
         Debug.Log("=== DoPlay ===");
         EDM_Timer.m_instance.DoReset();
+        EDM_Particle.m_instance.DoClear();
         EDM_Particle.m_instance.DoReady(gobjEffect);
     }
     
