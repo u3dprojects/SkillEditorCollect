@@ -49,11 +49,17 @@ public class EDM_Particle : MonoBehaviour {
         DoClear();
     }
 
+    public void DoReady(GameObject gobjFab)
+    {
+        UnityEngine.GameObject gobj = GameObject.Instantiate(gobjFab, Vector3.zero, Quaternion.identity) as GameObject;
+        DoActive(gobj);
+    }
+
     public void DoActive(GameObject go)
     {
         DBU3D_Particle db = new DBU3D_Particle(go);
+        db.Simulate(0,false,true);
         list.Add(db);
-        db.Simulate(0);
     }
 
     public void OnUpdate()
@@ -67,11 +73,13 @@ public class EDM_Particle : MonoBehaviour {
         if (isPause)
             return;
 
+        // Debug.Log("delta = " + deltatime);
+
         lens = list.Count;
         for (int i = 0; i < lens; i++)
         {
             tmp = list[i];
-            tmp.Simulate(deltatime);
+            tmp.Simulate(deltatime,false,false);
         }
         OnClearParticle();
     }
@@ -105,7 +113,7 @@ public class EDM_Particle : MonoBehaviour {
         tmp = null;
     }
 
-    void DoClear()
+    public void DoClear()
     {
         OnClearParticle(true);
 
@@ -125,26 +133,37 @@ public class EDM_Particle : MonoBehaviour {
         isPause = false;
     }
 
+    public void DoDestroy()
+    {
+#if UNITY_EDITOR
+        GameObject.DestroyImmediate(this);
+#else
+        GameObject.Destroy(this);
+#endif
+    }
+
 #if UNITY_EDITOR
     void OnEnable()
     {
-        EditorApplication.update += Update;
+        EditorApplication.update += OnUpdate;
     }
 
     void OnDisable()
     {
         DoClear();
-        EditorApplication.update -= Update;
+        EditorApplication.update -= OnUpdate;
     }
 #endif
 
     // Use this for initialization
     void Start () {
-	
-	}
+        Debug.Log("= EDM_Particle Start =");
+    }
 	
 	// Update is called once per frame
 	void Update () {
+#if !UNITY_EDITOR
         OnUpdate();
+#endif
     }
 }
