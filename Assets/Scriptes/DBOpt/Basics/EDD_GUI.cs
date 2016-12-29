@@ -192,9 +192,11 @@ public class EDD_GUI : System.Object{
     {
         EditorGUILayout.BeginHorizontal();
         {
-            GUILayout.Label("Delta Time : " + EDM_Timer.m_instance.DeltaTime + " s");
+            // Delta Time
+            GUILayout.Label("DTime : " + EDM_Timer.m_instance.DeltaTime + " s");
 
-            GUILayout.Label("Progress Time : " + EDM_Timer.m_instance.ProgressTime + " s");
+            // Progress Time
+            GUILayout.Label("PTime : " + EDM_Timer.m_instance.ProgressTime + " s");
         }
         EditorGUILayout.EndHorizontal();
 
@@ -203,7 +205,7 @@ public class EDD_GUI : System.Object{
 
     public void DrawSpeed()
     {
-        isCanSetMinMaxSpeed = EditorGUILayout.Toggle("速度的限制控制??", isCanSetMinMaxSpeed);
+        isCanSetMinMaxSpeed = EditorGUILayout.Toggle("MinMax速度??", isCanSetMinMaxSpeed);
 
         GUILayout.Space(space_row_interval);
 
@@ -245,7 +247,7 @@ public class EDD_GUI : System.Object{
 
         EditorGUILayout.BeginHorizontal();
         {
-            isCtrlProgress = EditorGUILayout.Toggle("拖动进度控制？？", isCtrlProgress,GUILayout.Height(20));
+            isCtrlProgress = EditorGUILayout.Toggle("进度控制？？", isCtrlProgress,GUILayout.Height(20));
 
             GUIStyle style = new GUIStyle();
             style.normal.textColor = Color.yellow;
@@ -296,7 +298,7 @@ public class EDD_GUI : System.Object{
     {
         EditorGUILayout.BeginHorizontal();
         {
-            isRound = EditorGUILayout.Toggle("是否控制循环次数？？", isRound);
+            isRound = EditorGUILayout.Toggle("控制循环次数？？", isRound);
 
             GUIStyle style = new GUIStyle();
             style.alignment = TextAnchor.MiddleCenter;

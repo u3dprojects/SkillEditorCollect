@@ -19,6 +19,7 @@ public class EDD_GUI_YGame : EDD_GUI{
     AnimationCurve[] curMvPocCurve = new AnimationCurve[3];
 
     // 特效挂节点
+    bool m_is_join = false;
     SpriteJoint curJoin;
     SpriteJoint.JointType m_join = SpriteJoint.JointType.Default;
     SpriteJoint.JointType m_pre_join = SpriteJoint.JointType.Default;
@@ -114,7 +115,7 @@ public class EDD_GUI_YGame : EDD_GUI{
     {
         EditorGUILayout.BeginHorizontal();
         {
-            is_open_pos = EditorGUILayout.Toggle("是否开启移动", is_open_pos);
+            is_open_pos = EditorGUILayout.Toggle("开启位移?", is_open_pos);
 
             // 添加一个按钮
             if (is_open_pos)
@@ -211,13 +212,26 @@ public class EDD_GUI_YGame : EDD_GUI{
 
         GUILayout.Space(space_row_interval);
 
+        //if (Event.current.type == EventType.Repaint)
+        //{
+        //    Rect lastRect = GUILayoutUtility.GetLastRect();
+        //    Debug.Log(lastRect.min);
+        //}
+        
         GUILayout.BeginHorizontal();
         {
-            if(curJoin != null) {
+            m_is_join = EditorGUILayout.Toggle("手动位置？", m_is_join);
+
+            if (!m_is_join)
+            {
+                m_is_join = curJoin == null;
+            }
+
+            if (!m_is_join && curJoin != null) {
                 effect.trsfParent = curJoin.jointArray[effect.bind_bones_type];
             }
 
-            effect.trsfParent = EditorGUILayout.ObjectField("位置", effect.trsfParent, typeof(Transform), true) as Transform;
+            effect.trsfParent = EditorGUILayout.ObjectField("位置", effect.trsfParent, typeof(Transform), m_is_join) as Transform;
         }
         GUILayout.EndHorizontal();
 
