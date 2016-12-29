@@ -9,6 +9,6 @@ public class ED_DT2_Inspector : Editor {
     {
         base.OnInspectorGUI();
         Debug.Log(" = ED_DT2_Inspector = ");
-        this.Repaint();
+        // this.Repaint();
     }
 }
