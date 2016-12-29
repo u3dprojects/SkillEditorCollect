@@ -6,7 +6,7 @@ using UnityEditor;
 /// 类名 : Demo_06
 /// 作者 : Canyon
 /// 日期 : 2016-12-28 09:40
-/// 功能 : 添加代码控制位移-融合项目之一(动作位移)
+/// 功能 : 添加代码控制位移-融合项目之一(动作位移),抽出时间(统一动作，粒子特效时间)
 /// </summary>
 [CanEditMultipleObjects]
 [CustomEditor(typeof(ED_Skill06), true)]
