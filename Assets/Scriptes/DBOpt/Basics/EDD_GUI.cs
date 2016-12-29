@@ -15,7 +15,7 @@ public class EDD_GUI : System.Object{
     // DBOpt_Time db_opt_time = new DBOpt_Time();
 
     // 控制行间 - 间隔距离
-    protected float space_row_interval = 10.0f;
+    protected float space_row_interval = 5.0f;
     
     // popup 列表选择值
     int ind_popup = 0;
