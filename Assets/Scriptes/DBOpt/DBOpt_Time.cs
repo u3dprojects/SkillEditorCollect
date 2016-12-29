@@ -134,15 +134,31 @@ public class DBOpt_Time : System.Object {
         progress_realtime_since_startup += delta_realtime_since_startup;
     }
 
+    string LogStr
+    {
+        get
+        {
+            return "ed_cur = " + cur_ed_time_startup + ",ed_pre = " + (cur_ed_time_startup - delta_ed_time_startup) + ",ed_delta = " + delta_ed_time_startup + ",ed_pro = " + progress_ed_time_startup +
+            ",@ r_cur = " + cur_realtime_since_startup + ",r_pre = " + (cur_realtime_since_startup - delta_realtime_since_startup) + ",r_delta = " + delta_realtime_since_startup + ",r_pro = " + progress_realtime_since_startup
+            + ",@ real_pro = " + ProgressTime + ",@ real_delta = " + DeltaTime;
+        }
+    }
+
+    public void DoDebug(string title = "")
+    {
+        string v = LogStr;
+        if (!string.IsNullOrEmpty(title))
+        {
+            v = title + "_" + v;
+        }
+        Debug.Log(v);
+    }
+
     void OnDebugLogTime()
     {
         if (!this.isDebug)
             return;
-
-        Debug.Log(
-            "ed_cur = " + cur_ed_time_startup + ",ed_pre = " + (cur_ed_time_startup - delta_ed_time_startup) + ",ed_delta = " + delta_ed_time_startup + ",ed_pro = " + progress_ed_time_startup +
-            ",@ r_cur = " + cur_realtime_since_startup + ",r_pre = " + (cur_realtime_since_startup - delta_realtime_since_startup) + ",r_delta = " + delta_realtime_since_startup + ",r_pro = " + progress_realtime_since_startup
-            + ",@ real_pro = " + ProgressTime + ",@ real_delta = " + DeltaTime);
+        Debug.Log(LogStr);
     }
 
     public void DoUpdateTime(bool isDebug)
