@@ -43,12 +43,12 @@ public class EDM_Timer : MonoBehaviour {
 #if UNITY_EDITOR
     void OnEnable()
     {
-        EditorApplication.update += Update;
+        EditorApplication.update += OnUpdate;
     }
 
     void OnDisable()
     {
-        EditorApplication.update -= Update;
+        EditorApplication.update -= OnUpdate;
     }
 #endif
 
@@ -88,13 +88,29 @@ public class EDM_Timer : MonoBehaviour {
         }
     }
 
+    public void OnUpdate()
+    {
+        m_time.DoUpdateTime();
+    }
+
+    public void  DoDestroy()
+    {
+#if UNITY_EDITOR
+        GameObject.DestroyImmediate(this);
+#else
+        GameObject.Destroy(this);
+#endif
+    }
+
     // Use this for initialization
     void Start () {
-	
-	}
+        Debug.Log("= EDM_Timer Start =");
+    }
 	
 	// Update is called once per frame
 	void Update () {
-        m_time.DoUpdateTime();
+#if !UNITY_EDITOR
+        OnUpdate();
+#endif
     }
 }
