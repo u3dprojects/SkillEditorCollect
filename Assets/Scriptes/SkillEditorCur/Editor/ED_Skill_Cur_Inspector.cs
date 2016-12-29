@@ -62,13 +62,14 @@ public class ED_Skill_Cur_Inspector : Editor
         EditorApplication.update -= EDM_Particle.m_instance.OnUpdate;
 
         DoClear();
-
-        draw_gui.DoClear();
     }
 
     void DoClear()
     {
+        EDM_Particle.m_instance.DoClear();
+
         db_opt_ani.DoClear();
+
         m_entity = null;
         m_ani = null;
         trsf_entity = null;
