@@ -39,7 +39,6 @@ public class EDM_Particle : MonoBehaviour {
     }
 
     List<DBU3D_Particle> list = new List<DBU3D_Particle>();
-    List<DBU3D_Particle> rmList = new List<DBU3D_Particle>();
     DBU3D_Particle tmp;
     int lens = 0;
     bool isPause = false;
@@ -69,7 +68,6 @@ public class EDM_Particle : MonoBehaviour {
 
     public void OnUpdate(float deltatime)
     {
-        rmList.Clear();
         if (isPause)
             return;
 
@@ -86,29 +84,16 @@ public class EDM_Particle : MonoBehaviour {
 
     void OnClearParticle(bool isAll = false)
     {
-        lens = list.Count;
-
-        for (int i = 0; i < lens; i++)
+        bool isCanMv = false;
+        for (int i = 0; i < list.Count; i++)
         {
             tmp = list[i];
-            if (isAll)
-            {
-                rmList.Add(tmp);
-            }else
-            {
-                if (tmp.isEndLife)
-                {
-                    rmList.Add(tmp);
-                }
-            }
-        }
+            isCanMv = tmp.isEndLife;
 
-        lens = rmList.Count;
-        for (int i = 0; i < lens; i++)
-        {
-            tmp = rmList[i];
-            tmp.DoDestory();
-            list.Remove(tmp);
+            if (isAll || isCanMv) { 
+                list.Remove(tmp);
+                tmp.DoDestory();
+            }
         }
         tmp = null;
     }
@@ -118,7 +103,6 @@ public class EDM_Particle : MonoBehaviour {
         OnClearParticle(true);
 
         list.Clear();
-        rmList.Clear();
         tmp = null;
         isPause = false;
     }
@@ -131,15 +115,6 @@ public class EDM_Particle : MonoBehaviour {
     public void DoResume()
     {
         isPause = false;
-    }
-
-    public void DoDestroy()
-    {
-#if UNITY_EDITOR
-        GameObject.DestroyImmediate(this);
-#else
-        GameObject.Destroy(this);
-#endif
     }
 
 #if UNITY_EDITOR
