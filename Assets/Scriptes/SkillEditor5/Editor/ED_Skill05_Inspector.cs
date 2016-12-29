@@ -14,7 +14,7 @@ public class ED_Skill05_Inspector : Editor
 {
     DBU3D_Ani db_opt_ani = new DBU3D_Ani();
     DBOpt_Time db_opt_time = new DBOpt_Time();
-    DBU3D_GUI draw_gui = new DBU3D_GUI();
+    EDD_GUI draw_gui = new EDD_GUI();
     
     ED_Skill05 m_entity;
     Animator m_ani;

@@ -19,7 +19,7 @@ public class ED_Skill_Cur_Inspector : Editor
     Vector3 def_pos = Vector3.zero;
 
     DBU3D_Ani db_opt_ani = new DBU3D_Ani();
-    DBU3D_GUI draw_gui = new DBU3D_GUI();
+    EDD_GUI_YGame draw_gui = new EDD_GUI_YGame();
 
     Animator m_ani;
 
@@ -241,7 +241,7 @@ public class ED_Skill_Cur_Inspector : Editor
 
         draw_gui.DrawRefreshAnimator(DoReInit);
 
-        draw_gui.DrawAniListIndex();
+        draw_gui.DrawAniListIndex(null);
 
         draw_gui.DrawAniInfo();
 
