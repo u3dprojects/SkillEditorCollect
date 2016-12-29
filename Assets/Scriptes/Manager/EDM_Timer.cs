@@ -93,15 +93,6 @@ public class EDM_Timer : MonoBehaviour {
         m_time.DoUpdateTime();
     }
 
-    public void  DoDestroy()
-    {
-#if UNITY_EDITOR
-        GameObject.DestroyImmediate(this);
-#else
-        GameObject.Destroy(this);
-#endif
-    }
-
     // Use this for initialization
     void Start () {
         Debug.Log("= EDM_Timer Start =");
