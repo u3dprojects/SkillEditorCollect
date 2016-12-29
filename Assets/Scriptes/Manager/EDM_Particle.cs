@@ -48,13 +48,17 @@ public class EDM_Particle : MonoBehaviour {
         DoClear();
     }
 
-    public void DoReady(GameObject gobjFab)
+    public void DoReady(GameObject gobjFab,Transform trsfParent = null)
     {
         UnityEngine.GameObject gobj = GameObject.Instantiate(gobjFab, Vector3.zero, Quaternion.identity) as GameObject;
+        if(trsfParent != null)
+        {
+            gobj.transform.parent = trsfParent;
+        }
         DoActive(gobj);
     }
 
-    public void DoActive(GameObject go)
+    void DoActive(GameObject go)
     {
         DBU3D_Particle db = new DBU3D_Particle(go);
         db.Simulate(0,false,true);

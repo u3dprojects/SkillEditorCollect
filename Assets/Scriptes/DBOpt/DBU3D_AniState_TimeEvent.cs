@@ -82,7 +82,7 @@ public class DBU3D_AniState_TimeEvent : System.Object {
         if (m_event == null) {
             m_event = new EA_Event<string>(one_effect.unq_id, delegate (string id)
             {
-                one_effect.Play();
+                EDM_Particle.m_instance.DoReady(one_effect.gobj);
             });
         }
         AddEvent(one_effect.time, m_event);

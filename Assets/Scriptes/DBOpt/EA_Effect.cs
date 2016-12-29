@@ -147,10 +147,4 @@ public class EA_Effect : System.Object
         bind_bones_type = -1;
         isChanged = false;
     }
-
-    public void Play()
-    {
-        UnityEngine.GameObject gobjFab = GameObject.Instantiate(this.gobj,Vector3.zero,Quaternion.identity) as GameObject;
-        EDM_Particle.m_instance.DoActive(gobjFab);
-    }
 }
