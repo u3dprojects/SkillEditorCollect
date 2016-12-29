@@ -36,7 +36,7 @@ public class ED_Skill_Cur_Inspector : Editor
     float movSpeed = 1f;
     float curSpeed = 0.0f;
 
-    DBOpt_Time db_opt_time = new DBOpt_Time(false);
+    // DBOpt_Time db_opt_time = new DBOpt_Time(false);
 
     void OnEnable()
     {
