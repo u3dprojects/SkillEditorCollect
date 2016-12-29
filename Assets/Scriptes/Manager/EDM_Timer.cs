@@ -11,7 +11,7 @@ using UnityEditor;
 /// 日期 : 2016-12-28 09:20
 /// 功能 : 
 /// </summary>
-[ExecuteInEditMode]
+/// [ExecuteInEditMode]
 public class EDM_Timer : MonoBehaviour {
 
     private static EDM_Timer _m_instance;

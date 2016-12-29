@@ -11,7 +11,7 @@ using UnityEditor;
 /// 日期 : 2016-12-27 10:10
 /// 功能 : 
 /// </summary>
-[ExecuteInEditMode]
+// [ExecuteInEditMode]
 public class EDM_Particle : MonoBehaviour {
 
     private static EDM_Particle _m_instance;
