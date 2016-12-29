@@ -396,8 +396,8 @@ public class EDD_GUI : System.Object{
         GUILayout.BeginHorizontal();
         {
             GUILayout.Label("特效文件:", GUILayout.Width(80));
-            one.gobj = EditorGUILayout.ObjectField(one.gobj, typeof(GameObject), false) as GameObject;
-            one.Reset(one.gobj);
+            one.gobjFab = EditorGUILayout.ObjectField(one.gobjFab, typeof(GameObject), false) as GameObject;
+            one.Reset(one.gobjFab);
         }
         GUILayout.EndHorizontal();
 

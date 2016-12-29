@@ -16,16 +16,14 @@ public class EA_Effect : System.Object
     public string unq_id { get; private set; }
 
     // 文件对象
-    GameObject pre_gobj;
-
-    GameObject _gobj;
-    public GameObject gobj { get {
-            return _gobj;
+    GameObject _gobjFab;
+    public GameObject gobjFab { get {
+            return _gobjFab;
         }
         set {
-            if(value != _gobj)
+            if(value != _gobjFab)
             {
-                _gobj = value;
+                _gobjFab = value;
                 this.isChanged = true;
             }
         }
@@ -52,6 +50,9 @@ public class EA_Effect : System.Object
 
     // 绑定点模式
     public int bind_bones_type { get; set;}
+
+    // 挂节点
+    public Transform trsfParent { get; set; }
 
     // 是否有改变
     public bool isChanged { get; set; }
@@ -82,7 +83,7 @@ public class EA_Effect : System.Object
 
     public void Reset(GameObject gobj)
     {
-        if(this.pre_gobj != gobj)
+        if(this._gobjFab != gobj)
         {
             DoReInit(gobj);
         }
@@ -90,9 +91,7 @@ public class EA_Effect : System.Object
 
     public void DoInit(GameObject gobj)
     {
-        this.gobj = gobj;
-        this.pre_gobj = gobj;
-        if (this.gobj == null)
+        if (gobj == null)
         {
             DoClear();
             return;
@@ -113,17 +112,18 @@ public class EA_Effect : System.Object
         //Debug.Log(path);
         //Debug.Log(path2);
 
-        UnityEngine.Object parentObject = this.gobj;
-        UnityEditor.PrefabType p_type = UnityEditor.PrefabUtility.GetPrefabType(this.gobj);
+        UnityEngine.Object parentObject = this.gobjFab;
+        UnityEditor.PrefabType p_type = UnityEditor.PrefabUtility.GetPrefabType(this.gobjFab);
         switch (p_type)
         {
             case UnityEditor.PrefabType.PrefabInstance:
-                parentObject = UnityEditor.PrefabUtility.GetPrefabParent(this.gobj);
+                parentObject = UnityEditor.PrefabUtility.GetPrefabParent(this.gobjFab);
                 break;
             case UnityEditor.PrefabType.Prefab:
                 break;
         }
 
+        this.gobjFab = parentObject as GameObject;
         path = GetPath(parentObject);
         Debug.Log(path);
 
@@ -139,12 +139,12 @@ public class EA_Effect : System.Object
     
     public void DoClear()
     {
-        gobj = null;
-        pre_gobj = null;
+        gobjFab = null;
         fab_path = "";
         
         time = 0;
         bind_bones_type = -1;
+        trsfParent = null;
         isChanged = false;
     }
 }
