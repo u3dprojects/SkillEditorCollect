@@ -64,7 +64,7 @@ public class EDD_GUI : System.Object{
         }
     }
 
-    public void DoClear()
+    public virtual void DoClear()
     {
         db_opt_ani = null;
 
@@ -94,7 +94,7 @@ public class EDD_GUI : System.Object{
         m_evnt_fodeOut.Clear();
     }
 
-    public void DoInit(DBU3D_Ani db_ani)
+    public virtual void DoInit(DBU3D_Ani db_ani)
     {
         Reset();
         
@@ -340,7 +340,7 @@ public class EDD_GUI : System.Object{
         int lens = db_opt_ani.curEffects.Count;
         
         if (lens > 0) {
-            EA_Effect one;
+            EA_Effect effect;
             for (int i = 0; i < lens; i++)
             {
                 lens = db_opt_ani.curEffects.Count;
@@ -349,7 +349,7 @@ public class EDD_GUI : System.Object{
                     i = lens - 1;
                 }
 
-                one = db_opt_ani.curEffects[i];
+                effect = db_opt_ani.curEffects[i];
 
                 m_evnt_fodeOut.Add(false);
 
@@ -357,19 +357,19 @@ public class EDD_GUI : System.Object{
                 {
                     EditorGUILayout.BeginHorizontal();
                     {
-                        if (string.IsNullOrEmpty(one.name))
+                        if (string.IsNullOrEmpty(effect.name))
                         {
                             m_evnt_fodeOut[i] = EditorGUILayout.Foldout(m_evnt_fodeOut[i], "特效 - 未指定");
                         }
                         else
                         {
-                            m_evnt_fodeOut[i] = EditorGUILayout.Foldout(m_evnt_fodeOut[i], "特效 - " + one.name);
+                            m_evnt_fodeOut[i] = EditorGUILayout.Foldout(m_evnt_fodeOut[i], "特效 - " + effect.name);
                         }
 
                         GUI.color = Color.red;
                         if (GUILayout.Button("X", EditorStyles.miniButton, GUILayout.Width(50)))
                         {
-                            db_opt_ani.RemoveEffect(one);
+                            db_opt_ani.RemoveEffect(effect);
                             m_evnt_fodeOut.RemoveAt(i);
                         }
                         GUI.color = Color.white;
@@ -379,7 +379,7 @@ public class EDD_GUI : System.Object{
 
                     if (m_evnt_fodeOut[i])
                     {
-                        DrawOneEffect(one);
+                        DrawOneEffect(effect);
                     }
                 }
                 EditorGUILayout.EndVertical();
@@ -391,13 +391,13 @@ public class EDD_GUI : System.Object{
         }
     }
 
-    void DrawOneEffect(EA_Effect one)
+    protected virtual void DrawOneEffect(EA_Effect effect)
     {
         GUILayout.BeginHorizontal();
         {
             GUILayout.Label("特效文件:", GUILayout.Width(80));
-            one.gobjFab = EditorGUILayout.ObjectField(one.gobjFab, typeof(GameObject), false) as GameObject;
-            one.Reset(one.gobjFab);
+            effect.gobjFab = EditorGUILayout.ObjectField(effect.gobjFab, typeof(GameObject), false) as GameObject;
+            effect.Reset(effect.gobjFab);
         }
         GUILayout.EndHorizontal();
 
@@ -406,13 +406,13 @@ public class EDD_GUI : System.Object{
         GUILayout.BeginHorizontal();
         {
             GUILayout.Label("触发时间:", GUILayout.Width(80));
-            one.time = EditorGUILayout.Slider(one.time, 0, 1);
+            effect.time = EditorGUILayout.Slider(effect.time, 0, 1);
         }
         GUILayout.EndHorizontal();
 
-        if (one.isChanged)
+        if (effect.isChanged)
         {
-            db_opt_ani.ResetEvent(one);
+            db_opt_ani.ResetEvent(effect);
         }
 
         GUILayout.Space(space_row_interval);

@@ -18,6 +18,23 @@ public class EDD_GUI_YGame : EDD_GUI{
     AnimationCurve z_curve;
     AnimationCurve[] curMvPocCurve = new AnimationCurve[3];
 
+    SpriteJoint curJoin;
+    SpriteJoint.JointType m_join = SpriteJoint.JointType.Default;
+    SpriteJoint.JointType m_pre_join = SpriteJoint.JointType.Default;
+
+
+    public override void DoInit(DBU3D_Ani db_ani)
+    {
+        base.DoInit(db_ani);
+
+        curJoin = db_ani.m_ani.GetComponent<SpriteJoint>();
+    }
+
+    public override void DoClear()
+    {
+        base.DoClear();
+        curJoin = null;
+    }
 
     public override void DrawAniListIndex(System.Action callFunc = null)
     {
@@ -171,5 +188,26 @@ public class EDD_GUI_YGame : EDD_GUI{
             }
             return null;
         }
+    }
+
+    protected override void DrawOneEffect(EA_Effect effect)
+    {
+        base.DrawOneEffect(effect);
+
+        GUILayout.BeginHorizontal();
+        {
+            GUILayout.Label("挂节点:", GUILayout.Width(80));
+            //Rect lastRect = GUILayoutUtility.GetLastRect();
+            //lastRect.x = lastRect.x + 85;
+            m_pre_join = (SpriteJoint.JointType)EditorGUILayout.EnumPopup((System.Enum)m_join);
+            if(m_pre_join != SpriteJoint.JointType.Length && m_pre_join != m_join)
+            {
+                m_join = m_pre_join;
+                effect.bind_bones_type = (int)m_join;
+            }
+        }
+        GUILayout.EndHorizontal();
+
+        GUILayout.Space(space_row_interval);
     }
 }

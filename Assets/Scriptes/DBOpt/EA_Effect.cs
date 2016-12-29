@@ -85,7 +85,7 @@ public class EA_Effect : System.Object
     {
         if(this._gobjFab != gobj)
         {
-            DoReInit(gobj);
+            DoInit(gobj);
         }
     }
 
@@ -143,7 +143,7 @@ public class EA_Effect : System.Object
         fab_path = "";
         
         time = 0;
-        bind_bones_type = -1;
+        bind_bones_type = 0;
         trsfParent = null;
         isChanged = false;
     }
