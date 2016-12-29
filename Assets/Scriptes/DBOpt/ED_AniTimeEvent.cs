@@ -8,7 +8,7 @@ using System.Collections.Generic;
  /// 功能 : 
  /// </summary>
 [System.Serializable]
-public class DBU3D_AniState_TimeEvent : System.Object {
+public class ED_AniTimeEvent : System.Object {
 
     // 排序对象
     static EA_Sort_TimeEvent _sort_event = new EA_Sort_TimeEvent();
@@ -19,7 +19,7 @@ public class DBU3D_AniState_TimeEvent : System.Object {
     // 当前动作的特效事件
     public List<EA_Effect> lst_effects = new List<EA_Effect>();
 
-    public DBU3D_AniState_TimeEvent() {
+    public ED_AniTimeEvent() {
         DoClear();
     }
     

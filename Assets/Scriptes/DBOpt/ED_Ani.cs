@@ -48,7 +48,7 @@ public class ED_Ani : System.Object {
     bool isFinished_OneWheel = false;
 
     // 动作时间轴时间
-    DBU3D_AniState_TimeEvent stateEvent = new DBU3D_AniState_TimeEvent();
+    ED_AniTimeEvent stateEvent = new ED_AniTimeEvent();
 
     // 当前StateMatch
     public StateMachineBehaviour cur_state_mache { get; set; }
