@@ -18,6 +18,7 @@ public class EDD_GUI_YGame : EDD_GUI{
     AnimationCurve z_curve;
     AnimationCurve[] curMvPocCurve = new AnimationCurve[3];
 
+    // 特效挂节点
     SpriteJoint curJoin;
     SpriteJoint.JointType m_join = SpriteJoint.JointType.Default;
     SpriteJoint.JointType m_pre_join = SpriteJoint.JointType.Default;
@@ -205,6 +206,18 @@ public class EDD_GUI_YGame : EDD_GUI{
                 m_join = m_pre_join;
                 effect.bind_bones_type = (int)m_join;
             }
+        }
+        GUILayout.EndHorizontal();
+
+        GUILayout.Space(space_row_interval);
+
+        GUILayout.BeginHorizontal();
+        {
+            if(curJoin != null) {
+                effect.trsfParent = curJoin.jointArray[effect.bind_bones_type];
+            }
+
+            effect.trsfParent = EditorGUILayout.ObjectField("位置", effect.trsfParent, typeof(Transform), true) as Transform;
         }
         GUILayout.EndHorizontal();
 
