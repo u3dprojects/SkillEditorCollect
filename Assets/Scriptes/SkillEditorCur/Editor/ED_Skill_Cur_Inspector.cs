@@ -36,6 +36,10 @@ public class ED_Skill_Cur_Inspector : Editor
     float movSpeed = 1f;
     float curSpeed = 0.0f;
 
+    // 只是参考时间是否在跑动
+    float Repaint_Inverval = 0.2f;
+    float Repaint_Progress = 0.0f;
+
     // DBOpt_Time db_opt_time = new DBOpt_Time(false);
 
     void OnEnable()
@@ -133,6 +137,17 @@ public class ED_Skill_Cur_Inspector : Editor
 
     void OnUpdate()
     {
+        // 重新绘制
+        if (Repaint_Inverval < Repaint_Progress)
+        {
+            this.Repaint();
+            Repaint_Progress = 0.0f;
+        }
+        else
+        {
+            Repaint_Progress += EDM_Timer.m_instance.DeltaTime;
+        }
+
         if (m_ani == null || isPauseing || !isPlaying || Application.isPlaying || EditorApplication.isPlaying)
         {
             return;
@@ -178,9 +193,7 @@ public class ED_Skill_Cur_Inspector : Editor
                 }
             }
         );
-
-        this.Repaint();
-
+        
         // 执行位移
         movCurve = draw_gui.curCurve;
         if (movCurve)
@@ -278,6 +291,8 @@ public class ED_Skill_Cur_Inspector : Editor
         draw_gui.DrawRoundTimes();
 
         draw_gui.DrawMovePos();
+
+        draw_gui.DrawTimerInfo();
 
         draw_gui.DrawEffect();
 

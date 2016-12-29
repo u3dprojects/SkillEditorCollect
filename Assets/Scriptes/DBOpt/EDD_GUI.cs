@@ -188,6 +188,19 @@ public class EDD_GUI : System.Object{
         GUILayout.Space(space_row_interval);
     }
 
+    public void DrawTimerInfo()
+    {
+        EditorGUILayout.BeginHorizontal();
+        {
+            GUILayout.Label("Delta Time : " + EDM_Timer.m_instance.DeltaTime + " s");
+
+            GUILayout.Label("Progress Time : " + EDM_Timer.m_instance.ProgressTime + " s");
+        }
+        EditorGUILayout.EndHorizontal();
+
+        GUILayout.Space(space_row_interval);
+    }
+
     public void DrawSpeed()
     {
         isCanSetMinMaxSpeed = EditorGUILayout.Toggle("速度的限制控制??", isCanSetMinMaxSpeed);
