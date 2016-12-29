@@ -36,27 +36,40 @@ public class ED_Skill06_Inspector : Editor
     float movSpeed = 1f;
     float curSpeed = 0.0f;
 
+    // 只是参考时间是否在跑动
+    float Repaint_Inverval = 0.2f;
+    float Repaint_Progress = 0.0f;
+
+    // DBOpt_Time db_opt_time = new DBOpt_Time(false);
+
     void OnEnable()
     {
-        EditorApplication.update += OnUpdate;
-
         EDM_Timer.m_instance.DoInit();
+        EDM_Particle.m_instance.DoInit();
+
+        EditorApplication.update += OnUpdate;
+        EditorApplication.update += EDM_Timer.m_instance.OnUpdate;
+        EditorApplication.update += EDM_Particle.m_instance.OnUpdate;
 
         DoInit();
     }
 
     void OnDisable()
     {
+
         EditorApplication.update -= OnUpdate;
+        EditorApplication.update -= EDM_Timer.m_instance.OnUpdate;
+        EditorApplication.update -= EDM_Particle.m_instance.OnUpdate;
 
         DoClear();
-
-        draw_gui.DoClear();
     }
 
     void DoClear()
     {
+        EDM_Particle.m_instance.DoClear();
+
         db_opt_ani.DoClear();
+
         m_entity = null;
         m_ani = null;
         trsf_entity = null;
@@ -106,13 +119,12 @@ public class ED_Skill06_Inspector : Editor
         isPauseing = false;
         isPlaying = false;
 
-        EDM_Particle.m_instance.DoInit();
-
         OnResetMemberReckon();
     }
 
     void OnResetMemberReckon()
     {
+        // db_opt_time.OnResetMemberReckon();
         EDM_Timer.m_instance.DoReset();
         if (trsf_entity)
             trsf_entity.position = def_pos;
@@ -128,16 +140,33 @@ public class ED_Skill06_Inspector : Editor
     {
         EDM_Timer.m_instance.DoResume();
         EDM_Particle.m_instance.DoResume();
+        // db_opt_time.DoResume();
     }
 
     void OnUpdate()
     {
+        // 重新绘制
+        if (Repaint_Inverval < Repaint_Progress)
+        {
+            this.Repaint();
+            Repaint_Progress = 0.0f;
+        }
+        else
+        {
+            Repaint_Progress += EDM_Timer.m_instance.DeltaTime;
+        }
+
         if (m_ani == null || isPauseing || !isPlaying || Application.isPlaying || EditorApplication.isPlaying)
         {
             return;
         }
 
+        // db_opt_time.DoUpdateTime(false);
+
         float temp = EDM_Timer.m_instance.DeltaTime;
+
+        // Debug.Log("= mono =" + temp + ", = editor = " + db_opt_time.DeltaTime);
+
         // db_opt_ani.DoUpdateAnimator(db_opt_time.DeltaTime, cur_speed);
 
         db_opt_ani.DoUpdateAnimator(temp, draw_gui.CurSpeed,
@@ -173,8 +202,6 @@ public class ED_Skill06_Inspector : Editor
             }
         );
 
-        this.Repaint();
-
         // 执行位移
         movCurve = draw_gui.curCurve;
         if (movCurve != null)
@@ -195,20 +222,21 @@ public class ED_Skill06_Inspector : Editor
             movPos.z = movCurve[2].Evaluate(nt01) * curSpeed;
 
 
-            if (myCtrl)
+            if (myCtrl && myCtrl.enabled)
             {
-                Debug.Log(movSpeed + "=,=" + temp + "=,=" + curSpeed + "=,=" + nt01 + "," + movCurve[0].Evaluate(nt01) + "," + movPos);
+                Debug.Log("= move =" + movSpeed + " , " + temp + " , " + curSpeed + " , " + nt01 + " , " + movCurve[0].Evaluate(nt01) + " , " + movPos);
                 myCtrl.Move(movPos);
             }
             else
             {
-                m_entity.transform.position += movPos;
+                trsf_entity.position += movPos;
             }
         }
     }
 
     void OnReady()
     {
+        EDM_Particle.m_instance.DoClear();
         OnResetMember();
         OnInitM_Ani();
     }
@@ -230,6 +258,11 @@ public class ED_Skill06_Inspector : Editor
         isPlaying = true;
 
         db_opt_ani.SetCurCondition();
+    }
+
+    void DoStop()
+    {
+        OnReady();
     }
 
     public override void OnInspectorGUI()
@@ -270,6 +303,8 @@ public class ED_Skill06_Inspector : Editor
 
         draw_gui.DrawMovePos();
 
+        draw_gui.DrawTimerInfo();
+
         draw_gui.DrawEffect();
 
         EditorGUILayout.BeginHorizontal();
@@ -294,7 +329,7 @@ public class ED_Skill06_Inspector : Editor
 
             if (GUILayout.Button("Stop"))
             {
-                OnReady();
+                DoStop();
             }
         }
         EditorGUILayout.EndHorizontal();
