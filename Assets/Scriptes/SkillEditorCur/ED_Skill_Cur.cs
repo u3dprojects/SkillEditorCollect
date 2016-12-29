@@ -12,4 +12,9 @@ public class ED_Skill_Cur : MonoBehaviour {
 	void Update () {
 	
 	}
+
+    void OnDestroy()
+    {
+
+    }
 }

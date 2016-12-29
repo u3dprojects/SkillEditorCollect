@@ -36,11 +36,13 @@ public class ED_Skill_Cur_Inspector : Editor
     float movSpeed = 1f;
     float curSpeed = 0.0f;
 
+    DBOpt_Time db_opt_time = new DBOpt_Time(false);
+
     void OnEnable()
     {
         EditorApplication.update += OnUpdate;
-
         EDM_Timer.m_instance.DoInit();
+        EDM_Particle.m_instance.DoInit();
 
         DoInit();
     }
@@ -104,14 +106,13 @@ public class ED_Skill_Cur_Inspector : Editor
     {
         isPauseing = false;
         isPlaying = false;
-
-        EDM_Particle.m_instance.DoInit();
-
+        
         OnResetMemberReckon();
     }
 
     void OnResetMemberReckon()
     {
+        // db_opt_time.OnResetMemberReckon();
         EDM_Timer.m_instance.DoReset();
         if (trsf_entity)
             trsf_entity.position = def_pos;
@@ -127,6 +128,7 @@ public class ED_Skill_Cur_Inspector : Editor
     {
         EDM_Timer.m_instance.DoResume();
         EDM_Particle.m_instance.DoResume();
+        // db_opt_time.DoResume();
     }
 
     void OnUpdate()
@@ -136,7 +138,12 @@ public class ED_Skill_Cur_Inspector : Editor
             return;
         }
 
+        // db_opt_time.DoUpdateTime(false);
+
         float temp = EDM_Timer.m_instance.DeltaTime;
+
+        // Debug.Log("= mono =" + temp + ", = editor = " + db_opt_time.DeltaTime);
+
         // db_opt_ani.DoUpdateAnimator(db_opt_time.DeltaTime, cur_speed);
 
         db_opt_ani.DoUpdateAnimator(temp, draw_gui.CurSpeed,
@@ -205,6 +212,7 @@ public class ED_Skill_Cur_Inspector : Editor
 
     void OnReady()
     {
+        EDM_Particle.m_instance.DoClear();
         OnResetMember();
         OnInitM_Ani();
     }
@@ -226,6 +234,11 @@ public class ED_Skill_Cur_Inspector : Editor
         isPlaying = true;
 
         db_opt_ani.SetCurCondition();
+    }
+
+    void DoStop()
+    {
+        OnReady();
     }
 
     public override void OnInspectorGUI()
@@ -290,7 +303,7 @@ public class ED_Skill_Cur_Inspector : Editor
 
             if (GUILayout.Button("Stop"))
             {
-                OnReady();
+                DoStop();
             }
         }
         EditorGUILayout.EndHorizontal();
