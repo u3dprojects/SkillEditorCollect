@@ -221,14 +221,14 @@ public class ED_Skill_Cur_Inspector : Editor
             movPos.z = movCurve[2].Evaluate(nt01) * curSpeed;
 
 
-            if (myCtrl)
+            if (myCtrl  && myCtrl.enabled)
             {
-                Debug.Log("= move =" + movSpeed + "=,=" + temp + "=,=" + curSpeed + "=,=" + nt01 + "," + movCurve[0].Evaluate(nt01) + "," + movPos);
+                Debug.Log("= move =" + movSpeed + " , " + temp + " , " + curSpeed + " , " + nt01 + " , " + movCurve[0].Evaluate(nt01) + " , " + movPos);
                 myCtrl.Move(movPos);
             }
             else
             {
-                m_entity.transform.position += movPos;
+                trsf_entity.position += movPos;
             }
         }
     }
