@@ -10,32 +10,38 @@ public class ED_DT2 : MonoBehaviour {
 
     public GameObject gobjEffect;
 
-    bool isInit = false;
+    public bool isAddToSelf = false;
 
     // OnUpdate Update
     public void OnUpdate()
     {
-        if (!isInit  && gobjEffect != null)
-        {
-            isInit = true;
-            Debug.Log("=== init ===");
-            DoPlay();
-        }
+        
     }
 
-    [ContextMenu("dddddd")]
+    [ContextMenu("DoPlay")]
     void DoPlay()
     {
+        if (gobjEffect == null)
+            return;
+
         Debug.Log("=== DoPlay ===");
         EDM_Timer.m_instance.DoReset();
         EDM_Particle.m_instance.DoClear();
-        EDM_Particle.m_instance.DoReady(gobjEffect);
+        Transform trsfParent = null;
+        if (isAddToSelf)
+        {
+            trsfParent = transform;
+        }
+        EDM_Particle.m_instance.DoReady(gobjEffect, trsfParent);
     }
     
 #if UNITY_EDITOR
     void OnEnable()
     {
         EditorApplication.update += OnUpdate;
+        EditorApplication.update += EDM_Particle.m_instance.OnUpdate;
+        EditorApplication.update += EDM_Timer.m_instance.OnUpdate;
+
         EDM_Timer.m_instance.DoInit();
         EDM_Particle.m_instance.DoInit();
     }
@@ -43,8 +49,10 @@ public class ED_DT2 : MonoBehaviour {
     void OnDisable()
     {
         EditorApplication.update -= OnUpdate;
-        EDM_Particle.m_instance.DoPause();
-        EDM_Timer.m_instance.DoPause();
+        EditorApplication.update -= EDM_Particle.m_instance.OnUpdate;
+        EditorApplication.update -= EDM_Timer.m_instance.OnUpdate;
+
+        EDM_Particle.m_instance.DoClear();
     }
 #endif
 }
