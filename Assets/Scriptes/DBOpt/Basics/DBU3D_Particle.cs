@@ -371,11 +371,16 @@ public class DBU3D_Particle : System.Object {
 
     public void Play()
     {
+        ChangeState(1);
+    }
+
+    public void DoStart()
+    {
         if (Application.isPlaying) {
             ChangeState(1);
         }else
         {
-            Simulate(0);
+            Simulate(0,false,true);
         }
     }
 
