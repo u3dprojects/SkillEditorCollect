@@ -45,7 +45,7 @@ public class EDM_Particle : MonoBehaviour {
 
     // 添加更新频率限定
     //更新间隔
-    float m_InvUpdate = 0.1f;
+    float m_InvUpdate = 0.05f;
     // 当前值
     float m_CurInvUp = 0.0f;
 
@@ -143,18 +143,18 @@ public class EDM_Particle : MonoBehaviour {
         isPause = false;
     }
 
-//#if UNITY_EDITOR
-//    void OnEnable()
-//    {
-//        EditorApplication.update += OnUpdate;
-//    }
+#if UNITY_EDITOR
+    void OnEnable()
+    {
+        EditorApplication.update += OnUpdate;
+    }
 
-//    void OnDisable()
-//    {
-//        DoClear();
-//        EditorApplication.update -= OnUpdate;
-//    }
-//#endif
+    void OnDisable()
+    {
+        DoClear();
+        EditorApplication.update -= OnUpdate;
+    }
+#endif
 
     // Use this for initialization
     void Start () {
