@@ -40,17 +40,17 @@ public class EDM_Timer : MonoBehaviour {
 
     DBOpt_Time m_time = new DBOpt_Time();
 
-#if UNITY_EDITOR
-    void OnEnable()
-    {
-        EditorApplication.update += OnUpdate;
-    }
+//#if UNITY_EDITOR
+//    void OnEnable()
+//    {
+//        EditorApplication.update += OnUpdate;
+//    }
 
-    void OnDisable()
-    {
-        EditorApplication.update -= OnUpdate;
-    }
-#endif
+//    void OnDisable()
+//    {
+//        EditorApplication.update -= OnUpdate;
+//    }
+//#endif
 
     public void DoPause()
     {
