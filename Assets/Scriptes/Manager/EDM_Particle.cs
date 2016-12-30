@@ -96,7 +96,7 @@ public class EDM_Particle : MonoBehaviour {
         if (m_CurInvUp < m_InvUpdate)
             return;
         
-        Debug.Log("== EDM_Particle delta = " + m_CurInvUp);
+        // Debug.Log("== EDM_Particle delta = " + m_CurInvUp);
 
         for (int i = 0; i < lens; i++)
         {
@@ -106,6 +106,8 @@ public class EDM_Particle : MonoBehaviour {
 
         m_CurInvUp = 0.0f;
         OnClearParticle();
+
+        UnityEditorInternal.InternalEditorUtility.RepaintAllViews();
     }
 
     void OnClearParticle(bool isAll = false)
