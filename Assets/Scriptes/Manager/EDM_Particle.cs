@@ -39,6 +39,7 @@ public class EDM_Particle : MonoBehaviour {
     }
 
     List<DBU3D_Particle> list = new List<DBU3D_Particle>();
+    List<DBU3D_Particle> rmList = new List<DBU3D_Particle>();
     DBU3D_Particle tmp;
     int lens = 0;
     bool isPause = false;
@@ -77,7 +78,7 @@ public class EDM_Particle : MonoBehaviour {
         }
 
         DBU3D_Particle db = new DBU3D_Particle(go);
-        db.Simulate(0,false,true);
+        db.DoStart();
         list.Add(db);
     }
 
@@ -112,17 +113,28 @@ public class EDM_Particle : MonoBehaviour {
 
     void OnClearParticle(bool isAll = false)
     {
+        rmList.Clear();
+
+        lens = list.Count;
         bool isCanMv = false;
-        for (int i = 0; i < list.Count; i++)
+        for (int i = 0; i < lens; i++)
         {
             tmp = list[i];
-            isCanMv = tmp.isEndLife;
+            isCanMv = tmp.isEndMax;
 
-            if (isAll || isCanMv) { 
-                list.Remove(tmp);
-                tmp.DoDestory();
+            if (isAll || isCanMv) {
+                rmList.Add(tmp);
             }
         }
+
+        lens = rmList.Count;
+        for (int i = 0; i < lens; i++)
+        {
+            tmp = rmList[i];
+            tmp.DoDestory();
+            list.Remove(tmp);
+        }
+        
         tmp = null;
     }
 
@@ -131,6 +143,8 @@ public class EDM_Particle : MonoBehaviour {
         OnClearParticle(true);
 
         list.Clear();
+        rmList.Clear();
+
         tmp = null;
         isPause = false;
     }
