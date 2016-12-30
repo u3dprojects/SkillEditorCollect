@@ -79,13 +79,16 @@ public class ED_Particle02_Inspector : Editor
         m_db_particle.SetSpeedRate(cur_speed);
 
         // 用delta time 播放 无效??
-        m_db_particle.Simulate(m_db_time.ProgressTime,true,true);
-        
+        // m_db_particle.Simulate(m_db_time.ProgressTime,false,true);
+        // m_db_particle.Simulate(m_db_time.DeltaTime, false, false);
+
     }
 
     void DoPlay(bool isFirst = true)
     {
         OnReady();
+
+        m_db_particle.Simulate(0, false, true);
 
         isPlaying = true;
     }
