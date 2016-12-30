@@ -11,7 +11,7 @@ using UnityEditor;
 [System.Serializable]
 public class EDD_GUI : System.Object{
 
-    protected ED_Ani db_opt_ani;
+    protected ED_Ani m_ed_ani;
     // DBOpt_Time db_opt_time = new DBOpt_Time();
 
     // 控制行间 - 间隔距离
@@ -66,7 +66,7 @@ public class EDD_GUI : System.Object{
 
     public virtual void DoClear()
     {
-        db_opt_ani = null;
+        m_ed_ani = null;
 
         Reset();
     }
@@ -98,7 +98,7 @@ public class EDD_GUI : System.Object{
     {
         Reset();
         
-        this.db_opt_ani = db_ani;
+        this.m_ed_ani = db_ani;
     }
 
     public float CurSpeed
@@ -127,13 +127,13 @@ public class EDD_GUI : System.Object{
 
     public bool DrawJudged()
     {
-        if (db_opt_ani == null)
+        if (m_ed_ani == null)
         {
             EditorGUILayout.HelpBox("请将脚本绑定到一个带Animator的物体！", MessageType.Error);
             return false;
         }
 
-        if (db_opt_ani.Keys.Count <= 0)
+        if (m_ed_ani.Keys.Count <= 0)
         {
             EditorGUILayout.HelpBox("该AnimatorController里面没有任何动画，请添加动画！", MessageType.Error);
             return false;
@@ -155,12 +155,12 @@ public class EDD_GUI : System.Object{
 
     public virtual void DrawAniListIndex(System.Action callFunc = null)
     {
-        ind_popup = EditorGUILayout.Popup("动画列表", ind_popup, db_opt_ani.Keys.ToArray());
+        ind_popup = EditorGUILayout.Popup("动画列表", ind_popup, m_ed_ani.Keys.ToArray());
         if (pre_ind_popup != ind_popup)
         {
             pre_ind_popup = ind_popup;
-            db_opt_ani.ResetAniState(ind_popup);
-            db_opt_ani.SetSpeed(1.0f);
+            m_ed_ani.ResetAniState(ind_popup);
+            m_ed_ani.SetSpeed(1.0f);
 
             cur_speed = 1.0f;
             
@@ -177,11 +177,11 @@ public class EDD_GUI : System.Object{
     {
         EditorGUILayout.BeginHorizontal();
         {
-            GUILayout.Label("总帧数: " + db_opt_ani.CurFrameCount);
+            GUILayout.Label("总帧数: " + m_ed_ani.CurFrameCount);
 
-            GUILayout.Label("总时长: " + db_opt_ani.CurLens + " s");
+            GUILayout.Label("总时长: " + m_ed_ani.CurLens + " s");
 
-            EditorGUILayout.LabelField("动画帧率: " + db_opt_ani.CurFrameRate +" 帧/s");
+            EditorGUILayout.LabelField("动画帧率: " + m_ed_ani.CurFrameRate +" 帧/s");
         }
         EditorGUILayout.EndHorizontal();
 
@@ -236,7 +236,7 @@ public class EDD_GUI : System.Object{
         reckon_progress = (normalizedTime % 1);
         reckon_progress = Round(reckon_progress, 3);
 
-        cur_progress = reckon_progress * db_opt_ani.CurLens;
+        cur_progress = reckon_progress * m_ed_ani.CurLens;
         cur_progress = Round(cur_progress, 3);
 
         pre_progress = cur_progress;
@@ -279,15 +279,15 @@ public class EDD_GUI : System.Object{
         {
             if (!isPause)
             {
-                ReckonProgress(db_opt_ani.normalizedTime);
+                ReckonProgress(m_ed_ani.normalizedTime);
             } else if (isPause && pre_progress != cur_progress) {
-                ReckonProgress(cur_progress / db_opt_ani.CurLens);
-                db_opt_ani.PlayCurr(reckon_progress);
+                ReckonProgress(cur_progress / m_ed_ani.CurLens);
+                m_ed_ani.PlayCurr(reckon_progress);
             }
 
             // EditorGUILayout.LabelField("当前进度:" + reckon_progress);
             GUILayout.Label("当前进度:" + reckon_progress,GUILayout.Width(110));
-            cur_progress = EditorGUILayout.Slider(cur_progress, min_progress, max_progress * db_opt_ani.CurLens);
+            cur_progress = EditorGUILayout.Slider(cur_progress, min_progress, max_progress * m_ed_ani.CurLens);
         }
         EditorGUILayout.EndHorizontal();
 
@@ -325,72 +325,91 @@ public class EDD_GUI : System.Object{
         }
     }
 
+    
     // 添加特效
     public void DrawEffect()
     {
-        EditorGUILayout.BeginHorizontal();
+        GUILayout.BeginVertical("As TextArea", GUILayout.MinHeight(12));
         {
-            if (GUILayout.Button("添加动作特效"))
+            EditorGUILayout.BeginHorizontal();
             {
-                db_opt_ani.AddCurEffect();
-            }
-        }
-        EditorGUILayout.EndHorizontal();
+                GUILayout.Space(2);
+                Color def = GUI.backgroundColor;
+                GUI.backgroundColor = Color.black;
+                GUI.color = Color.white;
 
-        GUILayout.Space(space_row_interval);
+                EditorGUILayout.LabelField("特效列表", EditorStyles.textArea);
 
-        int lens = db_opt_ani.curEffects.Count;
-        
-        if (lens > 0) {
-            EA_Effect effect;
-            for (int i = 0; i < lens; i++)
-            {
-                lens = db_opt_ani.curEffects.Count;
-                if(i > lens - 1)
+                GUI.backgroundColor = def;
+
+                GUI.color = Color.green;
+                if (GUILayout.Button("+", GUILayout.Width(50)))
                 {
-                    i = lens - 1;
+                    m_ed_ani.AddCurEffect();
                 }
+                GUI.color = Color.white;
+            }
+            EditorGUILayout.EndHorizontal();
 
-                effect = db_opt_ani.curEffects[i];
+            GUILayout.Space(space_row_interval);
 
-                m_evnt_fodeOut.Add(false);
+            int lens = m_ed_ani.curEffects.Count;
 
-                EditorGUILayout.BeginVertical();
+            if (lens > 0)
+            {
+                EA_Effect effect;
+                for (int i = 0; i < lens; i++)
                 {
-                    EditorGUILayout.BeginHorizontal();
+                    lens = m_ed_ani.curEffects.Count;
+                    if (i > lens - 1)
                     {
-                        if (string.IsNullOrEmpty(effect.name))
-                        {
-                            m_evnt_fodeOut[i] = EditorGUILayout.Foldout(m_evnt_fodeOut[i], "特效 - 未指定");
-                        }
-                        else
-                        {
-                            m_evnt_fodeOut[i] = EditorGUILayout.Foldout(m_evnt_fodeOut[i], "特效 - " + effect.name);
-                        }
-
-                        GUI.color = Color.red;
-                        if (GUILayout.Button("X", EditorStyles.miniButton, GUILayout.Width(50)))
-                        {
-                            db_opt_ani.RemoveEffect(effect);
-                            m_evnt_fodeOut.RemoveAt(i);
-                        }
-                        GUI.color = Color.white;
+                        i = lens - 1;
                     }
-                    EditorGUILayout.EndHorizontal();
+
+                    effect = m_ed_ani.curEffects[i];
+
+                    m_evnt_fodeOut.Add(false);
+
+                    EditorGUILayout.BeginVertical();
+                    {
+                        EditorGUILayout.BeginHorizontal();
+                        {
+                            if (string.IsNullOrEmpty(effect.name))
+                            {
+                                m_evnt_fodeOut[i] = EditorGUILayout.Foldout(m_evnt_fodeOut[i], "特效 - 未指定");
+                            }
+                            else
+                            {
+                                m_evnt_fodeOut[i] = EditorGUILayout.Foldout(m_evnt_fodeOut[i], "特效 - " + effect.name);
+                            }
+
+                            GUI.color = Color.red;
+                            if (GUILayout.Button("X", EditorStyles.miniButton, GUILayout.Width(50)))
+                            {
+                                m_ed_ani.RemoveEffect(effect);
+                                m_evnt_fodeOut.RemoveAt(i);
+                            }
+                            GUI.color = Color.white;
+                        }
+                        EditorGUILayout.EndHorizontal();
+                        GUILayout.Space(space_row_interval);
+
+                        if (m_evnt_fodeOut[i])
+                        {
+                            DrawOneEffect(effect);
+                        }
+                    }
+                    EditorGUILayout.EndVertical();
                     GUILayout.Space(space_row_interval);
-
-                    if (m_evnt_fodeOut[i])
-                    {
-                        DrawOneEffect(effect);
-                    }
                 }
-                EditorGUILayout.EndVertical();
-                GUILayout.Space(space_row_interval);
             }
-        }else
-        {
-            m_evnt_fodeOut.Clear();
+            else
+            {
+                m_evnt_fodeOut.Clear();
+            }
+
         }
+        GUILayout.EndVertical();
     }
 
     protected virtual void DrawOneEffect(EA_Effect effect)
@@ -416,7 +435,7 @@ public class EDD_GUI : System.Object{
 
         if (effect.isChanged)
         {
-            db_opt_ani.ResetEvent(effect,effect.trsfParent);
+            m_ed_ani.ResetEvent(effect,effect.trsfParent);
         }
 
     }

@@ -62,8 +62,8 @@ public class EDD_GUI_YGame : EDD_GUI{
     void InitMache()
     {
         // 获取StateMache
-        db_opt_ani.cur_state_mache = db_opt_ani.GetStateMache<SpriteAniCurve>();
-        bool isNotNull = db_opt_ani.cur_state_mache != null;
+        m_ed_ani.cur_state_mache = m_ed_ani.GetStateMache<SpriteAniCurve>();
+        bool isNotNull = m_ed_ani.cur_state_mache != null;
         is_open_pos = isNotNull;
         syncMache(true);
         if (!isNotNull)
@@ -74,21 +74,21 @@ public class EDD_GUI_YGame : EDD_GUI{
 
     void SaveMache()
     {
-        if(db_opt_ani.cur_state_mache == null)
+        if(m_ed_ani.cur_state_mache == null)
         {
-            db_opt_ani.cur_state_mache = db_opt_ani.AddStateMache<SpriteAniCurve>();
+            m_ed_ani.cur_state_mache = m_ed_ani.AddStateMache<SpriteAniCurve>();
         }
         syncMache();
     }
 
     void syncMache(bool isReverse = false)
     {
-        if (db_opt_ani.cur_state_mache == null)
+        if (m_ed_ani.cur_state_mache == null)
         {
             return;
         }
 
-        SpriteAniCurve temp = db_opt_ani.cur_state_mache as SpriteAniCurve;
+        SpriteAniCurve temp = m_ed_ani.cur_state_mache as SpriteAniCurve;
         if (isReverse)
         {
             x_curve = temp.x;
@@ -105,8 +105,8 @@ public class EDD_GUI_YGame : EDD_GUI{
 
     void RemoveMache()
     {
-        db_opt_ani.RemoveStateMache<SpriteAniCurve>();
-        db_opt_ani.cur_state_mache = null;
+        m_ed_ani.RemoveStateMache<SpriteAniCurve>();
+        m_ed_ani.cur_state_mache = null;
         DefCurve();
     }
 
@@ -174,9 +174,9 @@ public class EDD_GUI_YGame : EDD_GUI{
         {
             if (is_open_pos)
             {
-                if (db_opt_ani.cur_state_mache)
+                if (m_ed_ani.cur_state_mache)
                 {
-                    SpriteAniCurve m_Curve = db_opt_ani.cur_state_mache as SpriteAniCurve;
+                    SpriteAniCurve m_Curve = m_ed_ani.cur_state_mache as SpriteAniCurve;
                     curMvPocCurve[0] = m_Curve.x;
                     curMvPocCurve[1] = m_Curve.y;
                     curMvPocCurve[2] = m_Curve.z;
@@ -206,6 +206,16 @@ public class EDD_GUI_YGame : EDD_GUI{
             {
                 m_join = m_pre_join;
                 effect.bind_bones_type = (int)m_join;
+            }
+
+            if(curJoin == null) {
+                GUI.color = Color.green;
+                // EditorGUIUtility.singleLineHeight
+                if (GUILayout.Button("添加挂节点脚本", EditorStyles.miniButton, GUILayout.Height(18)))
+                {
+                    curJoin = m_ed_ani.m_ani.gameObject.AddComponent<SpriteJoint>();
+                }
+                GUI.color = Color.white;
             }
         }
         GUILayout.EndHorizontal();
