@@ -43,6 +43,12 @@ public class EDM_Particle : MonoBehaviour {
     int lens = 0;
     bool isPause = false;
 
+    // 添加更新频率限定
+    //更新间隔
+    float m_InvUpdate = 0.1f;
+    // 当前值
+    float m_CurInvUp = 0.0f;
+
     public void DoInit()
     {
         DoClear();
@@ -50,6 +56,11 @@ public class EDM_Particle : MonoBehaviour {
 
     public void DoReady(GameObject gobjFab,Transform trsfParent = null)
     {
+        if(gobjFab == null)
+        {
+            return;
+        }
+
         UnityEngine.GameObject gobj = GameObject.Instantiate(gobjFab, Vector3.zero, Quaternion.identity) as GameObject;
         if(trsfParent != null)
         {
@@ -60,6 +71,11 @@ public class EDM_Particle : MonoBehaviour {
 
     void DoActive(GameObject go)
     {
+        if (go == null)
+        {
+            return;
+        }
+
         DBU3D_Particle db = new DBU3D_Particle(go);
         db.Simulate(0,false,true);
         list.Add(db);
@@ -72,17 +88,23 @@ public class EDM_Particle : MonoBehaviour {
 
     public void OnUpdate(float deltatime)
     {
-        if (isPause)
+        lens = list.Count;
+        if (isPause || lens <= 0)
             return;
 
-        // Debug.Log("delta = " + deltatime);
+        m_CurInvUp += deltatime;
+        if (m_CurInvUp < m_InvUpdate)
+            return;
+        
+        Debug.Log("== EDM_Particle delta = " + m_CurInvUp);
 
-        lens = list.Count;
         for (int i = 0; i < lens; i++)
         {
             tmp = list[i];
-            tmp.Simulate(deltatime,false,false);
+            tmp.Simulate(m_CurInvUp, false,false);
         }
+
+        m_CurInvUp = 0.0f;
         OnClearParticle();
     }
 
@@ -121,18 +143,18 @@ public class EDM_Particle : MonoBehaviour {
         isPause = false;
     }
 
-#if UNITY_EDITOR
-    void OnEnable()
-    {
-        EditorApplication.update += OnUpdate;
-    }
+//#if UNITY_EDITOR
+//    void OnEnable()
+//    {
+//        EditorApplication.update += OnUpdate;
+//    }
 
-    void OnDisable()
-    {
-        DoClear();
-        EditorApplication.update -= OnUpdate;
-    }
-#endif
+//    void OnDisable()
+//    {
+//        DoClear();
+//        EditorApplication.update -= OnUpdate;
+//    }
+//#endif
 
     // Use this for initialization
     void Start () {
