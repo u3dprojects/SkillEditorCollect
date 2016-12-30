@@ -28,7 +28,12 @@ public class DBU3D_Particle : System.Object {
     float _maxTime = 0.0f;
 
     // 当前操作对象
-    GameObject gobj;
+    GameObject gobj = null;
+
+    // 用于计算的
+    float m_run_times = 0.0f;
+    // 循环次数
+    int m_loop_count = 0;
 
     public DBU3D_Particle() { }
 
@@ -93,18 +98,14 @@ public class DBU3D_Particle : System.Object {
 
     public void DoDestory()
     {
-        GameObject gobj = this.gobj;
-
-        DoClear();
-
-        if (gobj)
-        {
+        gobj.SetActive(false);
 #if UNITY_EDITOR
-            GameObject.DestroyImmediate(gobj);
+        GameObject.DestroyImmediate(gobj);
 #else
-            GameObject.Destroy(gobj);
+        GameObject.Destroy(gobj);
 #endif
-        }
+        DoClear();
+        
     }
 
     public void DoClear() {
@@ -118,6 +119,9 @@ public class DBU3D_Particle : System.Object {
         listAll.Clear();
         listAllRenders.Clear();
         dicDefaultScale.Clear();
+
+        m_run_times = 0.0f;
+        m_loop_count = 0;
     }
 
     void DoClearParticle()
@@ -208,14 +212,6 @@ public class DBU3D_Particle : System.Object {
         get
         {
             return _curScale;
-        }
-    }
-
-    public float lifeTime
-    {
-        get
-        {
-            return _maxTime - 0.01f;
         }
     }
 
@@ -311,27 +307,6 @@ public class DBU3D_Particle : System.Object {
         }
     }
 
-    public bool isEndLife
-    {
-        get
-        {
-            if (lens <= 0)
-            {
-                return true;
-            }
-            ParticleSystem ps;
-            for (int i = 0; i < lens; i++)
-            {
-                ps = listAll[i];
-                if(ps.time > lifeTime)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-    }
-
     // 设置播放速度 1 为正常
     public void SetSpeed(float speed)
     {
@@ -376,6 +351,9 @@ public class DBU3D_Particle : System.Object {
 
     public void DoStart()
     {
+        m_run_times = 0.0f;
+        m_loop_count = 0;
+
         if (Application.isPlaying) {
             ChangeState(1);
         }else

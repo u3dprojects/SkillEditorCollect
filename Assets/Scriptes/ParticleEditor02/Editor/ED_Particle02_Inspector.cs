@@ -88,7 +88,7 @@ public class ED_Particle02_Inspector : Editor
     {
         OnReady();
 
-        m_db_particle.Simulate(0, false, true);
+        m_db_particle.DoStart();
 
         isPlaying = true;
     }
