@@ -43,6 +43,7 @@ public class EDM_Particle : MonoBehaviour {
     DBU3D_Particle tmp;
     int lens = 0;
     bool isPause = false;
+    float curSpeed = 1.0f;
 
     // 添加更新频率限定
     //更新间隔
@@ -112,7 +113,7 @@ public class EDM_Particle : MonoBehaviour {
         for (int i = 0; i < lens; i++)
         {
             tmp = list[i];
-            tmp.DoUpdate(m_CurInvUp);
+            tmp.DoUpdate(m_CurInvUp * curSpeed);
         }
 
         m_CurInvUp = 0.0f;
@@ -157,6 +158,7 @@ public class EDM_Particle : MonoBehaviour {
 
         tmp = null;
         isPause = false;
+        curSpeed = 1.0f;
     }
 
     public void DoPause()
@@ -171,13 +173,7 @@ public class EDM_Particle : MonoBehaviour {
 
     public void SetSpeed(float speed)
     {
-        lens = list.Count;
-        for (int i = 0; i < lens; i++)
-        {
-            tmp = list[i];
-            tmp.SetSpeed(speed);
-        }
-        tmp = null;
+        curSpeed = speed;
     }
 
 #if UNITY_EDITOR
