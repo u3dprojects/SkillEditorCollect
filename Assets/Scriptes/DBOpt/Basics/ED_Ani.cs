@@ -71,6 +71,12 @@ public class ED_Ani : ED_AniBase {
     // 当前StateMatch
     public StateMachineBehaviour cur_state_mache { get; set; }
 
+    // 改变时候调用的函数
+    public System.Action callChanged { get; set; }
+    
+    // 完成一次循环(一个周期)
+    public System.Action<bool> callCompleted { get; set; }
+
     public ED_Ani() { }
 
     public ED_Ani(Animator ani):base(ani)
@@ -252,6 +258,9 @@ public class ED_Ani : ED_AniBase {
 
         stateEvent.DoClear();
 
+        callChanged = null;
+        callCompleted = null;
+
         OnResetMemberReckon();
     }
 
@@ -261,6 +270,19 @@ public class ED_Ani : ED_AniBase {
         cur_Phase = 0.0f;
         cur_loop_times = 0;
         isFinishedOneWheel = false;
+    }
+
+    public void DoUpdateCurr(float m_fPhase)
+    {
+        m_fPhase = Mathf.Repeat(m_fPhase, 1);
+        float curtime = cur_loop_times + m_fPhase;
+        float deltatime = (curtime - cur_progressTime) / curSpeed / m_InvLifeTime;
+
+        isFinishedOneWheel = OnUpdateTime(deltatime);
+        PlayCurr(cur_Phase);
+
+        // 执行事件
+        // stateEvent.OnUpdate(cur_Phase);
     }
 
     public void PlayCurr(float begNormallizedTime, float delta_time = 0)
@@ -349,14 +371,16 @@ public class ED_Ani : ED_AniBase {
             }
         }
     }
-    
-    public void DoUpdateAnimator(float deltatime, float speed)
+
+    #region === 以前的模式目前没有用了 ===
+
+    public void DoUpdateAnimator(float deltatime)
     {
-        DoUpdateAnimator(deltatime, speed, null, null);
+        DoUpdateAnimator(deltatime, 1, null, null);
     }
 
     // 以前的模式(目前没有用了)
-    void OnUpdateAnimator(float deltatime, float speed, System.Action callBackChange, System.Action<bool> callFinished)
+    public void DoUpdateAnimator(float deltatime, float speed, System.Action callBackChange, System.Action<bool> callFinished)
     {
         if (m_ani == null)
             return;
@@ -413,7 +437,9 @@ public class ED_Ani : ED_AniBase {
         stateEvent.OnUpdate(nt01);
     }
 
-    public void DoUpdateAnimator(float deltatime,float speed,System.Action callBackChange,System.Action<bool> callFinished)
+    #endregion
+
+    public void DoUpdateAnimator(float deltatime,float speed)
     {
         if (m_ani == null)
             return;
@@ -423,9 +449,9 @@ public class ED_Ani : ED_AniBase {
         {
             OnResetMemberReckon();
 
-            if (callBackChange != null)
+            if (this.callChanged != null)
             {
-                callBackChange();
+                this.callChanged();
             }
         }
 
@@ -450,9 +476,9 @@ public class ED_Ani : ED_AniBase {
         
         if (isFinishedOneWheel)
         {
-            if (callFinished != null)
+            if (this.callCompleted != null)
             {
-                callFinished(isLoop);
+                this.callCompleted(isLoop);
             }
         }
 
