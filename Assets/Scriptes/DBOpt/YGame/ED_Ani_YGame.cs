@@ -9,5 +9,11 @@ using System.Collections;
 /// </summary>
 [System.Serializable]
 public class ED_Ani_YGame : ED_Ani {
-
+    public override float DoPlayCurr(float m_fPhase)
+    {
+        float delaytime = base.DoPlayCurr(m_fPhase);
+        //EDM_Particle.m_instance.OnUpdate(delaytime,true);
+        //Debug.Log(delaytime);
+        return delaytime;
+    }
 }

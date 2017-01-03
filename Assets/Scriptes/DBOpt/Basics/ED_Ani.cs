@@ -272,18 +272,35 @@ public class ED_Ani : ED_AniBase {
         isFinishedOneWheel = false;
     }
 
-    public void DoUpdateCurr(float m_fPhase)
+    // 根据进度来取得上次和此次的间隔时间
+    public float GetDelayTime(float m_fPhase)
     {
         m_fPhase = Mathf.Repeat(m_fPhase, 1);
         float curtime = cur_loop_times + m_fPhase;
-        float deltatime = (curtime - cur_progressTime) / curSpeed / m_InvLifeTime;
+        return (curtime - cur_progressTime) / curSpeed / m_InvLifeTime;
+    }
 
+    // 专门用于拖动进度的时候调用的
+    public virtual float DoPlayCurr(float m_fPhase)
+    {
+        float deltatime = GetDelayTime(m_fPhase);
         isFinishedOneWheel = OnUpdateTime(deltatime);
         PlayCurr(cur_Phase);
 
+        if (isFinishedOneWheel)
+        {
+            if (this.callCompleted != null)
+            {
+                this.callCompleted(isLoop);
+            }
+        }
+
         // 执行事件
         // stateEvent.OnUpdate(cur_Phase);
+
+        return deltatime;
     }
+
 
     public void PlayCurr(float begNormallizedTime, float delta_time = 0)
     {
@@ -486,7 +503,7 @@ public class ED_Ani : ED_AniBase {
         stateEvent.OnUpdate(cur_Phase);
     }
 
-    bool OnUpdateTime(float deltatime)
+    protected bool OnUpdateTime(float deltatime)
     {
         cur_progressTime += deltatime * m_InvLifeTime * curSpeed;
         cur_Phase = cur_progressTime - cur_loop_times;

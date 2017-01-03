@@ -282,7 +282,7 @@ public class EDD_GUI : System.Object{
                 ReckonProgress(m_ed_ani.normalizedTime);
             } else if (isPause && pre_progress != cur_progress) {
                 ReckonProgress(cur_progress / m_ed_ani.CurLens);
-                m_ed_ani.DoUpdateCurr(reckon_progress);
+                m_ed_ani.DoPlayCurr(reckon_progress);
             }
 
             // EditorGUILayout.LabelField("当前进度:" + reckon_progress);

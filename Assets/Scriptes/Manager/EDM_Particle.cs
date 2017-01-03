@@ -98,11 +98,16 @@ public class EDM_Particle : MonoBehaviour {
         OnUpdate(EDM_Timer.m_instance.DeltaTime);
     }
 
-    public void OnUpdate(float deltatime)
+    public void OnUpdate(float deltatime,bool isImm = false)
     {
         lens = list.Count;
-        if (isPause || lens <= 0)
+        if (lens <= 0)
             return;
+
+        if (!isImm) {
+            if (isPause)
+                return;
+        }
 
         m_CurInvUp += deltatime;
         if (m_CurInvUp < m_InvUpdate)
