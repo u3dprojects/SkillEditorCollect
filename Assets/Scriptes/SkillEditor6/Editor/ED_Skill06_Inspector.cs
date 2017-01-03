@@ -171,35 +171,7 @@ public class ED_Skill06_Inspector : Editor
 
         db_opt_ani.DoUpdateAnimator(temp, draw_gui.CurSpeed,
             delegate () { OnResetMemberReckon(); },
-            delegate (bool isloop)
-            {
-                draw_gui.cur_round_times++;
-                if (draw_gui.isRound)
-                {
-                    if (draw_gui.isCompleteRound)
-                    {
-                        isPlaying = false;
-                    }
-                }
-                else
-                {
-                    if (isloop)
-                    {
-                        db_opt_ani.ResetCurEvents();
-                    }
-                    else
-                    {
-                        isPlaying = false;
-                    }
-                }
-
-                OnResetMemberReckon();
-
-                if (isPlaying && !isloop)
-                {
-                    DoPlay(false);
-                }
-            }
+            delegate (bool isloop){ CallFuncFinished(isloop);}
         );
 
         // 执行位移
@@ -231,6 +203,36 @@ public class ED_Skill06_Inspector : Editor
             {
                 trsf_entity.position += movPos;
             }
+        }
+    }
+
+    void CallFuncFinished(bool isLoop)
+    {
+        draw_gui.cur_round_times++;
+        if (draw_gui.isRound)
+        {
+            if (draw_gui.isCompleteRound)
+            {
+                isPlaying = false;
+            }
+        }
+        else
+        {
+            if (isLoop)
+            {
+                db_opt_ani.ResetCurEvents();
+            }
+            else
+            {
+                isPlaying = false;
+            }
+        }
+
+        OnResetMemberReckon();
+
+        if (isPlaying && !isLoop)
+        {
+            DoPlay(false);
         }
     }
 
