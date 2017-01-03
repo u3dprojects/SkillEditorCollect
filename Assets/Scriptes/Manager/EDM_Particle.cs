@@ -54,23 +54,32 @@ public class EDM_Particle : MonoBehaviour {
     {
         DoClear();
     }
-
-    public void DoReady(GameObject gobjFab,Transform trsfParent = null)
+    
+    public void DoReady(GameObject gobjFab, Transform trsfParent = null)
     {
-        if(gobjFab == null)
+        DoReady(gobjFab, Vector3.zero, Vector3.zero, 1, trsfParent);
+    }
+
+    public void DoReady(GameObject gobjFab, Vector3 locPos,Vector3 locRotation,float scale = 1,Transform trsfParent = null)
+    {
+        if (gobjFab == null)
         {
             return;
         }
-
         UnityEngine.GameObject gobj = GameObject.Instantiate(gobjFab, Vector3.zero, Quaternion.identity) as GameObject;
-        if(trsfParent != null)
+        Transform trsfGobj = gobj.transform;
+        if (trsfParent != null)
         {
-            gobj.transform.parent = trsfParent;
+            trsfGobj.parent = trsfParent;
         }
-        DoActive(gobj);
+        trsfGobj.localPosition = locPos;
+        trsfGobj.localEulerAngles = locRotation;
+        trsfGobj.localScale = Vector3.one;
+
+        DoActive(gobj,scale);
     }
 
-    void DoActive(GameObject go)
+    void DoActive(GameObject go, float scale = 1)
     {
         if (go == null)
         {
@@ -79,6 +88,7 @@ public class EDM_Particle : MonoBehaviour {
 
         DBU3D_Particle db = new DBU3D_Particle(go);
         db.DoStart();
+        db.SetScale(scale);
         list.Add(db);
     }
 

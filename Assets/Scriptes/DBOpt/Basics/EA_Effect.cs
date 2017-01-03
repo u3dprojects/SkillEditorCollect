@@ -54,6 +54,15 @@ public class EA_Effect : System.Object
     // 挂节点
     public Transform trsfParent { get; set; }
 
+    // 偏移
+    public Vector3 v3LocPos { get; set; }
+
+    // 旋转
+    public Vector3 v3LocEulerAngle { get; set; }
+
+    // 缩放
+    public float scale { get; set; }
+
     // 是否有改变
     public bool isChanged { get; set; }
     
@@ -146,5 +155,8 @@ public class EA_Effect : System.Object
         bind_bones_type = 0;
         trsfParent = null;
         isChanged = false;
+        v3LocPos = Vector3.zero;
+        v3LocEulerAngle = Vector3.zero;
+        scale = 1;
     }
 }

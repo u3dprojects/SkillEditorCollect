@@ -246,5 +246,30 @@ public class EDD_GUI_YGame : EDD_GUI{
         GUILayout.EndHorizontal();
 
         GUILayout.Space(space_row_interval);
+
+
+        GUILayout.BeginHorizontal();
+        {
+            effect.v3LocPos = EditorGUILayout.Vector3Field("偏移:", effect.v3LocPos);
+        }
+        GUILayout.EndHorizontal();
+
+        GUILayout.Space(space_row_interval);
+
+        GUILayout.BeginHorizontal();
+        {
+            effect.v3LocEulerAngle = EditorGUILayout.Vector3Field("旋转:", effect.v3LocEulerAngle);
+        }
+        GUILayout.EndHorizontal();
+
+        GUILayout.Space(space_row_interval);
+
+        GUILayout.BeginHorizontal();
+        {
+            effect.scale = EditorGUILayout.FloatField("缩放:", effect.scale);
+        }
+        GUILayout.EndHorizontal();
+
+        GUILayout.Space(space_row_interval);
     }
 }

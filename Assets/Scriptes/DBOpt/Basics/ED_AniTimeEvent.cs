@@ -89,7 +89,7 @@ public class ED_AniTimeEvent : System.Object {
         if (m_event == null) {
             m_event = new EA_Event<string>(one_effect.unq_id, delegate (string id)
             {
-                EDM_Particle.m_instance.DoReady(one_effect.gobjFab,one_effect.trsfParent);
+                EDM_Particle.m_instance.DoReady(one_effect.gobjFab,one_effect.v3LocPos,one_effect.v3LocEulerAngle,one_effect.scale,one_effect.trsfParent);
             });
         }
 
