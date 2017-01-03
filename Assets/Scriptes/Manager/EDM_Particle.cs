@@ -169,6 +169,17 @@ public class EDM_Particle : MonoBehaviour {
         isPause = false;
     }
 
+    public void SetSpeed(float speed)
+    {
+        lens = list.Count;
+        for (int i = 0; i < lens; i++)
+        {
+            tmp = list[i];
+            tmp.SetSpeed(speed);
+        }
+        tmp = null;
+    }
+
 #if UNITY_EDITOR
     void OnEnable()
     {
