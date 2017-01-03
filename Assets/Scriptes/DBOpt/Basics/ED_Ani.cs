@@ -63,7 +63,7 @@ public class ED_Ani : ED_AniBase {
     // 当前循环次数
     int cur_loop_times = 0;
     // 是否完成了一个周期
-    bool isFinished_OneWheel = false;
+    bool isFinishedOneWheel = false;
     
     // 动作时间轴时间
     ED_AniTimeEvent stateEvent = new ED_AniTimeEvent();
@@ -260,7 +260,7 @@ public class ED_Ani : ED_AniBase {
         cur_progressTime = 0.0f;
         cur_Phase = 0.0f;
         cur_loop_times = 0;
-        isFinished_OneWheel = false;
+        isFinishedOneWheel = false;
     }
 
     public void PlayCurr(float begNormallizedTime, float delta_time = 0)
@@ -393,15 +393,15 @@ public class ED_Ani : ED_AniBase {
         int runed_loop_times = Mathf.FloorToInt(normalizedTime);
         if (runed_loop_times > cur_loop_times)
         {
-            isFinished_OneWheel = true;
+            isFinishedOneWheel = true;
             cur_loop_times = runed_loop_times;
         }
         else
         {
-            isFinished_OneWheel = false;
+            isFinishedOneWheel = false;
         }
 
-        if (isFinished_OneWheel)
+        if (isFinishedOneWheel)
         {
             if (callFinished != null)
             {
@@ -431,7 +431,7 @@ public class ED_Ani : ED_AniBase {
 
         curSpeed = speed;
 
-        isFinished_OneWheel = OnUpdateTime(deltatime);
+        isFinishedOneWheel = OnUpdateTime(deltatime);
 
         if (isUpByCondition && cur_isHasCondition)
         {
@@ -447,9 +447,8 @@ public class ED_Ani : ED_AniBase {
         {
             return;
         }
-
-
-        if (isFinished_OneWheel)
+        
+        if (isFinishedOneWheel)
         {
             if (callFinished != null)
             {
@@ -465,13 +464,12 @@ public class ED_Ani : ED_AniBase {
     {
         cur_progressTime += deltatime * m_InvLifeTime * curSpeed;
         cur_Phase = cur_progressTime - cur_loop_times;
-        isFinished_OneWheel = false;
         if (cur_Phase < 0.0f)
         {
             cur_Phase = 0.0f;
             return false;
         }
-        else if(cur_Phase > 1.0f)
+        else if(cur_Phase >= 1.0f)
         {
             cur_loop_times++;
             cur_Phase -= 1.0f;
