@@ -102,7 +102,7 @@ public class EDM_Particle : MonoBehaviour {
         for (int i = 0; i < lens; i++)
         {
             tmp = list[i];
-            tmp.Simulate(m_CurInvUp, false,false);
+            tmp.DoUpdate(m_CurInvUp);
         }
 
         m_CurInvUp = 0.0f;
@@ -120,7 +120,7 @@ public class EDM_Particle : MonoBehaviour {
         for (int i = 0; i < lens; i++)
         {
             tmp = list[i];
-            isCanMv = tmp.isEndMax;
+            isCanMv = tmp.isEnd;
 
             if (isAll || isCanMv) {
                 rmList.Add(tmp);
