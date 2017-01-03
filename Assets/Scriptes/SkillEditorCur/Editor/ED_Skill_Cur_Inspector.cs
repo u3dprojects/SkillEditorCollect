@@ -166,40 +166,11 @@ public class ED_Skill_Cur_Inspector : Editor
 
         // Debug.Log("= mono =" + temp + ", = editor = " + db_opt_time.DeltaTime);
 
-        // db_opt_ani.DoUpdateAnimator(db_opt_time.DeltaTime, cur_speed);
+        m_ed_ani.DoUpdateAnimator(temp, draw_gui.CurSpeed);
 
-        m_ed_ani.DoUpdateAnimator(temp, draw_gui.CurSpeed,
-            delegate () { OnResetMemberReckon(); },
-            delegate (bool isloop)
-            {
-                draw_gui.cur_round_times++;
-                if (draw_gui.isRound)
-                {
-                    if (draw_gui.isCompleteRound)
-                    {
-                        isPlaying = false;
-                    }
-                }
-                else
-                {
-                    if (isloop)
-                    {
-                        m_ed_ani.ResetCurEvents();
-                    }
-                    else
-                    {
-                        isPlaying = false;
-                    }
-                }
 
-                OnResetMemberReckon();
-
-                if (isPlaying && !isloop)
-                {
-                    DoPlay(false);
-                }
-            }
-        );
+        // 设置粒子速度
+        EDM_Particle.m_instance.SetSpeed(draw_gui.CurSpeed);
 
         // 执行位移
         movCurve = draw_gui.curCurve;
@@ -257,6 +228,39 @@ public class ED_Skill_Cur_Inspector : Editor
         isPlaying = true;
 
         m_ed_ani.SetCurCondition();
+
+        m_ed_ani.callChanged = OnResetMemberReckon;
+        m_ed_ani.callCompleted = CallFuncFinished;
+    }
+
+    void CallFuncFinished(bool isLoop)
+    {
+        draw_gui.cur_round_times++;
+        if (draw_gui.isRound)
+        {
+            if (draw_gui.isCompleteRound)
+            {
+                isPlaying = false;
+            }
+        }
+        else
+        {
+            if (isLoop)
+            {
+                m_ed_ani.ResetCurEvents();
+            }
+            else
+            {
+                isPlaying = false;
+            }
+        }
+
+        OnResetMemberReckon();
+
+        if (isPlaying && !isLoop)
+        {
+            DoPlay(false);
+        }
     }
 
     void DoStop()

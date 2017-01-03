@@ -234,10 +234,10 @@ public class EDD_GUI : System.Object{
     void ReckonProgress(float normalizedTime)
     {
         reckon_progress = (normalizedTime % 1);
-        reckon_progress = Round(reckon_progress, 3);
+        reckon_progress = Round(reckon_progress, 6);
 
         cur_progress = reckon_progress * m_ed_ani.CurLens;
-        cur_progress = Round(cur_progress, 3);
+        cur_progress = Round(cur_progress, 6);
 
         pre_progress = cur_progress;
     }
@@ -282,7 +282,7 @@ public class EDD_GUI : System.Object{
                 ReckonProgress(m_ed_ani.normalizedTime);
             } else if (isPause && pre_progress != cur_progress) {
                 ReckonProgress(cur_progress / m_ed_ani.CurLens);
-                m_ed_ani.PlayCurr(reckon_progress);
+                m_ed_ani.DoUpdateCurr(reckon_progress);
             }
 
             // EditorGUILayout.LabelField("当前进度:" + reckon_progress);
