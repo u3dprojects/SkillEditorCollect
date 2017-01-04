@@ -72,16 +72,17 @@ public class ED_Particle02_Inspector : Editor
             return;
         }
 
-        m_db_time.DoUpdateTime(true);
+        m_db_time.DoUpdateTime(false);
 
         m_db_particle.SetScale(cur_scale);
 
         m_db_particle.SetSpeedRate(cur_speed);
 
         // 用delta time 播放 无效??
-        // m_db_particle.Simulate(m_db_time.ProgressTime,false,true);
+        m_db_particle.Simulate(m_db_time.ProgressTime, false, true);
         // m_db_particle.Simulate(m_db_time.DeltaTime, false, false);
-
+        // m_db_particle.DoUpdate(m_db_time.DeltaTime);
+        UnityEditorInternal.InternalEditorUtility.RepaintAllViews();
     }
 
     void DoPlay(bool isFirst = true)
