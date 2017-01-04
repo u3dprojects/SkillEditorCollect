@@ -98,7 +98,7 @@ public class DBU3D_Effect : System.Object
     {
         up_deltatime = deltatime * curSpeed;
         lens = list.Count;
-        Debug.Log("== DBU3D_Effect delta = " + up_deltatime);
+        // Debug.Log("== DBU3D_Effect delta = " + up_deltatime);
         for (int i = 0; i < lens; i++)
         {
             (list[i]).DoUpdateAnimator(up_deltatime,1);
