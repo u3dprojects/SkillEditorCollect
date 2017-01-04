@@ -1,0 +1,608 @@
+fileFormatVersion: 2
+guid: 575a59f6e36503a40a55c8749f47be87
+timeCreated: 1483079968
+licenseType: Pro
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: Bip01
+    100002: Bip01 Footsteps
+    100004: Bip01 Head
+    100006: Bip01 HeadNub
+    100008: Bip01 L Calf
+    100010: Bip01 L Clavicle
+    100012: Bip01 L Finger0
+    100014: Bip01 L Finger01
+    100016: Bip01 L Finger0Nub
+    100018: Bip01 L Finger1
+    100020: Bip01 L Finger11
+    100022: Bip01 L Finger1Nub
+    100024: Bip01 L Foot
+    100026: Bip01 L Forearm
+    100028: Bip01 L Hand
+    100030: Bip01 L Thigh
+    100032: Bip01 L Toe0
+    100034: Bip01 L Toe0Nub
+    100036: Bip01 L UpperArm
+    100038: Bip01 Neck
+    100040: Bip01 Pelvis
+    100042: Bip01 Prop1
+    100044: Bip01 Prop2
+    100046: Bip01 R Calf
+    100048: Bip01 R Clavicle
+    100050: Bip01 R Finger0
+    100052: Bip01 R Finger01
+    100054: Bip01 R Finger0Nub
+    100056: Bip01 R Finger1
+    100058: Bip01 R Finger11
+    100060: Bip01 R Finger1Nub
+    100062: Bip01 R Foot
+    100064: Bip01 R Forearm
+    100066: Bip01 R Hand
+    100068: Bip01 R Thigh
+    100070: Bip01 R Toe0
+    100072: Bip01 R Toe0Nub
+    100074: Bip01 R UpperArm
+    100076: Bip01 Spine
+    100078: Bip01 Spine1
+    100080: Bone01
+    100082: Bone02
+    100084: Bone03
+    100086: Bone04
+    100088: Bone05
+    100090: Bone06
+    100092: Bone08
+    100094: Bone09
+    100096: Bone10
+    100098: Bone19
+    100100: Bone22
+    100102: Bone26
+    100104: Bone27
+    100106: Bone29
+    100108: Bone30
+    100110: Bone32
+    100112: Bone33
+    100114: Bone35
+    100116: Bone36
+    100118: Bone38
+    100120: Bone43
+    100122: Bone50
+    100124: Bone53
+    100126: Bone56
+    100128: Bone63
+    100130: Bone66
+    100132: daoman001
+    100134: daoman_toufa001
+    100136: daoman_wuqi
+    100138: //RootNode
+    100140: Object001
+    100142: Particle View 01
+    100144: Particle View 01 1
+    100146: Particle View 01 10
+    100148: Particle View 01 100
+    100150: Particle View 01 101
+    100152: Particle View 01 102
+    100154: Particle View 01 103
+    100156: Particle View 01 104
+    100158: Particle View 01 105
+    100160: Particle View 01 106
+    100162: Particle View 01 107
+    100164: Particle View 01 108
+    100166: Particle View 01 109
+    100168: Particle View 01 11
+    100170: Particle View 01 110
+    100172: Particle View 01 111
+    100174: Particle View 01 112
+    100176: Particle View 01 113
+    100178: Particle View 01 114
+    100180: Particle View 01 115
+    100182: Particle View 01 116
+    100184: Particle View 01 117
+    100186: Particle View 01 118
+    100188: Particle View 01 119
+    100190: Particle View 01 12
+    100192: Particle View 01 120
+    100194: Particle View 01 121
+    100196: Particle View 01 122
+    100198: Particle View 01 123
+    100200: Particle View 01 124
+    100202: Particle View 01 125
+    100204: Particle View 01 126
+    100206: Particle View 01 127
+    100208: Particle View 01 128
+    100210: Particle View 01 129
+    100212: Particle View 01 13
+    100214: Particle View 01 130
+    100216: Particle View 01 131
+    100218: Particle View 01 132
+    100220: Particle View 01 133
+    100222: Particle View 01 134
+    100224: Particle View 01 135
+    100226: Particle View 01 136
+    100228: Particle View 01 137
+    100230: Particle View 01 138
+    100232: Particle View 01 139
+    100234: Particle View 01 14
+    100236: Particle View 01 140
+    100238: Particle View 01 141
+    100240: Particle View 01 142
+    100242: Particle View 01 143
+    100244: Particle View 01 144
+    100246: Particle View 01 145
+    100248: Particle View 01 146
+    100250: Particle View 01 147
+    100252: Particle View 01 148
+    100254: Particle View 01 149
+    100256: Particle View 01 15
+    100258: Particle View 01 150
+    100260: Particle View 01 151
+    100262: Particle View 01 152
+    100264: Particle View 01 153
+    100266: Particle View 01 16
+    100268: Particle View 01 17
+    100270: Particle View 01 18
+    100272: Particle View 01 19
+    100274: Particle View 01 2
+    100276: Particle View 01 20
+    100278: Particle View 01 21
+    100280: Particle View 01 22
+    100282: Particle View 01 23
+    100284: Particle View 01 24
+    100286: Particle View 01 25
+    100288: Particle View 01 26
+    100290: Particle View 01 27
+    100292: Particle View 01 28
+    100294: Particle View 01 29
+    100296: Particle View 01 3
+    100298: Particle View 01 30
+    100300: Particle View 01 31
+    100302: Particle View 01 32
+    100304: Particle View 01 33
+    100306: Particle View 01 34
+    100308: Particle View 01 35
+    100310: Particle View 01 36
+    100312: Particle View 01 37
+    100314: Particle View 01 38
+    100316: Particle View 01 39
+    100318: Particle View 01 4
+    100320: Particle View 01 40
+    100322: Particle View 01 41
+    100324: Particle View 01 42
+    100326: Particle View 01 43
+    100328: Particle View 01 44
+    100330: Particle View 01 45
+    100332: Particle View 01 46
+    100334: Particle View 01 47
+    100336: Particle View 01 48
+    100338: Particle View 01 49
+    100340: Particle View 01 5
+    100342: Particle View 01 50
+    100344: Particle View 01 51
+    100346: Particle View 01 52
+    100348: Particle View 01 53
+    100350: Particle View 01 54
+    100352: Particle View 01 55
+    100354: Particle View 01 56
+    100356: Particle View 01 57
+    100358: Particle View 01 58
+    100360: Particle View 01 59
+    100362: Particle View 01 6
+    100364: Particle View 01 60
+    100366: Particle View 01 61
+    100368: Particle View 01 62
+    100370: Particle View 01 63
+    100372: Particle View 01 64
+    100374: Particle View 01 65
+    100376: Particle View 01 66
+    100378: Particle View 01 67
+    100380: Particle View 01 68
+    100382: Particle View 01 69
+    100384: Particle View 01 7
+    100386: Particle View 01 70
+    100388: Particle View 01 71
+    100390: Particle View 01 72
+    100392: Particle View 01 73
+    100394: Particle View 01 74
+    100396: Particle View 01 75
+    100398: Particle View 01 76
+    100400: Particle View 01 77
+    100402: Particle View 01 78
+    100404: Particle View 01 79
+    100406: Particle View 01 8
+    100408: Particle View 01 80
+    100410: Particle View 01 81
+    100412: Particle View 01 82
+    100414: Particle View 01 83
+    100416: Particle View 01 84
+    100418: Particle View 01 85
+    100420: Particle View 01 86
+    100422: Particle View 01 87
+    100424: Particle View 01 88
+    100426: Particle View 01 89
+    100428: Particle View 01 9
+    100430: Particle View 01 90
+    100432: Particle View 01 91
+    100434: Particle View 01 92
+    100436: Particle View 01 93
+    100438: Particle View 01 94
+    100440: Particle View 01 95
+    100442: Particle View 01 96
+    100444: Particle View 01 97
+    100446: Particle View 01 98
+    100448: Particle View 01 99
+    100450: Particle View 02
+    100452: Particle View 02 1
+    100454: Particle View 02 2
+    100456: Particle View 02 3
+    100458: Particle View 02 4
+    100460: Particle View 02 5
+    100462: Particle View 02 6
+    100464: Particle View 02 7
+    100466: Particle View 02 8
+    100468: Particle View 02 9
+    100470: Particle View01
+    100472: Particle View01 1
+    100474: Particle View01 10
+    100476: Particle View01 11
+    100478: Particle View01 12
+    100480: Particle View01 13
+    100482: Particle View01 14
+    100484: Particle View01 15
+    100486: Particle View01 16
+    100488: Particle View01 17
+    100490: Particle View01 18
+    100492: Particle View01 19
+    100494: Particle View01 2
+    100496: Particle View01 20
+    100498: Particle View01 21
+    100500: Particle View01 22
+    100502: Particle View01 23
+    100504: Particle View01 24
+    100506: Particle View01 25
+    100508: Particle View01 26
+    100510: Particle View01 27
+    100512: Particle View01 3
+    100514: Particle View01 4
+    100516: Particle View01 5
+    100518: Particle View01 6
+    100520: Particle View01 7
+    100522: Particle View01 8
+    100524: Particle View01 9
+    400000: Bip01
+    400002: Bip01 Footsteps
+    400004: Bip01 Head
+    400006: Bip01 HeadNub
+    400008: Bip01 L Calf
+    400010: Bip01 L Clavicle
+    400012: Bip01 L Finger0
+    400014: Bip01 L Finger01
+    400016: Bip01 L Finger0Nub
+    400018: Bip01 L Finger1
+    400020: Bip01 L Finger11
+    400022: Bip01 L Finger1Nub
+    400024: Bip01 L Foot
+    400026: Bip01 L Forearm
+    400028: Bip01 L Hand
+    400030: Bip01 L Thigh
+    400032: Bip01 L Toe0
+    400034: Bip01 L Toe0Nub
+    400036: Bip01 L UpperArm
+    400038: Bip01 Neck
+    400040: Bip01 Pelvis
+    400042: Bip01 Prop1
+    400044: Bip01 Prop2
+    400046: Bip01 R Calf
+    400048: Bip01 R Clavicle
+    400050: Bip01 R Finger0
+    400052: Bip01 R Finger01
+    400054: Bip01 R Finger0Nub
+    400056: Bip01 R Finger1
+    400058: Bip01 R Finger11
+    400060: Bip01 R Finger1Nub
+    400062: Bip01 R Foot
+    400064: Bip01 R Forearm
+    400066: Bip01 R Hand
+    400068: Bip01 R Thigh
+    400070: Bip01 R Toe0
+    400072: Bip01 R Toe0Nub
+    400074: Bip01 R UpperArm
+    400076: Bip01 Spine
+    400078: Bip01 Spine1
+    400080: Bone01
+    400082: Bone02
+    400084: Bone03
+    400086: Bone04
+    400088: Bone05
+    400090: Bone06
+    400092: Bone08
+    400094: Bone09
+    400096: Bone10
+    400098: Bone19
+    400100: Bone22
+    400102: Bone26
+    400104: Bone27
+    400106: Bone29
+    400108: Bone30
+    400110: Bone32
+    400112: Bone33
+    400114: Bone35
+    400116: Bone36
+    400118: Bone38
+    400120: Bone43
+    400122: Bone50
+    400124: Bone53
+    400126: Bone56
+    400128: Bone63
+    400130: Bone66
+    400132: daoman001
+    400134: daoman_toufa001
+    400136: daoman_wuqi
+    400138: //RootNode
+    400140: Object001
+    400142: Particle View 01
+    400144: Particle View 01 1
+    400146: Particle View 01 10
+    400148: Particle View 01 100
+    400150: Particle View 01 101
+    400152: Particle View 01 102
+    400154: Particle View 01 103
+    400156: Particle View 01 104
+    400158: Particle View 01 105
+    400160: Particle View 01 106
+    400162: Particle View 01 107
+    400164: Particle View 01 108
+    400166: Particle View 01 109
+    400168: Particle View 01 11
+    400170: Particle View 01 110
+    400172: Particle View 01 111
+    400174: Particle View 01 112
+    400176: Particle View 01 113
+    400178: Particle View 01 114
+    400180: Particle View 01 115
+    400182: Particle View 01 116
+    400184: Particle View 01 117
+    400186: Particle View 01 118
+    400188: Particle View 01 119
+    400190: Particle View 01 12
+    400192: Particle View 01 120
+    400194: Particle View 01 121
+    400196: Particle View 01 122
+    400198: Particle View 01 123
+    400200: Particle View 01 124
+    400202: Particle View 01 125
+    400204: Particle View 01 126
+    400206: Particle View 01 127
+    400208: Particle View 01 128
+    400210: Particle View 01 129
+    400212: Particle View 01 13
+    400214: Particle View 01 130
+    400216: Particle View 01 131
+    400218: Particle View 01 132
+    400220: Particle View 01 133
+    400222: Particle View 01 134
+    400224: Particle View 01 135
+    400226: Particle View 01 136
+    400228: Particle View 01 137
+    400230: Particle View 01 138
+    400232: Particle View 01 139
+    400234: Particle View 01 14
+    400236: Particle View 01 140
+    400238: Particle View 01 141
+    400240: Particle View 01 142
+    400242: Particle View 01 143
+    400244: Particle View 01 144
+    400246: Particle View 01 145
+    400248: Particle View 01 146
+    400250: Particle View 01 147
+    400252: Particle View 01 148
+    400254: Particle View 01 149
+    400256: Particle View 01 15
+    400258: Particle View 01 150
+    400260: Particle View 01 151
+    400262: Particle View 01 152
+    400264: Particle View 01 153
+    400266: Particle View 01 16
+    400268: Particle View 01 17
+    400270: Particle View 01 18
+    400272: Particle View 01 19
+    400274: Particle View 01 2
+    400276: Particle View 01 20
+    400278: Particle View 01 21
+    400280: Particle View 01 22
+    400282: Particle View 01 23
+    400284: Particle View 01 24
+    400286: Particle View 01 25
+    400288: Particle View 01 26
+    400290: Particle View 01 27
+    400292: Particle View 01 28
+    400294: Particle View 01 29
+    400296: Particle View 01 3
+    400298: Particle View 01 30
+    400300: Particle View 01 31
+    400302: Particle View 01 32
+    400304: Particle View 01 33
+    400306: Particle View 01 34
+    400308: Particle View 01 35
+    400310: Particle View 01 36
+    400312: Particle View 01 37
+    400314: Particle View 01 38
+    400316: Particle View 01 39
+    400318: Particle View 01 4
+    400320: Particle View 01 40
+    400322: Particle View 01 41
+    400324: Particle View 01 42
+    400326: Particle View 01 43
+    400328: Particle View 01 44
+    400330: Particle View 01 45
+    400332: Particle View 01 46
+    400334: Particle View 01 47
+    400336: Particle View 01 48
+    400338: Particle View 01 49
+    400340: Particle View 01 5
+    400342: Particle View 01 50
+    400344: Particle View 01 51
+    400346: Particle View 01 52
+    400348: Particle View 01 53
+    400350: Particle View 01 54
+    400352: Particle View 01 55
+    400354: Particle View 01 56
+    400356: Particle View 01 57
+    400358: Particle View 01 58
+    400360: Particle View 01 59
+    400362: Particle View 01 6
+    400364: Particle View 01 60
+    400366: Particle View 01 61
+    400368: Particle View 01 62
+    400370: Particle View 01 63
+    400372: Particle View 01 64
+    400374: Particle View 01 65
+    400376: Particle View 01 66
+    400378: Particle View 01 67
+    400380: Particle View 01 68
+    400382: Particle View 01 69
+    400384: Particle View 01 7
+    400386: Particle View 01 70
+    400388: Particle View 01 71
+    400390: Particle View 01 72
+    400392: Particle View 01 73
+    400394: Particle View 01 74
+    400396: Particle View 01 75
+    400398: Particle View 01 76
+    400400: Particle View 01 77
+    400402: Particle View 01 78
+    400404: Particle View 01 79
+    400406: Particle View 01 8
+    400408: Particle View 01 80
+    400410: Particle View 01 81
+    400412: Particle View 01 82
+    400414: Particle View 01 83
+    400416: Particle View 01 84
+    400418: Particle View 01 85
+    400420: Particle View 01 86
+    400422: Particle View 01 87
+    400424: Particle View 01 88
+    400426: Particle View 01 89
+    400428: Particle View 01 9
+    400430: Particle View 01 90
+    400432: Particle View 01 91
+    400434: Particle View 01 92
+    400436: Particle View 01 93
+    400438: Particle View 01 94
+    400440: Particle View 01 95
+    400442: Particle View 01 96
+    400444: Particle View 01 97
+    400446: Particle View 01 98
+    400448: Particle View 01 99
+    400450: Particle View 02
+    400452: Particle View 02 1
+    400454: Particle View 02 2
+    400456: Particle View 02 3
+    400458: Particle View 02 4
+    400460: Particle View 02 5
+    400462: Particle View 02 6
+    400464: Particle View 02 7
+    400466: Particle View 02 8
+    400468: Particle View 02 9
+    400470: Particle View01
+    400472: Particle View01 1
+    400474: Particle View01 10
+    400476: Particle View01 11
+    400478: Particle View01 12
+    400480: Particle View01 13
+    400482: Particle View01 14
+    400484: Particle View01 15
+    400486: Particle View01 16
+    400488: Particle View01 17
+    400490: Particle View01 18
+    400492: Particle View01 19
+    400494: Particle View01 2
+    400496: Particle View01 20
+    400498: Particle View01 21
+    400500: Particle View01 22
+    400502: Particle View01 23
+    400504: Particle View01 24
+    400506: Particle View01 25
+    400508: Particle View01 26
+    400510: Particle View01 27
+    400512: Particle View01 3
+    400514: Particle View01 4
+    400516: Particle View01 5
+    400518: Particle View01 6
+    400520: Particle View01 7
+    400522: Particle View01 8
+    400524: Particle View01 9
+    2300000: daoman_wuqi
+    2300002: Object001
+    3300000: daoman_wuqi
+    3300002: Object001
+    4300000: daoman_toufa001
+    4300002: daoman001
+    4300004: daoman_wuqi
+    4300006: Object001
+    9500000: //RootNode
+    13700000: daoman001
+    13700002: daoman_toufa001
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
