@@ -38,9 +38,9 @@ public class EDM_Particle : MonoBehaviour {
         }
     }
 
-    List<DBU3D_Particle> list = new List<DBU3D_Particle>();
-    List<DBU3D_Particle> rmList = new List<DBU3D_Particle>();
-    DBU3D_Particle tmp;
+    List<DBU3D_Effect> list = new List<DBU3D_Effect>();
+    List<DBU3D_Effect> rmList = new List<DBU3D_Effect>();
+    DBU3D_Effect tmp;
     int lens = 0;
     bool isPause = false;
     float curSpeed = 1.0f;
@@ -87,7 +87,7 @@ public class EDM_Particle : MonoBehaviour {
             return;
         }
 
-        DBU3D_Particle db = new DBU3D_Particle(goEntity);
+        DBU3D_Effect db = new DBU3D_Effect(goEntity);
         db.DoStart();
         db.SetScale(scale);
         list.Add(db);
