@@ -80,14 +80,14 @@ public class EDM_Particle : MonoBehaviour {
         DoActive(gobj,scale);
     }
 
-    void DoActive(GameObject go, float scale = 1)
+    public void DoActive(GameObject goEntity, float scale = 1)
     {
-        if (go == null)
+        if (goEntity == null)
         {
             return;
         }
 
-        DBU3D_Particle db = new DBU3D_Particle(go);
+        DBU3D_Particle db = new DBU3D_Particle(goEntity);
         db.DoStart();
         db.SetScale(scale);
         list.Add(db);

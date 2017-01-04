@@ -65,6 +65,8 @@ public class ED_Particle01_Inspector : Editor
         m_db_particle.SetScale(cur_scale);
 
         m_db_particle.SetSpeed(cur_speed);
+
+        UnityEditorInternal.InternalEditorUtility.RepaintAllViews();
     }
 
     void DoPlay(bool isFirst = true)
