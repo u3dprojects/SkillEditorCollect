@@ -37,6 +37,9 @@ public class ED_Ani : ED_AniBase {
     // 当前时长
     float cur_Length = 0f;
 
+    // 当前动作是否循环
+    bool cur_IsLoop = false;
+
     // 循环/时长 的 关系
     float m_InvLifeTime = 0.0f;
 
@@ -62,8 +65,15 @@ public class ED_Ani : ED_AniBase {
 
     // 当前循环次数
     int cur_loop_times = 0;
+
     // 是否完成了一个周期
     bool isFinishedOneWheel = false;
+
+    // 完成了播放(包括循环播放次数)
+    bool isCompletedRound = false;
+
+    // 可循环次数
+    public int m_LoopTimes { get; set; }
     
     // 动作时间轴时间
     ED_AniTimeEvent stateEvent = new ED_AniTimeEvent();
@@ -208,6 +218,8 @@ public class ED_Ani : ED_AniBase {
             AnimationClip clip = state.motion as AnimationClip;
             cur_Length = clip.length;
             cur_FrameRate = clip.frameRate;
+            cur_IsLoop = clip.isLooping;
+
             defSpeed = state.speed;
             curSpeed = defSpeed;
 
@@ -217,7 +229,7 @@ public class ED_Ani : ED_AniBase {
 
             cur_isHasCondition = ReCurIsHasCondition();
 
-            Debug.Log("key = " + cur_state_key + ",lens = " + cur_Length + ",frameRate = " + cur_FrameRate + ",count = " + count + ",countint = " + cur_FrameCount);
+            Debug.Log("key = " + cur_state_key + ",lens = " + cur_Length + ",frameRate = " + cur_FrameRate + ",count = " + count + ",countint = " + cur_FrameCount + ",isLoop = " + cur_IsLoop);
         }
     }
 
@@ -256,6 +268,7 @@ public class ED_Ani : ED_AniBase {
         cur_FrameRate = 0.0f;
         m_InvLifeTime = 0.0f;
         cur_isHasCondition = false;
+        cur_IsLoop = false;
 
         cur_state = null;
         cur_state_mache = null;
@@ -274,7 +287,9 @@ public class ED_Ani : ED_AniBase {
         cur_progressTime = 0.0f;
         cur_Phase = 0.0f;
         cur_loop_times = 0;
+        m_LoopTimes = 0;
         isFinishedOneWheel = false;
+        isCompletedRound = false;
     }
 
     // 根据进度来取得上次和此次的间隔时间
@@ -289,7 +304,7 @@ public class ED_Ani : ED_AniBase {
     public virtual float DoPlayCurr(float m_fPhase)
     {
         float deltatime = GetDelayTime(m_fPhase);
-        isFinishedOneWheel = OnUpdateTime(deltatime);
+        OnUpdateTime(deltatime);
         PlayCurr(cur_Phase);
 
         if (isFinishedOneWheel)
@@ -298,6 +313,7 @@ public class ED_Ani : ED_AniBase {
             {
                 this.callCompleted(isLoop);
             }
+            isFinishedOneWheel = false;
         }
 
         // 执行事件
@@ -453,6 +469,7 @@ public class ED_Ani : ED_AniBase {
             {
                 callFinished(isLoop);
             }
+            isFinishedOneWheel = false;
         }
 
         // 执行事件
@@ -479,7 +496,7 @@ public class ED_Ani : ED_AniBase {
 
         curSpeed = speed;
 
-        isFinishedOneWheel = OnUpdateTime(deltatime);
+        OnUpdateTime(deltatime);
 
         if (isUpByCondition && cur_isHasCondition)
         {
@@ -502,29 +519,51 @@ public class ED_Ani : ED_AniBase {
             {
                 this.callCompleted(isLoop);
             }
+            isFinishedOneWheel = false;
         }
 
         // 执行事件
         stateEvent.OnUpdate(cur_Phase);
     }
 
-    protected bool OnUpdateTime(float deltatime)
+    void OnCompleteAllRound()
     {
+        cur_progressTime = cur_loop_times * cur_Length;
+        cur_Phase = 1.0f;
+        isCompletedRound = true;
+    }
+
+    protected void OnUpdateTime(float deltatime)
+    {
+        if (isCompletedRound)
+            return;
+
+        if (m_LoopTimes > 0 && m_LoopTimes <= cur_loop_times)
+        {
+            OnCompleteAllRound();
+            return;
+        }
+
         cur_progressTime += deltatime * m_InvLifeTime * curSpeed;
         cur_Phase = cur_progressTime - cur_loop_times;
         if (cur_Phase < 0.0f)
         {
             cur_Phase = 0.0f;
-            return false;
         }
         else if(cur_Phase >= 1.0f)
         {
             cur_loop_times++;
-            cur_Phase -= 1.0f;
-            return true;
-        }
+            if(cur_IsLoop || m_LoopTimes > 0)
+            {
+                cur_Phase -= 1.0f;
+            }
+            isFinishedOneWheel = true;
 
-        return false;
+            if(!cur_IsLoop && m_LoopTimes <= 0)
+            {
+                OnCompleteAllRound();
+            }
+        }
     }
 
     #region === state mache behaviour ==
@@ -610,9 +649,9 @@ public class ED_Ani : ED_AniBase {
     }
     #endregion
 
-    public override void DoStart(System.Action callChg = null, System.Action<bool> callFinished = null)
+    public virtual void DoStart(System.Action callChg = null, System.Action<bool> callFinished = null)
     {
-        base.DoStart(callChg,callFinished);
+        DoResetAniCtrl();
 
         OnResetMemberReckon();
         ResetCurEvents();
@@ -620,5 +659,7 @@ public class ED_Ani : ED_AniBase {
         SetCurCondition();
         this.callChanged = callChg;
         this.callCompleted = callFinished;
+
+        PlayCurr(0);
     }
 }

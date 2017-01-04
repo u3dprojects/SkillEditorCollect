@@ -259,8 +259,4 @@ public class ED_AniBase : System.Object
 
     public virtual void OnClear() { }
 
-    public virtual void DoStart(System.Action callChg = null, System.Action<bool> callFinished = null)
-    {
-        DoResetAniCtrl();
-    }
 }
