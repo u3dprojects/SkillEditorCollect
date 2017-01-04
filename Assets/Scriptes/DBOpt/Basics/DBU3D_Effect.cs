@@ -10,9 +10,6 @@ using System.Collections.Generic;
 [System.Serializable]
 public class DBU3D_Effect : System.Object
 {
-    // 当前操作对象
-    GameObject gobjEdtity = null;
-
     // 多个粒子特效
     DBU3D_Particle m_particle = new DBU3D_Particle();
 
@@ -67,7 +64,6 @@ public class DBU3D_Effect : System.Object
 
     public void DoClear()
     {
-        this.gobjEdtity = null;
         curSpeed = 1;
         m_particle.DoClear();
         OnClearAnimator();
