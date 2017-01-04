@@ -160,6 +160,11 @@ public class ED_Ani : ED_AniBase {
         get { return cur_stateInfo.loop; }
     }
 
+    public bool isEndFirst
+    {
+        get { return cur_progressTime >=  cur_Length;}
+    }
+
     public void ResetAniState(int index_key)
     {
         if(index_key < 0)
@@ -604,4 +609,16 @@ public class ED_Ani : ED_AniBase {
         stateEvent.ResetEvents();
     }
     #endregion
+
+    public override void DoStart(System.Action callChg = null, System.Action<bool> callFinished = null)
+    {
+        base.DoStart(callChg,callFinished);
+
+        OnResetMemberReckon();
+        ResetCurEvents();
+
+        SetCurCondition();
+        this.callChanged = callChg;
+        this.callCompleted = callFinished;
+    }
 }
