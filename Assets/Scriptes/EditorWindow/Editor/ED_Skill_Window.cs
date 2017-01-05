@@ -17,13 +17,7 @@ public class ED_Skill_Window : EditorWindow
         isOpenWindowView = true;
         vwWindow = GetWindow<ED_Skill_Window>("技能编辑器");
     }
-
-    [InitializeOnLoadMethod]
-    static public void Test()
-    {
-        Debug.Log("= InitializeOnLoadMethod = test = ");
-    }
-
+    
     //DBU3D_Ani m_db_ani = new DBU3D_Ani();
 
     //DBU3D_GUI m_gui_draw = new DBU3D_GUI();

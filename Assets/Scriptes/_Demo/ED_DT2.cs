@@ -12,6 +12,12 @@ public class ED_DT2 : MonoBehaviour {
 
     public bool isAddToSelf = false;
 
+    [InitializeOnLoadMethod]
+    static public void Test()
+    {
+        Debug.Log("= InitializeOnLoadMethod = test = ");
+    }
+
     // OnUpdate Update
     public void OnUpdate()
     {
