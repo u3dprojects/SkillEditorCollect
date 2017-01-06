@@ -43,6 +43,11 @@ public class EDW_DeleteComponent : EditorWindow
 
     #region  == EditorWindow Func ===
 
+    void Awake()
+    {
+        Debug.Log("== Awake ==");
+    }
+
     void OnEnable()
     {
         Debug.Log("== OnEnable ==");
