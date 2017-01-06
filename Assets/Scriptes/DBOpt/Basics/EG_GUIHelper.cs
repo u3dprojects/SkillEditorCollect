@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 using UnityEditor;
 
 /// <summary>
@@ -12,23 +12,43 @@ using UnityEditor;
 /// </summary>
 public static class EG_GUIHelper {
 
+    static List<GUILayoutOption> list = new List<GUILayoutOption>();
+
+    static public GUILayoutOption[] ToOptions(float minW = 0, float minH = 10)
+    {
+        list.Clear();
+        if (minH > 0)
+        {
+            list.Add(GUILayout.MinHeight(minH));
+        }
+
+        if (minW > 0)
+        {
+            list.Add(GUILayout.MinWidth(minW));
+        }
+        return list.ToArray();
+    }
+
     #region == GUILayout Func ==
 
-    static public void FG_BeginVAsArea()
+    static public void FG_BeginVAsArea(float minW = 0, float minH = 10)
     {
-        GUILayout.BeginVertical("As TextArea", GUILayout.MinHeight(10));
+        GUILayoutOption[] arrs = ToOptions(minW, minH);
+        GUILayout.BeginVertical("As TextArea", arrs);
         GUILayout.Space(2);
     }
 
-    static public void FG_BeginVArea()
+    static public void FG_BeginVArea(float minW = 0, float minH = 10)
     {
-        GUILayout.BeginVertical(EditorStyles.textArea, GUILayout.MinHeight(10));
+        GUILayoutOption[] arrs = ToOptions(minW, minH);
+        GUILayout.BeginVertical(EditorStyles.textArea,arrs);
         GUILayout.Space(2);
     }
 
-    static public void FG_BeginV()
+    static public void FG_BeginV(float minW = 0, float minH = 10)
     {
-        GUILayout.BeginVertical(GUILayout.MinHeight(10));
+        GUILayoutOption[] arrs = ToOptions(minW, minH);
+        GUILayout.BeginVertical(arrs);
         GUILayout.Space(2);
     }
 
@@ -38,21 +58,24 @@ public static class EG_GUIHelper {
         GUILayout.EndVertical();
     }
 
-    static public void FG_BeginHAsArea()
+    static public void FG_BeginHAsArea(float minW = 0, float minH = 10)
     {
-        GUILayout.BeginHorizontal("As TextArea", GUILayout.MinHeight(10));
+        GUILayoutOption[] arrs = ToOptions(minW, minH);
+        GUILayout.BeginHorizontal("As TextArea", arrs);
         GUILayout.Space(2);
     }
 
-    static public void FG_BeginHArea()
+    static public void FG_BeginHArea(float minW = 0, float minH = 10)
     {
-        GUILayout.BeginHorizontal(EditorStyles.textArea, GUILayout.MinHeight(10));
+        GUILayoutOption[] arrs = ToOptions(minW, minH);
+        GUILayout.BeginHorizontal(EditorStyles.textArea, arrs);
         GUILayout.Space(2);
     }
 
-    static public void FG_BeginH()
+    static public void FG_BeginH(float minW = 0, float minH = 10)
     {
-        GUILayout.BeginHorizontal(GUILayout.MinHeight(10));
+        GUILayoutOption[] arrs = ToOptions(minW, minH);
+        GUILayout.BeginHorizontal(arrs);
         GUILayout.Space(2);
     }
 
@@ -76,21 +99,25 @@ public static class EG_GUIHelper {
 
     #region == EditorGUILayout Func ==
 
-    static public void FEG_BeginVAsArea()
+    static public void FEG_BeginVAsArea(float minW = 0,float minH = 10)
     {
-        EditorGUILayout.BeginVertical("As TextArea",GUILayout.MinHeight(10));
+
+        GUILayoutOption[] arrs = ToOptions(minW, minH);
+        EditorGUILayout.BeginVertical("As TextArea",arrs);
         GUILayout.Space(2);
     }
 
-    static public void FEG_BeginVArea()
+    static public void FEG_BeginVArea(float minW = 0, float minH = 10)
     {
-        EditorGUILayout.BeginVertical(EditorStyles.textArea, GUILayout.MinHeight(10));
+        GUILayoutOption[] arrs = ToOptions(minW, minH);
+        EditorGUILayout.BeginVertical(EditorStyles.textArea, arrs);
         GUILayout.Space(2);
     }
 
-    static public void FEG_BeginV()
+    static public void FEG_BeginV(float minW = 0, float minH = 10)
     {
-        EditorGUILayout.BeginVertical(GUILayout.MinHeight(10));
+        GUILayoutOption[] arrs = ToOptions(minW, minH);
+        EditorGUILayout.BeginVertical(arrs);
         GUILayout.Space(2);
     }
 
@@ -100,21 +127,24 @@ public static class EG_GUIHelper {
         EditorGUILayout.EndVertical();
     }
 
-    static public void FEG_BeginHAsArea()
+    static public void FEG_BeginHAsArea(float minW = 0, float minH = 10)
     {
-        EditorGUILayout.BeginHorizontal("As TextArea", GUILayout.MinHeight(10));
+        GUILayoutOption[] arrs = ToOptions(minW, minH);
+        EditorGUILayout.BeginHorizontal("As TextArea", arrs);
         GUILayout.Space(2);
     }
 
-    static public void FEG_BeginHArea()
+    static public void FEG_BeginHArea(float minW = 0, float minH = 10)
     {
-        EditorGUILayout.BeginHorizontal(EditorStyles.textArea, GUILayout.MinHeight(10));
+        GUILayoutOption[] arrs = ToOptions(minW, minH);
+        EditorGUILayout.BeginHorizontal(EditorStyles.textArea, arrs);
         GUILayout.Space(2);
     }
 
-    static public void FEG_BeginH()
+    static public void FEG_BeginH(float minW = 0, float minH = 10)
     {
-        EditorGUILayout.BeginHorizontal(GUILayout.MinHeight(10));
+        GUILayoutOption[] arrs = ToOptions(minW, minH);
+        EditorGUILayout.BeginHorizontal(arrs);
         GUILayout.Space(2);
     }
 
@@ -127,10 +157,12 @@ public static class EG_GUIHelper {
     static public void FEG_BeginToggleGroup(string title,ref bool toggle)
     {
         toggle = EditorGUILayout.BeginToggleGroup(title, toggle);
+        GUILayout.Space(2);
     }
 
-    static public void FEG_EndToggleGroup(string title, ref bool toggle)
+    static public void FEG_EndToggleGroup()
     {
+        GUILayout.Space(3);
         EditorGUILayout.EndToggleGroup();
     }
     #endregion
