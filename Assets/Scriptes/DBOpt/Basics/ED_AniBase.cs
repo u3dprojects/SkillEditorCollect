@@ -128,8 +128,12 @@ public class ED_AniBase : System.Object
 
     void OnResetPars()
     {
-        if (m_ani)
+        if (m_ani != null && m_ani_ctrl != null)
         {
+            int _lens = m_ani.parameters.Length;
+            if (_lens <= 0)
+                return;
+
             foreach (AnimatorControllerParameter par in m_ani.parameters)
             {
                 switch (par.type)
@@ -259,4 +263,8 @@ public class ED_AniBase : System.Object
 
     public virtual void OnClear() { }
 
+    public bool IsHasAniCtrl
+    {
+        get { return this.m_ani_ctrl != null; }
+    }
 }
