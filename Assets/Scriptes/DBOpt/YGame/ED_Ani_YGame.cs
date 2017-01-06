@@ -9,6 +9,14 @@ using System.Collections;
 /// </summary>
 [System.Serializable]
 public class ED_Ani_YGame : ED_Ani {
+
+    public void DoReInit(GameObject gobj)
+    {
+        DoClear();
+        Animator ani = gobj.GetComponentInChildren<Animator>();
+        DoInit(ani);
+    }
+
     public override float DoPlayCurr(float m_fPhase)
     {
         float delaytime = base.DoPlayCurr(m_fPhase);
