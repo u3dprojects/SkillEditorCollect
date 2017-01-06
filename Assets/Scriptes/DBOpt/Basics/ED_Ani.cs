@@ -175,6 +175,11 @@ public class ED_Ani : ED_AniBase {
         get { return cur_progressTime >=  cur_Length;}
     }
 
+    public int CurLoopCount
+    {
+        get { return cur_loop_times; }
+    }
+
     public void ResetAniState(int index_key)
     {
         if(index_key < 0)
