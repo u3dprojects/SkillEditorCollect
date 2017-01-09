@@ -311,19 +311,6 @@ public class ED_Ani : ED_AniBase {
         float deltatime = GetDelayTime(m_fPhase);
         OnUpdateTime(deltatime);
         PlayCurr(cur_Phase);
-
-        if (isFinishedOneWheel)
-        {
-            if (this.callCompleted != null)
-            {
-                this.callCompleted(isLoop);
-            }
-            isFinishedOneWheel = false;
-        }
-
-        // 执行事件
-        // stateEvent.OnUpdate(cur_Phase);
-
         return deltatime;
     }
 
@@ -666,5 +653,7 @@ public class ED_Ani : ED_AniBase {
         this.callCompleted = callFinished;
 
         PlayCurr(0);
+
+        SetApplyRootMotion(false);
     }
 }

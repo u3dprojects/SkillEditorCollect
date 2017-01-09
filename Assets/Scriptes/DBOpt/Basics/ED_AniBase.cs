@@ -267,4 +267,10 @@ public class ED_AniBase : System.Object
     {
         get { return this.m_ani_ctrl != null; }
     }
+
+    public void SetApplyRootMotion(bool isApply)
+    {
+        if (m_ani)
+            m_ani.applyRootMotion = isApply;
+    }
 }
