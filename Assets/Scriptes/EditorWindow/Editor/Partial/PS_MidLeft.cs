@@ -588,15 +588,14 @@ public class PS_MidLeft{
         if (isOpenMovPos)
         {
             movPos = Vector3.zero;
-            movPos.x = x_curve.Evaluate(this.m_curTime.ProgressTime);
-            movPos.y = y_curve.Evaluate(this.m_curTime.ProgressTime);
-            movPos.z = z_curve.Evaluate(this.m_curTime.ProgressTime);
+            movPos.x = x_curve.Evaluate(this.m_curAni.nt01);
+            movPos.y = y_curve.Evaluate(this.m_curAni.nt01);
+            movPos.z = z_curve.Evaluate(this.m_curAni.nt01);
             if(m_myCtrl != null && m_myCtrl.enabled)
             {
                 m_myCtrl.Move(movPos);
             }else
             {
-                movPos = trsfEntity.TransformDirection(movPos);
                 trsfEntity.Translate(movPos);
             }
         }
@@ -622,5 +621,6 @@ public class PS_MidLeft{
     void DoStop() {
         isRunnging = false;
         EDM_Particle.m_instance.DoClear();
+        trsfEntity.position = Vector3.zero;
     }
 }

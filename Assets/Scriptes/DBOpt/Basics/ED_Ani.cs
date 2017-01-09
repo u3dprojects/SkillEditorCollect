@@ -161,7 +161,7 @@ public class ED_Ani : ED_AniBase {
     {
         get
         {
-            return Mathf.Repeat(normalizedTime, 1);
+            return Mathf.Repeat(cur_progressTime, 1);
         }
     }
 

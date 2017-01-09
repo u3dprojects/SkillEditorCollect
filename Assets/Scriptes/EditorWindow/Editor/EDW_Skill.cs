@@ -268,6 +268,8 @@ public class EDW_Skill : EditorWindow
         if (gobjEntity)
             GameObject.DestroyImmediate(gobjEntity);
         gobjEntity = null;
+        trsfEntity = null;
+        m_myCtrl = null;
 
         if (me_ani != null)
         {
