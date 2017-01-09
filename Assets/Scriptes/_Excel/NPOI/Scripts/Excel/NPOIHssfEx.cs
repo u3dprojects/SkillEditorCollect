@@ -36,4 +36,27 @@ public class NPOIHssfEx : NPOIEx
     {
         return GetCell(GetRow(sheet,rowIndex),columnIndex);
     }
+
+    #region === 创建 ===
+
+    static public HSSFSheet CreateSheet(HSSFWorkbook wb)
+    {
+        return CreateISheet(wb) as HSSFSheet;
+    }
+
+    static public HSSFSheet CreateSheet(HSSFWorkbook wb, string sheetName)
+    {
+        return CreateISheet(wb, sheetName) as HSSFSheet;
+    }
+
+    static public HSSFRow CreateRow(HSSFSheet sheet, int rowIndex)
+    {
+        return CreateIRow(sheet, rowIndex) as HSSFRow;
+    }
+
+    static public HSSFCell CreateCell(HSSFRow row, int columnIndex)
+    {
+        return CreateICell(row, columnIndex) as HSSFCell;
+    }
+    #endregion
 }

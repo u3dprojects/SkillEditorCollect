@@ -11,18 +11,24 @@ using System.Collections.Generic;
 /// </summary>
 [System.Serializable]
 public class NH_Sheet {
-    public HSSFWorkbook m_wb { get; set; }
-    public HSSFSheet m_sheet { get; set; }
-    public string sheetName { get; set; }
-    public int sheetIndex { get; set; }
-    public int maxCol { get; set; }
-    public int maxRow { get; set; }
+
+    // 排序对象
+    static NH_Sort_Cell _sort = new NH_Sort_Cell();
+
+    public HSSFWorkbook m_wb;
+    public HSSFSheet m_sheet;
+    public string sheetName;
+    public int sheetIndex;
+    public int maxCol;
+    public int maxRow;
+
+    protected HSSFWorkbook m_preWb;
 
     // 文件路径
-    public string pathFile { get; set; }
+    public string pathFile;
 
-    // 行数据
-    public Dictionary<int, List<NH_SheetCell>> m_dic_row = new Dictionary<int, List<NH_SheetCell>>();
+    // 表数据
+    public List<NH_SheetCell> m_tableList = new List<NH_SheetCell>();
     
     public NH_Sheet(string path, int sheetIndex)
     {
@@ -74,50 +80,49 @@ public class NH_Sheet {
         if (this.m_sheet.IsActive) {
             this.maxRow = this.m_sheet.LastRowNum + 1;
             this.maxCol = this.m_sheet.GetRow(0).LastCellNum;
-            List<NH_SheetCell> tmpList = null;
+            
             NH_SheetCell tmpCell = null;
-            bool isHasList = false;
             for (int i = 0; i < this.maxRow; i++)
             {
-                isHasList = m_dic_row.ContainsKey(i);
-                if (isHasList)
-                {
-                    tmpList = m_dic_row[i];
-                }else
-                {
-                    tmpList = new List<NH_SheetCell>();
-                }
-
                 for(int j = 0; j < this.maxCol; j++)
                 {
                     tmpCell = NH_SheetCell.NewCell(this, i, j);
-                    tmpList.Add(tmpCell);
-                }
-
-                if (!isHasList)
-                {
-                    m_dic_row.Add(i, tmpList);
+                    m_tableList.Add(tmpCell);
                 }
             }
+
+            m_tableList.Sort(_sort);
         }
     }
 
-    public HSSFRow GetRow(int rowIndex)
+    public HSSFRow GetRow(int rowIndex,bool isNew = false)
     {
-        return NPOIHssfEx.GetRow(m_sheet, rowIndex);
+        HSSFRow ret = NPOIHssfEx.GetRow(m_sheet, rowIndex);
+        if (isNew && ret == null)
+        {
+            ret = NPOIHssfEx.CreateRow(m_sheet, rowIndex);
+        }
+        return ret;
     }
 
-    public HSSFCell GetCell(int rowIndex,int columnIndex)
+    public HSSFCell GetCell(int rowIndex,int columnIndex,bool isNew = false)
     {
+        HSSFCell ret = null;
         try
         {
-            return NPOIHssfEx.GetCell(m_sheet, rowIndex, columnIndex);
+            ret = NPOIHssfEx.GetCell(m_sheet, rowIndex, columnIndex);
         }
         catch (System.Exception ex)
         {
             Debug.LogError("rIndex = " + rowIndex + ",cIndex = " + columnIndex + "\n" + ex);
         }
-        return null;
+
+        if (isNew && ret == null)
+        {
+            HSSFRow row = GetRow(rowIndex, isNew);
+            ret = NPOIHssfEx.CreateCell(row, columnIndex);
+        }
+        return ret;
     }
 
     public object GetObject(int rowIndex, int columnIndex)
@@ -149,7 +154,7 @@ public class NH_Sheet {
         return GetObject(row - 1, column - 1);
     }
 
-    public string GetValString(int row,int column)
+    public string GetString(int row,int column)
     {
         object obj = GetValue(row, column);
         if (obj != null)
@@ -157,8 +162,161 @@ public class NH_Sheet {
         return "";
     }
 
+    public int GetInt(int row, int column)
+    {
+        object obj = GetValue(row, column);
+        try
+        {
+            if (obj != null)
+                return int.Parse(obj.ToString());
+        }
+        catch (System.Exception)
+        {
+        }
+        return 0;
+    }
+
+    public float GetFloat(int row, int column)
+    {
+        object obj = GetValue(row, column);
+        try
+        {
+            if (obj != null)
+                return float.Parse(obj.ToString());
+        }
+        catch (System.Exception)
+        {
+        }
+        return 0.0f;
+    }
+
+    public double GetDouble(int row, int column)
+    {
+        object obj = GetValue(row, column);
+        try
+        {
+            if (obj != null)
+                return double.Parse(obj.ToString());
+        }
+        catch (System.Exception)
+        {
+        }
+        return 0.0d;
+    }
+
+    #region === 保存 ===
+
+    public void SaveValue(int rowIndex, int columnIndex, string val)
+    {
+        HSSFCell cell = GetCell(rowIndex, columnIndex, true);
+        cell.SetCellValue(val);
+        cell.SetAsActiveCell();
+    }
+
+    public void SaveValue(int rowIndex, int columnIndex, int val)
+    {
+        HSSFCell cell = GetCell(rowIndex, columnIndex, true);
+        cell.SetCellValue(val);
+        cell.SetAsActiveCell();
+    }
+
+    public void SaveValue(int rowIndex, int columnIndex, float val)
+    {
+        HSSFCell cell = GetCell(rowIndex, columnIndex, true);
+        cell.SetCellValue(val);
+        cell.SetAsActiveCell();
+    }
+
+    public void SaveValue(int rowIndex, int columnIndex, double val)
+    {
+        HSSFCell cell = GetCell(rowIndex, columnIndex, true);
+        cell.SetCellValue(val);
+        cell.SetAsActiveCell();
+    }
+
+    public void SaveValue(int rowIndex,int columnIndex,bool val)
+    {
+        HSSFCell cell = GetCell(rowIndex, columnIndex, true);
+        cell.SetCellValue(val);
+        cell.SetAsActiveCell();
+    }
+
+    public void SaveValue(int rowIndex, int columnIndex, System.DateTime val)
+    {
+        HSSFCell cell = GetCell(rowIndex, columnIndex, true);
+        cell.SetCellValue(val);
+        cell.SetAsActiveCell();
+    }
+
+    public void SaveValueToExcel(int rowIndex, int columnIndex,object val)
+    {
+        if (val == null)
+            return;
+        if(val is bool)
+        {
+            SaveValue(rowIndex, columnIndex, (bool)val);
+        }else if (val is int)
+        {
+            SaveValue(rowIndex, columnIndex, (int)val);
+        }else if (val is float)
+        {
+            SaveValue(rowIndex, columnIndex, (float)val);
+        }else if (val is double)
+        {
+            SaveValue(rowIndex, columnIndex, (double)val);
+        }else if (val is System.DateTime)
+        {
+            SaveValue(rowIndex, columnIndex, (System.DateTime)val);
+        }
+        else
+        {
+            SaveValue(rowIndex, columnIndex,val.ToString());
+        }
+    }
+
+    public void SaveValueToExcel(NH_SheetCell one)
+    {
+        if (one == null)
+            return;
+        SaveValueToExcel(one.rowIndex, one.columnIndex, one.val);
+    }
+
+    public void SaveValueToCache(int rowIndex, int columnIndex, object val)
+    {
+        if (val == null)
+            return;
+        
+        NH_SheetCell ncell = GetNCell(rowIndex, columnIndex);
+        if(ncell == null)
+        {
+            ncell = NH_SheetCell.NewCell(this, rowIndex, columnIndex);
+            m_tableList.Add(ncell);
+        }
+        ncell.val = val;
+    }
+
+    #endregion
+
+    public HSSFWorkbook ToWorkbook(bool isNew = false)
+    {
+        this.m_preWb = this.m_wb;
+        if (isNew)
+        {
+            this.m_wb = new HSSFWorkbook();
+            this.m_sheet = NPOIHssfEx.CreateSheet(this.m_wb,this.sheetName);
+        }
+
+        int lens = m_tableList.Count;
+        for (int i = 0; i < lens; i++)
+        {
+            SaveValueToExcel(m_tableList[i]);
+        }
+        
+        return this.m_wb;
+    }
+
     // L - Local:表示当前Class中的变量
-    public  string ToLString()
+    public string ToLString()
     {
         System.Text.StringBuilder builder = new System.Text.StringBuilder();
         builder.Append("NH_Sheet ,sheetName = [").Append(this.sheetName).Append("]");
@@ -170,20 +328,17 @@ public class NH_Sheet {
 
     public string ToNString()
     {
+        m_tableList.Sort(_sort);
+
         System.Text.StringBuilder builder = new System.Text.StringBuilder();
         builder.Append("list = [");
-        foreach (KeyValuePair<int, List<NH_SheetCell>> kv in m_dic_row)
+        builder.Append("\n\t");
+        int lens = m_tableList.Count;
+        for (int i = 0; i < lens; i++)
         {
+            builder.Append((m_tableList[i]).ToRCVString());
             builder.Append("\n\t");
-            builder.Append("row_").Append(kv.Key).Append(" = ");
-            builder.Append("[");
-            foreach (NH_SheetCell cell in kv.Value)
-            {
-                builder.Append("\n\t\t").Append(cell.ToCVString()).Append("\n"); ;
-            }
-            builder.Append("\t]").Append("\n");
         }
-
         builder.Append("]");
         return builder.ToString();
     }
@@ -195,17 +350,38 @@ public class NH_Sheet {
 
     public List<NH_SheetCell> GetNRows(int rowIndex)
     {
-        if (!m_dic_row.ContainsKey(rowIndex))
+        if (m_tableList.Count <= 0)
             return null;
-        return (m_dic_row[rowIndex]);
+        int lens = m_tableList.Count;
+        List<NH_SheetCell> ret = new List<NH_SheetCell>();
+        NH_SheetCell tmpCell = null;
+        for (int i = 0; i < lens; i++)
+        {
+            tmpCell = m_tableList[i];
+            if (tmpCell.rowIndex == rowIndex)
+            {
+                    ret.Add(tmpCell);
+            }
+        }
+        return ret;
     }
 
     public NH_SheetCell GetNCell(int rowIndex,int columnIndex)
     {
-        List<NH_SheetCell> rows = GetNRows(rowIndex);
-        if (rows == null || rows.Count <= 0)
+        if (m_tableList.Count <= 0)
             return null;
-        return rows[columnIndex];
+
+        int lens = m_tableList.Count;
+        NH_SheetCell tmpCell = null;
+        for (int i = 0; i < lens; i++)
+        {
+            tmpCell = m_tableList[i];
+            if (rowIndex == tmpCell.rowIndex && columnIndex == tmpCell.columnIndex)
+            {
+                return tmpCell;
+            }
+        }
+        return null;
     }
     
     public void DoClear()
@@ -218,6 +394,8 @@ public class NH_Sheet {
         this.maxRow = -1;
         this.maxCol = -1;
 
-        m_dic_row.Clear();
+        m_tableList.Clear();
+
+        this.m_preWb = null;
     }
 }

@@ -118,4 +118,28 @@ public class NPOIEx
     {
         return sheet.GetCellComment(rowIndex, columnIndex);
     }
+
+    #region === 创建 ===
+
+    static public ISheet CreateISheet(HSSFWorkbook wb)
+    {
+        return wb.CreateSheet();
+    }
+
+    static public ISheet CreateISheet(HSSFWorkbook wb, string sheetName)
+    {
+        return wb.CreateSheet(sheetName);
+    }
+
+    static public IRow CreateIRow(ISheet sheet, int rowIndex)
+    {
+        return sheet.CreateRow(rowIndex);
+    }
+
+    static public ICell CreateICell(IRow row, int columnIndex)
+    {
+        return row.CreateCell(columnIndex);
+    }
+    
+    #endregion
 }

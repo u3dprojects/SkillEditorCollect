@@ -67,3 +67,14 @@ public class NH_SheetCell {
         return new NH_SheetCell(nsheet, rIndex, cIndex);
     }
 }
+
+// 按照时间进度排序
+public class NH_Sort_Cell : System.Collections.Generic.IComparer<NH_SheetCell>
+{
+    public int Compare(NH_SheetCell x, NH_SheetCell y)
+    {
+        if (x.rowIndex == y.rowIndex)
+            return x.columnIndex < y.columnIndex ? -1 : 1;
+        return x.rowIndex < y.rowIndex ? -1 : 1;
+    }
+}
