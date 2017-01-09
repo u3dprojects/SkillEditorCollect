@@ -24,6 +24,8 @@ public class EA_Effect : System.Object
             if(value != _gobjFab)
             {
                 _gobjFab = value;
+
+                Reset(_gobjFab);
                 this.isChanged = true;
             }
         }
@@ -90,12 +92,9 @@ public class EA_Effect : System.Object
         DoInit(gobj);
     }
 
-    public void Reset(GameObject gobj)
+    void Reset(GameObject gobj)
     {
-        if(this._gobjFab != gobj)
-        {
-            DoInit(gobj);
-        }
+        DoInit(gobj);
     }
 
     public void DoInit(GameObject gobj)
@@ -134,7 +133,7 @@ public class EA_Effect : System.Object
 
         this.gobjFab = parentObject as GameObject;
         path = GetPath(parentObject);
-        Debug.Log(path);
+        // Debug.Log(path);
 
         this.fab_path = path;
         this.name = Path.GetFileName(this.fab_path);

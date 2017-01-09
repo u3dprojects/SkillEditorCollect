@@ -44,6 +44,7 @@ public class EDM_Particle : MonoBehaviour {
     int lens = 0;
     bool isPause = false;
     float curSpeed = 1.0f;
+    bool isRefreshView = false;
 
     // 添加更新频率限定
     //更新间隔
@@ -51,9 +52,10 @@ public class EDM_Particle : MonoBehaviour {
     // 当前值
     float m_CurInvUp = 0.0f;
 
-    public void DoInit()
+    public void DoInit(bool RefreshView = true)
     {
         DoClear();
+        this.isRefreshView = RefreshView;
     }
     
     public void DoReady(GameObject gobjFab, Transform trsfParent = null)
@@ -124,7 +126,10 @@ public class EDM_Particle : MonoBehaviour {
         m_CurInvUp = 0.0f;
         OnClearParticle();
 
-        UnityEditorInternal.InternalEditorUtility.RepaintAllViews();
+        if (isRefreshView) { 
+            // Inspectror 的开发的时候，感觉需要重新绘制,Windows窗体，就不需要
+            UnityEditorInternal.InternalEditorUtility.RepaintAllViews();
+        }
     }
 
     void OnClearParticle(bool isAll = false)
@@ -164,6 +169,7 @@ public class EDM_Particle : MonoBehaviour {
         tmp = null;
         isPause = false;
         curSpeed = 1.0f;
+        isRefreshView = false;
     }
 
     public void DoPause()

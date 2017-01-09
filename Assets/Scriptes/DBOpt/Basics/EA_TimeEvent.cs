@@ -88,6 +88,11 @@ public class EA_TimeEvent : System.Object{
 
     public  void DoClearEvent()
     {
+        if(lstCalls == null)
+        {
+            return;
+        }
+
         foreach (EA_Event<string> item in lstCalls)
         {
             item.DoClear();

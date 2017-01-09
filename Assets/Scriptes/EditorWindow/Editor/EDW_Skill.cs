@@ -58,6 +58,8 @@ public class EDW_Skill : EditorWindow
     // 实例对象
     public GameObject gobjEntity;
     public ED_Ani_YGame me_ani;
+    public Transform trsfEntity;
+    public CharacterController m_myCtrl;
 
     PS_MidLeft m_midLeft;
     PS_MidRight m_midRight;
@@ -103,7 +105,6 @@ public class EDW_Skill : EditorWindow
             if(go == null)
             {
                 OnClearFab();
-                Debug.Log("== 1 ==");
                 DoClearEntity();
 
                 EditorGUILayout.HelpBox("Model不能为空,请选择模型 !!!", MessageType.Error);
@@ -202,11 +203,12 @@ public class EDW_Skill : EditorWindow
 
     void OnInitEntity()
     {
-        Debug.Log("== 2 ==");
         DoClearEntity();
         
         gobjEntity = GameObject.Instantiate<GameObject>(gobjFab);
         // gobjEntity = GameObject.Instantiate(gobjFab, Vector3.zero, Quaternion.identity) as GameObject;
+        trsfEntity = gobjEntity.transform;
+        m_myCtrl = gobjEntity.GetComponent<CharacterController>();
 
         OnInitEnAni();
     }
@@ -247,8 +249,6 @@ public class EDW_Skill : EditorWindow
     void DoClear()
     {
         OnClearFab();
-
-        Debug.Log("== 3 ==");
 
         DoClearEntity();
 

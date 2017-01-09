@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEditor;
 
 /// <summary>
@@ -20,6 +21,16 @@ public class PS_MidLeft{
         {
             return m_wSkill.me_ani;
         }
+    }
+
+    CharacterController m_myCtrl
+    {
+        get { return m_wSkill.m_myCtrl; }
+    }
+
+    Transform trsfEntity
+    {
+        get { return m_wSkill.trsfEntity; }
     }
 
     DBOpt_Time m_curTime;
@@ -43,6 +54,19 @@ public class PS_MidLeft{
     // 循环次数
     bool isRound = false;
     int round_times = 1;
+
+    // 位移
+    bool isOpenMovPos = false;
+    AnimationCurve x_curve;
+    AnimationCurve y_curve;
+    AnimationCurve z_curve;
+    Vector3 movPos = Vector3.zero;
+
+    // 特效事件
+    
+    List<bool> m_event_fodeOut = new List<bool>();
+    // 特效挂节点
+    bool isEffectJoinSelf = false;
 
     // 暂停按钮控制
     bool isPauseing = false;
@@ -105,11 +129,9 @@ public class PS_MidLeft{
 
                     _DrawRoundTimes();
 
-                    //mg_YGame.DrawMovePos();
+                    _DrawMovPos();
 
-                    //mg_YGame.DrawTimerInfo();
-
-                    //mg_YGame.DrawEffect();
+                    _DrawEffects();
 
                     _DrawOptBtns();
                 }
@@ -196,9 +218,9 @@ public class PS_MidLeft{
         style.alignment = TextAnchor.MiddleLeft;
 
         GUILayoutOption minW = GUILayout.MinWidth(90);
-        GUILayout.Label("总帧数: " + m_curAni.CurFrameCount, style, minW);
+        GUILayout.Label("动画帧数: " + m_curAni.CurFrameCount, style, minW);
 
-        GUILayout.Label("总时长: " + m_curAni.CurLens + " s", style, minW);
+        GUILayout.Label("动画时长: " + m_curAni.CurLens + " s", style, minW);
 
         style.alignment = TextAnchor.MiddleRight;
         EditorGUILayout.LabelField("动画帧率: " + m_curAni.CurFrameRate + " 帧/s", style);
@@ -305,6 +327,217 @@ public class PS_MidLeft{
         EG_GUIHelper.FEG_EndH();
     }
 
+    void InitMovPosCurve()
+    {
+        DefCurve();
+    }
+
+    void DefCurve()
+    {
+        x_curve = new AnimationCurve(new Keyframe(0, 0, 0, 0), new Keyframe(1, 1, 0, 0));
+        y_curve = new AnimationCurve(new Keyframe(0, 0, 0, 0), new Keyframe(1, 1, 0, 0));
+        z_curve = new AnimationCurve(new Keyframe(0, 0, 0, 0), new Keyframe(1, 1, 0, 0));
+    }
+
+    void SaveMache() { }
+
+    void RemoveMache() { }
+
+    void _DrawMovPos()
+    {
+        EG_GUIHelper.FEG_BeginH();
+        {
+            EG_GUIHelper.FEG_BeginToggleGroup("开启位移??", ref isOpenMovPos);
+            {
+                InitMovPosCurve();
+
+                EG_GUIHelper.FEG_BeginV();
+
+                EG_GUIHelper.FEG_BeginH();
+                GUI.color = Color.cyan;
+                if (GUILayout.Button("SaveCurveMache"))
+                {
+                    SaveMache();
+                }
+
+                GUI.color = Color.red;
+                if (GUILayout.Button("RemoveCurveMache"))
+                {
+                    RemoveMache();
+                }
+                GUI.color = Color.white;
+                EG_GUIHelper.FEG_EndH();
+
+                EG_GUIHelper.FG_Space(5);
+
+                EG_GUIHelper.FEG_BeginH();
+                x_curve = EditorGUILayout.CurveField("x", x_curve);
+                EG_GUIHelper.FEG_EndH();
+
+                EG_GUIHelper.FG_Space(5);
+
+                EG_GUIHelper.FEG_BeginH();
+                y_curve = EditorGUILayout.CurveField("y", y_curve);
+                EG_GUIHelper.FEG_EndH();
+
+                EG_GUIHelper.FG_Space(5);
+
+                EG_GUIHelper.FEG_BeginH();
+                z_curve = EditorGUILayout.CurveField("z", z_curve);
+                EG_GUIHelper.FEG_EndH();
+
+                EG_GUIHelper.FEG_EndV();
+            }
+            EG_GUIHelper.FEG_EndToggleGroup();
+        }
+        EG_GUIHelper.FEG_EndH();
+    }
+
+    void _DrawEffects()
+    {
+        EG_GUIHelper.FG_BeginVAsArea();
+        {
+            {
+                // 上
+                EG_GUIHelper.FEG_BeginH();
+                Color def = GUI.backgroundColor;
+                GUI.backgroundColor = Color.black;
+                GUI.color = Color.white;
+
+                EditorGUILayout.LabelField("特效列表", EditorStyles.textArea);
+
+                GUI.backgroundColor = def;
+
+                GUI.color = Color.green;
+                if (GUILayout.Button("+", GUILayout.Width(50)))
+                {
+                    m_curAni.AddCurEffect();
+                }
+                GUI.color = Color.white;
+                EG_GUIHelper.FEG_EndV();
+            }
+
+            {
+                // 中
+                int lens = m_curAni.curEffects.Count;
+                if (lens > 0)
+                {
+                    for (int i = 0; i < lens; i++)
+                    {
+                        lens = m_curAni.curEffects.Count;
+                        if (i > lens - 1)
+                        {
+                            i = lens - 1;
+                        }
+                        m_event_fodeOut.Add(false);
+
+                        _DrawOneEffect(i, m_curAni.curEffects[i]);
+                    }
+                }
+                else
+                {
+                    m_event_fodeOut.Clear();
+                }
+            }
+        }
+        EG_GUIHelper.FG_EndV();
+    }
+
+    void _DrawOneEffect(int index,EA_Effect effect)
+    {
+        bool isEmptyName = string.IsNullOrEmpty(effect.name);
+
+        EG_GUIHelper.FEG_BeginV();
+        {
+            EG_GUIHelper.FEG_BeginH();
+            {
+                m_event_fodeOut[index] = EditorGUILayout.Foldout(m_event_fodeOut[index], "特效 - " + (isEmptyName ? "未指定" : effect.name));
+                GUI.color = Color.red;
+                if (GUILayout.Button("X", EditorStyles.miniButton, GUILayout.Width(50)))
+                {
+                    m_curAni.RemoveEffect(effect);
+                    m_event_fodeOut.RemoveAt(index);
+                }
+                GUI.color = Color.white;
+            }
+            EG_GUIHelper.FEG_EndH();
+
+            EG_GUIHelper.FG_Space(5);
+
+            if (m_event_fodeOut[index])
+            {
+                _DrawOneEffectAttrs(effect);
+            }
+        }
+        EG_GUIHelper.FEG_EndV();
+    }
+
+    void _DrawOneEffectAttrs(EA_Effect effect)
+    {
+        if (effect.isChanged)
+        {
+            m_curAni.ResetEvent(effect, effect.trsfParent);
+        }
+
+        EG_GUIHelper.FEG_BeginH();
+        {
+            GUILayout.Label("特效文件:", GUILayout.Width(80));
+            effect.gobjFab = EditorGUILayout.ObjectField(effect.gobjFab, typeof(GameObject), false) as GameObject;
+        }
+        EG_GUIHelper.FEG_EndH();
+
+        EG_GUIHelper.FG_Space(5);
+
+        EG_GUIHelper.FEG_BeginH();
+        {
+            GUILayout.Label("触发时间:", GUILayout.Width(80));
+            effect.time = EditorGUILayout.Slider(effect.time, 0, 1);
+        }
+        EG_GUIHelper.FEG_EndH();
+
+        EG_GUIHelper.FG_Space(5);
+
+        _DrawOneEffectJoinPos(effect);
+    }
+
+    void _DrawOneEffectJoinPos(EA_Effect effect)
+    {
+        EG_GUIHelper.FEG_BeginH();
+        {
+            EG_GUIHelper.FEG_BeginToggleGroup("手动位置??", ref isEffectJoinSelf);
+            effect.trsfParent = EditorGUILayout.ObjectField("位置:", effect.trsfParent, typeof(Transform), isEffectJoinSelf) as Transform;
+            EG_GUIHelper.FEG_EndToggleGroup();
+        }
+        EG_GUIHelper.FEG_EndH();
+
+        EG_GUIHelper.FG_Space(5);
+        GUIStyle style = EditorStyles.label;
+        style.alignment = TextAnchor.MiddleLeft;
+
+        EG_GUIHelper.FEG_BeginH();
+        {
+            effect.v3LocPos = EditorGUILayout.Vector3Field("偏移:", effect.v3LocPos);
+        }
+        EG_GUIHelper.FEG_EndH();
+
+        EG_GUIHelper.FG_Space(5);
+
+        EG_GUIHelper.FEG_BeginH();
+        {
+            effect.v3LocEulerAngle = EditorGUILayout.Vector3Field("旋转:", effect.v3LocEulerAngle);
+        }
+        EG_GUIHelper.FEG_EndH();
+
+        EG_GUIHelper.FG_Space(5);
+
+        EG_GUIHelper.FEG_BeginH();
+        {
+            EG_GUIHelper.FG_Label("缩放:");
+            effect.scale = EditorGUILayout.FloatField(effect.scale);
+        }
+        EG_GUIHelper.FEG_EndH();
+    }
+
     void _DrawOptBtns()
     {
         EG_GUIHelper.FEG_BeginH();
@@ -346,7 +579,27 @@ public class PS_MidLeft{
 
         this.m_curTime.DoUpdateTime();
         this.m_curAni.DoUpdateAnimator(m_curTime.DeltaTime,cur_speed);
-        
+
+        // 设置粒子速度
+        EDM_Particle.m_instance.SetSpeed(cur_speed);
+        EDM_Particle.m_instance.OnUpdate(m_curTime.DeltaTime,true);
+
+        // 设置位移
+        if (isOpenMovPos)
+        {
+            movPos = Vector3.zero;
+            movPos.x = x_curve.Evaluate(this.m_curTime.ProgressTime);
+            movPos.y = y_curve.Evaluate(this.m_curTime.ProgressTime);
+            movPos.z = z_curve.Evaluate(this.m_curTime.ProgressTime);
+            if(m_myCtrl != null && m_myCtrl.enabled)
+            {
+                m_myCtrl.Move(movPos);
+            }else
+            {
+                movPos = trsfEntity.TransformDirection(movPos);
+                trsfEntity.Translate(movPos);
+            }
+        }
     }
 
     void DoPlay() {
@@ -354,6 +607,8 @@ public class PS_MidLeft{
 
         isRunnging = true;
         isPauseing = false;
+
+        EDM_Particle.m_instance.DoInit(false);
     }
 
     void DoPause() {
@@ -366,5 +621,6 @@ public class PS_MidLeft{
 
     void DoStop() {
         isRunnging = false;
+        EDM_Particle.m_instance.DoClear();
     }
 }
