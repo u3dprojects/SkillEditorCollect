@@ -352,24 +352,25 @@ public class PS_MidLeft{
                 InitMovPosCurve();
 
                 EG_GUIHelper.FEG_BeginV();
-
-                EG_GUIHelper.FEG_BeginH();
-                GUI.color = Color.cyan;
-                if (GUILayout.Button("SaveCurveMache"))
                 {
-                    SaveMache();
+                    EG_GUIHelper.FEG_BeginH();
+                    GUI.color = Color.cyan;
+                    if (GUILayout.Button("SaveCurveMache"))
+                    {
+                        SaveMache();
+                    }
+
+                    GUI.color = Color.red;
+                    if (GUILayout.Button("RemoveCurveMache"))
+                    {
+                        RemoveMache();
+                    }
+                    GUI.color = Color.white;
+                    EG_GUIHelper.FEG_EndH();
+
+                    EG_GUIHelper.FG_Space(5);
                 }
-
-                GUI.color = Color.red;
-                if (GUILayout.Button("RemoveCurveMache"))
-                {
-                    RemoveMache();
-                }
-                GUI.color = Color.white;
-                EG_GUIHelper.FEG_EndH();
-
-                EG_GUIHelper.FG_Space(5);
-
+                
                 EG_GUIHelper.FEG_BeginH();
                 x_curve = EditorGUILayout.CurveField("x", x_curve);
                 EG_GUIHelper.FEG_EndH();
