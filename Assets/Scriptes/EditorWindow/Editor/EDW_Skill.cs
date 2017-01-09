@@ -25,11 +25,11 @@ public class EDW_Skill : EditorWindow
             isOpenWindowView = true;
             vwWindow = GetWindow<EDW_Skill>("SkillEditor");
 
-            int width = 900;
-            int height = 400;
-            float x = 460;
-            float y = 220;
-            vwWindow.position = new Rect(x, y, width, height);
+            //int width = 900;
+            //int height = 400;
+            //float x = 460;
+            //float y = 220;
+            //vwWindow.position = new Rect(x, y, width, height);
 
             vwWindow.Show();
         }
@@ -222,6 +222,7 @@ public class EDW_Skill : EditorWindow
             me_ani = new ED_Ani_YGame();
 
         me_ani.DoReInit(gobjEntity);
+        me_ani.SetApplyRootMotion(false);
 
         m_midLeft.DoReset();
     }

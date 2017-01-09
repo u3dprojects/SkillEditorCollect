@@ -654,6 +654,6 @@ public class ED_Ani : ED_AniBase {
 
         PlayCurr(0);
 
-        SetApplyRootMotion(false);
+        // SetApplyRootMotion(false);
     }
 }
