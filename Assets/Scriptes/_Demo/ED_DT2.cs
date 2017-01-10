@@ -25,7 +25,7 @@ public class ED_DT2 : MonoBehaviour {
     }
 
     [ContextMenu("DoPlay")]
-    void DoPlay()
+    public void DoPlay()
     {
         if (gobjEffect == null)
             return;
