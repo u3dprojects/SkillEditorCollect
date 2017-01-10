@@ -34,6 +34,12 @@ public class PS_MidLeft{
     }
 
     DBOpt_Time m_curTime;
+    
+    Vector2 scrollPos;
+    float minScrollH = 260;
+    float curScrollH = 260;
+    float minWidth = 440;
+    float curWidth = 0;
 
     // popup 列表选择值
     int ind_popup = 0;
@@ -63,8 +69,9 @@ public class PS_MidLeft{
     Vector3 movPos = Vector3.zero;
 
     // 特效事件
-    
+    ED_AniTimeEvent stateEvent = new ED_AniTimeEvent();
     List<bool> m_event_fodeOut = new List<bool>();
+
     // 特效挂节点
     bool isEffectJoinSelf = false;
 
@@ -97,6 +104,8 @@ public class PS_MidLeft{
     {
         ind_popup = 0;
         pre_ind_popup = -1;
+
+        stateEvent.DoClear();
     }
 
     void OnResetProgress()
@@ -105,17 +114,34 @@ public class PS_MidLeft{
         max_progress = max_progress > 0 ? max_progress : 1.0f;
     }
 
+    void RecokenWH()
+    {
+        if (this.m_wSkill != null)
+        {
+            // 100 - 是主界面顶部高度 20 - 是误差偏移
+            curScrollH = (m_wSkill.position.height - 100) - 20;
+            curScrollH = Mathf.Max(curScrollH, minScrollH);
+
+            curWidth = (m_wSkill.position.width - 10) / 2;
+            curWidth = Mathf.Max(curWidth, minWidth);
+        }
+    }
+
     public void DrawShow()
     {
-        EG_GUIHelper.FEG_BeginVArea();
+        RecokenWH();
+
+        EG_GUIHelper.FEG_BeginVArea(curWidth);
         {
             _DrawDesc();
 
             if (this.m_wSkill.gobjEntity)
             {
+                EG_GUIHelper.FEG_BeginScroll(ref scrollPos, 0, 0, curScrollH);
+
                 _DrawFreshBtn();
 
-                if (_DrawAniJudged())
+                if (this.m_wSkill._DrawAniJudged())
                 {
                     _DrawAniList();
 
@@ -132,9 +158,11 @@ public class PS_MidLeft{
                     _DrawMovPos();
 
                     _DrawEffects();
-
+                    
                     _DrawOptBtns();
                 }
+
+                EG_GUIHelper.FEG_EndScroll();
             }
         }
         EG_GUIHelper.FEG_EndV();
@@ -161,35 +189,7 @@ public class PS_MidLeft{
         }
         EG_GUIHelper.FEG_EndH();
     }
-
-    bool _DrawAniJudged()
-    {
-        bool ret = false;
-        EG_GUIHelper.FEG_BeginH();
-        {
-            EG_GUIHelper.FEG_BeginV();
-            {
-                if (m_wSkill == null || m_curAni == null)
-                {
-                    EditorGUILayout.HelpBox("请拖动Prefab到Model Prefab中！", MessageType.Error);
-                }else if (!m_curAni.IsHasAniCtrl)
-                {
-                    EditorGUILayout.HelpBox("该Animator里面没有AnimatorController \n\n请添加动画控制器-AnimatorController！", MessageType.Error);
-                }
-                else if (m_curAni.Keys.Count <= 0)
-                {
-                    EditorGUILayout.HelpBox("该AnimatorController里面没有任何动画，请添加State动画！", MessageType.Error);
-                }else
-                {
-                    ret = true;
-                }
-            }
-            EG_GUIHelper.FEG_EndV();
-        }
-        EG_GUIHelper.FEG_EndH();
-        return ret;
-    }
-
+    
     void _DrawAniList()
     {
         EG_GUIHelper.FEG_BeginH();
@@ -207,6 +207,8 @@ public class PS_MidLeft{
             m_curAni.ResetAniState(ind_popup);
 
             OnResetProgress();
+
+            m_curAni.AddCallPhase(OnUpdateAniPhase);
         }
         EG_GUIHelper.FEG_EndH();
     }
@@ -257,19 +259,12 @@ public class PS_MidLeft{
         }
         EG_GUIHelper.FEG_EndH();
     }
-
-    float Round(float org, int acc)
-    {
-        float pow = Mathf.Pow(10, acc);
-        float temp = org * pow;
-        return Mathf.RoundToInt(temp) / pow;
-    }
-
+    
     void ReckonProgress(float normalizedTime)
     {
         cur_progress = (normalizedTime % 1);
         cur_progress = cur_progress * max_progress;
-        // cur_progress = Round(cur_progress, 6);
+        // cur_progress = EDW_Skill.Round(cur_progress, 6);
     }
 
     void _DrawCtrlAniStateProgress()
@@ -412,7 +407,8 @@ public class PS_MidLeft{
                 GUI.color = Color.green;
                 if (GUILayout.Button("+", GUILayout.Width(50)))
                 {
-                    m_curAni.AddCurEffect();
+                    // m_curAni.AddCurEffect();
+                    stateEvent.AddEffect();
                 }
                 GUI.color = Color.white;
                 EG_GUIHelper.FEG_EndV();
@@ -420,19 +416,20 @@ public class PS_MidLeft{
 
             {
                 // 中
-                int lens = m_curAni.curEffects.Count;
+                // int lens = m_curAni.curEffects.Count;
+                int lens = stateEvent.lst_effects.Count;
                 if (lens > 0)
                 {
                     for (int i = 0; i < lens; i++)
                     {
-                        lens = m_curAni.curEffects.Count;
+                        lens = stateEvent.lst_effects.Count;
                         if (i > lens - 1)
                         {
                             i = lens - 1;
                         }
                         m_event_fodeOut.Add(false);
 
-                        _DrawOneEffect(i, m_curAni.curEffects[i]);
+                        _DrawOneEffect(i, stateEvent.lst_effects[i]);
                     }
                 }
                 else
@@ -456,7 +453,8 @@ public class PS_MidLeft{
                 GUI.color = Color.red;
                 if (GUILayout.Button("X", EditorStyles.miniButton, GUILayout.Width(50)))
                 {
-                    m_curAni.RemoveEffect(effect);
+                    // m_curAni.RemoveEffect(effect);
+                    stateEvent.RemoveEffect(effect);
                     m_event_fodeOut.RemoveAt(index);
                 }
                 GUI.color = Color.white;
@@ -477,7 +475,8 @@ public class PS_MidLeft{
     {
         if (effect.isChanged)
         {
-            m_curAni.ResetEvent(effect, effect.trsfParent);
+            // m_curAni.ResetEvent(effect, effect.trsfParent);
+            stateEvent.ResetOneEvent(effect, effect.trsfParent);
         }
 
         EG_GUIHelper.FEG_BeginH();
@@ -604,6 +603,7 @@ public class PS_MidLeft{
 
     void DoPlay() {
         this.m_curAni.DoStart();
+        stateEvent.ResetEvents();
 
         isRunnging = true;
         isPauseing = false;
@@ -623,5 +623,10 @@ public class PS_MidLeft{
         isRunnging = false;
         EDM_Particle.m_instance.DoClear();
         trsfEntity.position = Vector3.zero;
+    }
+
+    void OnUpdateAniPhase(float phase)
+    {
+        stateEvent.OnUpdate(phase);
     }
 }
