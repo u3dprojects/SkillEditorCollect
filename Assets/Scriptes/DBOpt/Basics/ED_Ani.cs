@@ -75,9 +75,6 @@ public class ED_Ani : ED_AniBase {
     // 可循环次数
     public int m_LoopTimes { get; set; }
     
-    // 动作时间轴时间
-    ED_AniTimeEvent stateEvent = new ED_AniTimeEvent();
-
     // 当前StateMatch
     public StateMachineBehaviour cur_state_mache { get; set; }
 
@@ -86,6 +83,15 @@ public class ED_Ani : ED_AniBase {
     
     // 完成一次循环(一个周期)
     public System.Action<bool> callCompleted { get; set; }
+
+    // 动作时间轴时间
+    ED_AniTimeEvent stateEvent = new ED_AniTimeEvent();
+
+    // 更新动作回调 - 进度时间 
+    System.Action<float> callOnUpdateProgress;
+
+    // 更新动作回调 - 当前阶段(0-1)
+    System.Action<float> callOnUpdatePhase;
 
     public ED_Ani() { }
 
@@ -284,6 +290,9 @@ public class ED_Ani : ED_AniBase {
         callChanged = null;
         callCompleted = null;
 
+        callOnUpdatePhase = null;
+        callOnUpdateProgress = null;
+
         OnResetMemberReckon();
     }
 
@@ -313,8 +322,7 @@ public class ED_Ani : ED_AniBase {
         PlayCurr(cur_Phase);
         return deltatime;
     }
-
-
+    
     public void PlayCurr(float begNormallizedTime, float delta_time = 0)
     {
         if (cur_state)
@@ -514,8 +522,12 @@ public class ED_Ani : ED_AniBase {
             isFinishedOneWheel = false;
         }
 
-        // 执行事件
+        // 执行事件(自带的以前模式)
         stateEvent.OnUpdate(cur_Phase);
+
+        // 新的模式用于外部调用
+        OnUpdateCallPhase();
+        OnUpdateCallProgress();
     }
 
     void OnCompleteAllRound()
@@ -555,6 +567,51 @@ public class ED_Ani : ED_AniBase {
             {
                 OnCompleteAllRound();
             }
+        }
+    }
+
+    protected void OnUpdateCallProgress()
+    {
+        if(this.callOnUpdateProgress != null)
+        {
+            this.callOnUpdateProgress(cur_progressTime);
+        }
+    }
+
+    protected void OnUpdateCallPhase()
+    {
+        if (this.callOnUpdatePhase != null)
+        {
+            this.callOnUpdatePhase(cur_Phase);
+        }
+    }
+
+    public void AddCallProgress(System.Action<float> callFunc)
+    {
+        if (callFunc == null)
+            return;
+
+        if(this.callOnUpdateProgress == null)
+        {
+            this.callOnUpdateProgress = callFunc;
+        }else
+        {
+            this.callOnUpdateProgress += callFunc;
+        }
+    }
+
+    public void AddCallPhase(System.Action<float> callFunc)
+    {
+        if (callFunc == null)
+            return;
+
+        if (this.callOnUpdatePhase == null)
+        {
+            this.callOnUpdatePhase = callFunc;
+        }
+        else
+        {
+            this.callOnUpdatePhase += callFunc;
         }
     }
 
