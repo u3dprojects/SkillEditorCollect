@@ -13,6 +13,20 @@ using NPOI.SS.UserModel;
 public class NPOIEx
 {
 
+    static public float Round2F(float org, int acc)
+    {
+        float pow = Mathf.Pow(10, acc);
+        float temp = org * pow;
+        return Mathf.RoundToInt(temp) / pow;
+    }
+
+    static public double Round2D(float org, int acc)
+    {
+        double pow = Mathf.Pow(10, acc);
+        double temp = org * pow;
+        return Mathf.RoundToInt((float)temp) / pow;
+    }
+
     static public Stream ToStream(string FileName)
     {
         FileInfo fi = new FileInfo(FileName);
