@@ -13,7 +13,11 @@ public class EDW_Skill : EditorWindow
     static bool isOpenWindowView = false;
 
     static protected EDW_Skill vwWindow = null;
-    
+
+    // 窗体宽高
+    static public float width = 1010;
+    static public float height = 450;
+
     [MenuItem("Tools/Windows/EDSkill")]
     static void AddWindow()
     {
@@ -23,15 +27,20 @@ public class EDW_Skill : EditorWindow
         try
         {
             isOpenWindowView = true;
+            float x = 460;
+            float y = 200;
+            Rect rect = new Rect(x, y, width, height);
+
+            // 大小不能拉伸
+            // vwWindow = GetWindowWithRect<EDW_Skill>(rect, true, "SkillEditor");
+            
+            // 窗口，只能单独当成一个窗口,大小可以拉伸
+            //vwWindow = GetWindow<EDW_Skill>(true,"SkillEditor");
+
+            // 这个合并到其他窗口中去,大小可以拉伸
             vwWindow = GetWindow<EDW_Skill>("SkillEditor");
 
-            //int width = 900;
-            //int height = 400;
-            //float x = 460;
-            //float y = 220;
-            //vwWindow.position = new Rect(x, y, width, height);
-
-            vwWindow.Show();
+            vwWindow.position = rect;
         }
         catch (System.Exception)
         {
@@ -44,6 +53,13 @@ public class EDW_Skill : EditorWindow
     {
         isOpenWindowView = false;
         vwWindow = null;
+    }
+
+    static public float Round(float org, int acc)
+    {
+        float pow = Mathf.Pow(10, acc);
+        float temp = org * pow;
+        return Mathf.RoundToInt(temp) / pow;
     }
 
     #region  == Member Attribute ===
@@ -96,7 +112,7 @@ public class EDW_Skill : EditorWindow
             string txtDecs = "类名 : 技能编辑器窗口\n"
                 + "作者 : Canyon\n"
                 + "日期 : 2017 - 01 - 05 17:10\n"
-                + "描述 : 结构分上中下三层，中分左右两块，左边提供给美术对动作-特效；右边提供策划导出数据表。\n";
+                + "描述 : 结构分上下两层，下分左右两块，左边提供给美术对动作-特效；右边提供策划导出数据表。\n";
             GUILayout.Label(txtDecs, style);
             
             EG_GUIHelper.FEG_EndH();
@@ -157,6 +173,36 @@ public class EDW_Skill : EditorWindow
     #endregion
 
     #region  == Self Func ===
+
+    public bool _DrawAniJudged()
+    {
+        bool ret = false;
+        EG_GUIHelper.FEG_BeginH();
+        {
+            EG_GUIHelper.FEG_BeginV();
+            {
+                if (me_ani == null)
+                {
+                    EditorGUILayout.HelpBox("请拖动Prefab到Model Prefab中！", MessageType.Error);
+                }
+                else if (!me_ani.IsHasAniCtrl)
+                {
+                    EditorGUILayout.HelpBox("该Animator里面没有AnimatorController \n\n请添加动画控制器-AnimatorController！", MessageType.Error);
+                }
+                else if (me_ani.Keys.Count <= 0)
+                {
+                    EditorGUILayout.HelpBox("该AnimatorController里面没有任何动画，请添加State动画！", MessageType.Error);
+                }
+                else
+                {
+                    ret = true;
+                }
+            }
+            EG_GUIHelper.FEG_EndV();
+        }
+        EG_GUIHelper.FEG_EndH();
+        return ret;
+    }
 
     public void AddCall4Update(System.Action callFunc)
     {
