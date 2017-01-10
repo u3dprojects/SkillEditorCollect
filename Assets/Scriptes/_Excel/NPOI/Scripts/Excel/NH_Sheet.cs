@@ -154,17 +154,17 @@ public class NH_Sheet {
         return GetObject(row - 1, column - 1);
     }
 
-    public string GetString(int row,int column)
+    public string GetString(int rowIndex, int columnIndex)
     {
-        object obj = GetValue(row, column);
+        object obj = GetObject(rowIndex, columnIndex);
         if (obj != null)
             return obj.ToString();
         return "";
     }
 
-    public int GetInt(int row, int column)
+    public int GetInt(int rowIndex, int columnIndex)
     {
-        object obj = GetValue(row, column);
+        object obj = GetObject(rowIndex, columnIndex);
         try
         {
             if (obj != null)
@@ -176,9 +176,9 @@ public class NH_Sheet {
         return 0;
     }
 
-    public float GetFloat(int row, int column)
+    public float GetFloat(int rowIndex, int columnIndex)
     {
-        object obj = GetValue(row, column);
+        object obj = GetObject(rowIndex, columnIndex);
         try
         {
             if (obj != null)
@@ -190,9 +190,9 @@ public class NH_Sheet {
         return 0.0f;
     }
 
-    public double GetDouble(int row, int column)
+    public double GetDouble(int rowIndex, int columnIndex)
     {
-        object obj = GetValue(row, column);
+        object obj = GetObject(rowIndex, columnIndex);
         try
         {
             if (obj != null)
@@ -223,7 +223,7 @@ public class NH_Sheet {
     public void SaveValue(int rowIndex, int columnIndex, float val)
     {
         HSSFCell cell = GetCell(rowIndex, columnIndex, true);
-        cell.SetCellValue(val);
+        cell.SetCellValue(NPOIEx.Round2D(val,2));
         cell.SetAsActiveCell();
     }
 
