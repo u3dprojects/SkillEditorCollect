@@ -25,7 +25,8 @@ public class EDW_GUIHelper : EditorWindow
     }
 
     #region  == Member Attribute ===
-    
+    float fadeVal = 0.5f;
+    Vector2 scorllPos;
     #endregion
 
     #region  == EditorWindow Func ===
@@ -131,6 +132,48 @@ public class EDW_GUIHelper : EditorWindow
         EG_GUIHelper.FG_EndV();
 
         EG_GUIHelper.FG_Space(10);
+
+        fadeVal = EditorGUILayout.Slider("FadeValue:", fadeVal,0,1);
+
+        // scroll
+        EG_GUIHelper.FEG_BeginScroll(ref scorllPos,3,0,260);
+
+        // fade 
+        //if (EG_GUIHelper.FEG_BeginFadeGroup(fadeVal))
+        //{
+        //    if (GUILayout.Button(" FadeGroup test"))
+        //    {
+
+        //    }
+        //    EG_GUIHelper.FG_Label("FadeGroup000");
+        //    EG_GUIHelper.FG_Label("FadeGroup001");
+        //    EG_GUIHelper.FG_Label("FadeGroup002");
+        //    EG_GUIHelper.FG_Label("FadeGroup003");
+        //    EG_GUIHelper.FG_Label("FadeGroup004");
+        //    EG_GUIHelper.FG_Label("FadeGroup005");
+        //    EG_GUIHelper.FG_Label("FadeGroup006");
+        //    EG_GUIHelper.FG_Label("FadeGroup007");
+        //    EG_GUIHelper.FG_Label("FadeGroup008");
+        //    EG_GUIHelper.FG_Label("FadeGroup009");
+        //    EG_GUIHelper.FG_Label("FadeGroup010");
+        //}
+        //EG_GUIHelper.FEG_EndFadeGroup();
+        EG_GUIHelper.FG_Space(10);
+
+        EG_GUIHelper.FG_Label("Scroll View");
+        EG_GUIHelper.FG_Label(1111);
+        EG_GUIHelper.FG_Label(1112);
+        EG_GUIHelper.FG_Label(1113);
+        EG_GUIHelper.FG_Label(1115);
+        EG_GUIHelper.FG_Label(1111);
+        EG_GUIHelper.FG_Label(1112);
+        EG_GUIHelper.FG_Label(1113);
+        if (GUILayout.Button("ScrollView test"))
+        {
+
+        }
+        EG_GUIHelper.FG_Label("ScrollView");
+        EG_GUIHelper.FEG_EndScroll();
     }
 
     void OnDestroy()
