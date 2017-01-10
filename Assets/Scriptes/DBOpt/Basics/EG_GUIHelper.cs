@@ -165,6 +165,38 @@ public static class EG_GUIHelper {
         GUILayout.Space(3);
         EditorGUILayout.EndToggleGroup();
     }
+
+    static public void FEG_BeginScroll(ref Vector2 scrollPos,int hvScrollType = 0,float minW = 0, float minH = 70)
+    {
+        GUILayoutOption[] arrs = ToOptions(minW, minH);
+        bool isHScroll = hvScrollType != 2 && hvScrollType != 0;
+        bool isVScroll = hvScrollType != 1 && hvScrollType != 0;
+        scrollPos = EditorGUILayout.BeginScrollView(scrollPos, isHScroll, isVScroll,arrs);
+        GUILayout.Space(2);
+    }
+
+    static public void FEG_EndScroll()
+    {
+        GUILayout.Space(3);
+        EditorGUILayout.EndScrollView();
+    }
+
+    static public bool FEG_BeginFadeGroup(float val,float minW = 0, float minH = 30)
+    {
+        bool ret = false;
+        FEG_BeginV(minW, minH);
+        ret = EditorGUILayout.BeginFadeGroup(val);
+        GUILayout.Space(2);
+        return ret;
+    }
+
+    static public void FEG_EndFadeGroup()
+    {
+        GUILayout.Space(3);
+        EditorGUILayout.EndFadeGroup();
+        FEG_EndV();
+    }
+
     #endregion
 
 }
