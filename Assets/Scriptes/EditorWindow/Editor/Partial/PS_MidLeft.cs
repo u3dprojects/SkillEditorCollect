@@ -91,7 +91,6 @@ public class PS_MidLeft{
         OnInitTime();
     }
 
-
     void OnInitTime()
     {
         if (m_curTime == null)
